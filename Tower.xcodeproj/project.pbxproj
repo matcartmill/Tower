@@ -15,7 +15,6 @@
 		8292BDFC28A958B700471B59 /* TowerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDFB28A958B700471B59 /* TowerUITests.swift */; };
 		8292BDFE28A958B700471B59 /* TowerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDFD28A958B700471B59 /* TowerUITestsLaunchTests.swift */; };
 		8292BE0E28A960F800471B59 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE0D28A960F800471B59 /* Message.swift */; };
-		8292BE1428A97CD800471B59 /* MessagesGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1328A97CD800471B59 /* MessagesGateway.swift */; };
 		8292BE1A28A9F9F900471B59 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1928A9F9F900471B59 /* Conversation.swift */; };
 		8292BE1C28A9FA1A00471B59 /* Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1B28A9FA1A00471B59 /* Participant.swift */; };
 		8292BE1E28A9FA5000471B59 /* Identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1D28A9FA5000471B59 /* Identifier.swift */; };
@@ -83,7 +82,6 @@
 		8292BDFB28A958B700471B59 /* TowerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerUITests.swift; sourceTree = "<group>"; };
 		8292BDFD28A958B700471B59 /* TowerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8292BE0D28A960F800471B59 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		8292BE1328A97CD800471B59 /* MessagesGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesGateway.swift; sourceTree = "<group>"; };
 		8292BE1928A9F9F900471B59 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		8292BE1B28A9FA1A00471B59 /* Participant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Participant.swift; sourceTree = "<group>"; };
 		8292BE1D28A9FA5000471B59 /* Identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifier.swift; sourceTree = "<group>"; };
@@ -206,9 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				8292BDE028A958B600471B59 /* TowerApp.swift */,
-				8292BE1228A97C5000471B59 /* API */,
-				8292BE1528A97D3500471B59 /* Components */,
-				8292BE0F28A9789F00471B59 /* Extensions */,
 				8292BE0C28A960A700471B59 /* Models */,
 				8292BE0B28A9609000471B59 /* UI */,
 			);
@@ -235,28 +230,6 @@
 				82FCE88728C4D9AF00C928E9 /* Tag.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		8292BE0F28A9789F00471B59 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		8292BE1228A97C5000471B59 /* API */ = {
-			isa = PBXGroup;
-			children = (
-				8292BE1328A97CD800471B59 /* MessagesGateway.swift */,
-			);
-			path = API;
-			sourceTree = "<group>";
-		};
-		8292BE1528A97D3500471B59 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		82D35A8628ADCC8F00572C52 /* Components */ = {
@@ -518,7 +491,6 @@
 				82D35A9F28B1501000572C52 /* ConversationReducer.swift in Sources */,
 				8292BDE128A958B600471B59 /* TowerApp.swift in Sources */,
 				82FCE8AA28C578EA00C928E9 /* AccountAction.swift in Sources */,
-				8292BE1428A97CD800471B59 /* MessagesGateway.swift in Sources */,
 				8292BE1E28A9FA5000471B59 /* Identifier.swift in Sources */,
 				82FCE88D28C50C0B00C928E9 /* AuthAction.swift in Sources */,
 				82FCE89828C5242900C928E9 /* AppReducer.swift in Sources */,
