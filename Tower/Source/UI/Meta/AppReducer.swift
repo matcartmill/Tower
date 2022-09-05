@@ -18,50 +18,26 @@ public let appReducer = AppReducer.combine(
     ),
     .init { state, action, env in
         switch action {
-        case .dataLoaded:
-            state.hasLoaded = true
+        case .viewShown:
+            return .task {
+                try! await DispatchQueue.main.sleep(for: 1)
+                return .showAuth
+            }
+            
+        case .showAuth:
             state.authState = .init()
             return .none
             
-        case .viewLoaded:
-            return .task {
-                try! await DispatchQueue.main.sleep(for: 1)
-                return .dataLoaded
-            }
+        case .showHome(let user):
+            state.homeState = .init(user: user)
+            return .none
             
         // Bridge - Auth
             
         case .auth(.succeeded):
             guard let user = state.authState?.user else { return .none }
             
-            state.authState = nil
-            state.homeState = .init(
-                conversations: [
-                    .init(
-                        conversation: .init(
-                            participants: [.sender, .receiver],
-                            messages: [
-                               .init(
-                                   content: "Hey everyone, I’ve got something on my mind that I would love to share. Please bear with me, this could get a bit lengthy.",
-                                   sender: Participant.sender.id
-                               ),
-                               .init(
-                                   content: "No worries! Feel free to vent. I’m here to listen!",
-                                   sender: Participant.receiver.id
-                               ),
-                               .init(
-                                   content: "Vent all you need.",
-                                   sender: Participant.receiver.id
-                               )
-                            ]
-                        ),
-                        user: user
-                    )
-                ],
-                user: user
-            )
-            
-            return .none
+            return .init(value: .showHome(user))
             
         case .auth:
             return .none

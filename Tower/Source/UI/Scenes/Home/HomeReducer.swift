@@ -27,6 +27,32 @@ public let homeReducer = HomeReducer.combine(
     ),
     .init { state, action, env in
         switch action {
+        case .viewShown:
+            state.conversations = [
+                .init(
+                    conversation: .init(
+                        participants: [.sender, .receiver],
+                        messages: [
+                           .init(
+                               content: "Hey everyone, I’ve got something on my mind that I would love to share. Please bear with me, this could get a bit lengthy.",
+                               sender: Participant.sender.id
+                           ),
+                           .init(
+                               content: "No worries! Feel free to vent. I’m here to listen!",
+                               sender: Participant.receiver.id
+                           ),
+                           .init(
+                               content: "Vent all you need.",
+                               sender: Participant.receiver.id
+                           )
+                        ]
+                    ),
+                    user: state.user
+                )
+            ]
+            
+            return .none
+            
         // Account
         
         case .openAccount:

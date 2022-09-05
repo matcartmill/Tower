@@ -1,4 +1,6 @@
 public enum HomeAction {
+    case viewShown
+    
     // Account
     case openAccount
     

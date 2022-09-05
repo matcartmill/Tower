@@ -1,6 +1,7 @@
 public enum AppAction {
-    case dataLoaded
-    case viewLoaded
+    case viewShown
+    case showAuth
+    case showHome(Participant)
     
     // Bridge - Auth
     

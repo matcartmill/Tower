@@ -71,6 +71,7 @@ struct HomeView: View {
                         }
                     }
                 }
+                .onAppear { viewStore.send(.viewShown) }
                 .navigationBarTitleDisplayMode(.inline)
                 .fullScreenCover(isPresented: viewStore.binding(
                     get: { $0.newConversation != nil },

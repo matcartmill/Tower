@@ -6,7 +6,7 @@ struct AppView: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            if viewStore.hasLoaded {
+            if viewStore.homeState != nil {
                 IfLetStore(
                     store.scope(
                         state: \.homeState,
@@ -15,7 +15,7 @@ struct AppView: View {
                 ) {
                     HomeView(store: $0)
                 }
-                
+            } else if viewStore.authState != nil {
                 IfLetStore(
                     store.scope(
                         state: \.authState,
@@ -26,7 +26,7 @@ struct AppView: View {
                 }
             } else {
                 ProgressView()
-                    .onAppear { viewStore.send(.viewLoaded) }
+                    .onAppear { viewStore.send(.viewShown) }
             }
         }
     }
