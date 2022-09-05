@@ -66,9 +66,10 @@ struct ComposeView: View {
                         text: viewStore.binding(
                             get: \.message,
                             send: ComposeAction.textFieldChanged
-                        )
+                        ),
+                        axis: .vertical
                     )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .frame(maxHeight: .infinity, alignment: .top)
                     .foregroundColor(Color("colors/content/primary"))
                     .focused($isComposingFocused)
                 }
@@ -91,7 +92,13 @@ struct ComposeView: View {
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
         ComposeView(store: .init(
-            initialState: .init(conversation: .init(participants: [Participant.sender], messages: [])),
+            initialState: .init(
+                conversation: .init(
+                    participants: [Participant.sender],
+                    messages: []
+                ),
+                user: .sender
+            ),
             reducer: composeReducer,
             environment: .live
         ))

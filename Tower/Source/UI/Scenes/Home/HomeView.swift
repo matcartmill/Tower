@@ -43,7 +43,6 @@ struct HomeView: View {
                     }
                     .scrollContentBackground(.hidden)
                     .scrollIndicators(.hidden)
-                    .padding()
                     .listStyle(.plain)
                     
                     Button(action: { viewStore.send(.openComposer) }) {
@@ -62,7 +61,16 @@ struct HomeView: View {
                     Color("colors/background/base")
                         .ignoresSafeArea()
                 )
-                .navigationBarHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { viewStore.send(.openAccount) }) {
+                            Image("icons/account")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .tint(Color("colors/content/primary"))
+                        }
+                    }
+                }
                 .navigationBarTitleDisplayMode(.inline)
                 .fullScreenCover(isPresented: viewStore.binding(
                     get: { $0.newConversation != nil },
@@ -75,6 +83,19 @@ struct HomeView: View {
                         )
                     ) {
                         ComposeView(store: $0)
+                    }
+                }
+                .sheet(isPresented: viewStore.binding(
+                    get: { $0.accountState != nil },
+                    send: HomeAction.account(.close)
+                )) {
+                    IfLetStore(
+                        store.scope(
+                            state: \.accountState,
+                            action: HomeAction.account
+                        )
+                    ) {
+                        AccountView(store: $0)
                     }
                 }
             }
@@ -99,6 +120,7 @@ struct ConversationListItem: View {
                 Text(conversation.messages[0].content)
                     .font(.headline)
                     .foregroundColor(Color("colors/content/primary"))
+                    .lineLimit(2)
                 
                 HStack {
                     Text("\(conversation.participants.count) participants")
@@ -117,7 +139,7 @@ struct ConversationListItem: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(store: .init(
-            initialState: .init(),
+            initialState: .init(conversations: [], user: .sender),
             reducer: homeReducer,
             environment: .live
         ))

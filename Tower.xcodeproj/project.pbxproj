@@ -15,7 +15,6 @@
 		8292BDFC28A958B700471B59 /* TowerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDFB28A958B700471B59 /* TowerUITests.swift */; };
 		8292BDFE28A958B700471B59 /* TowerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDFD28A958B700471B59 /* TowerUITestsLaunchTests.swift */; };
 		8292BE0E28A960F800471B59 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE0D28A960F800471B59 /* Message.swift */; };
-		8292BE1128A9790300471B59 /* View+Discover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1028A9790300471B59 /* View+Discover.swift */; };
 		8292BE1428A97CD800471B59 /* MessagesGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1328A97CD800471B59 /* MessagesGateway.swift */; };
 		8292BE1A28A9F9F900471B59 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1928A9F9F900471B59 /* Conversation.swift */; };
 		8292BE1C28A9FA1A00471B59 /* Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BE1B28A9FA1A00471B59 /* Participant.swift */; };
@@ -36,6 +35,23 @@
 		82D35A9B28B11BE600572C52 /* ConversationEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D35A9A28B11BE600572C52 /* ConversationEnvironment.swift */; };
 		82D35A9D28B14FE800572C52 /* ConversationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D35A9C28B14FE800572C52 /* ConversationAction.swift */; };
 		82D35A9F28B1501000572C52 /* ConversationReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D35A9E28B1501000572C52 /* ConversationReducer.swift */; };
+		82FCE88828C4D9AF00C928E9 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE88728C4D9AF00C928E9 /* Tag.swift */; };
+		82FCE88B28C5069D00C928E9 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE88A28C5069D00C928E9 /* AuthView.swift */; };
+		82FCE88D28C50C0B00C928E9 /* AuthAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE88C28C50C0B00C928E9 /* AuthAction.swift */; };
+		82FCE88F28C50E7400C928E9 /* AuthReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE88E28C50E7300C928E9 /* AuthReducer.swift */; };
+		82FCE89128C50EC900C928E9 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89028C50EC900C928E9 /* AuthState.swift */; };
+		82FCE89328C50EDE00C928E9 /* AuthEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89228C50EDE00C928E9 /* AuthEnvironment.swift */; };
+		82FCE89628C523EC00C928E9 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89528C523EC00C928E9 /* AppView.swift */; };
+		82FCE89828C5242900C928E9 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89728C5242900C928E9 /* AppReducer.swift */; };
+		82FCE89A28C5242F00C928E9 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89928C5242F00C928E9 /* AppState.swift */; };
+		82FCE89C28C5243500C928E9 /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89B28C5243500C928E9 /* AppAction.swift */; };
+		82FCE89E28C5243F00C928E9 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE89D28C5243F00C928E9 /* AppEnvironment.swift */; };
+		82FCE8A128C56B9100C928E9 /* AppleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE8A028C56B9100C928E9 /* AppleSignInButton.swift */; };
+		82FCE8A428C578CA00C928E9 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE8A328C578CA00C928E9 /* AccountView.swift */; };
+		82FCE8A628C578D600C928E9 /* AccountReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE8A528C578D600C928E9 /* AccountReducer.swift */; };
+		82FCE8A828C578DD00C928E9 /* AccountState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE8A728C578DD00C928E9 /* AccountState.swift */; };
+		82FCE8AA28C578EA00C928E9 /* AccountAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE8A928C578EA00C928E9 /* AccountAction.swift */; };
+		82FCE8AC28C578F300C928E9 /* AccountEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FCE8AB28C578F300C928E9 /* AccountEnvironment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +83,6 @@
 		8292BDFB28A958B700471B59 /* TowerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerUITests.swift; sourceTree = "<group>"; };
 		8292BDFD28A958B700471B59 /* TowerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8292BE0D28A960F800471B59 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		8292BE1028A9790300471B59 /* View+Discover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Discover.swift"; sourceTree = "<group>"; };
 		8292BE1328A97CD800471B59 /* MessagesGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesGateway.swift; sourceTree = "<group>"; };
 		8292BE1928A9F9F900471B59 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		8292BE1B28A9FA1A00471B59 /* Participant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Participant.swift; sourceTree = "<group>"; };
@@ -87,6 +102,23 @@
 		82D35A9A28B11BE600572C52 /* ConversationEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationEnvironment.swift; sourceTree = "<group>"; };
 		82D35A9C28B14FE800572C52 /* ConversationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationAction.swift; sourceTree = "<group>"; };
 		82D35A9E28B1501000572C52 /* ConversationReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationReducer.swift; sourceTree = "<group>"; };
+		82FCE88728C4D9AF00C928E9 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		82FCE88A28C5069D00C928E9 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		82FCE88C28C50C0B00C928E9 /* AuthAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAction.swift; sourceTree = "<group>"; };
+		82FCE88E28C50E7300C928E9 /* AuthReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReducer.swift; sourceTree = "<group>"; };
+		82FCE89028C50EC900C928E9 /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
+		82FCE89228C50EDE00C928E9 /* AuthEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEnvironment.swift; sourceTree = "<group>"; };
+		82FCE89528C523EC00C928E9 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		82FCE89728C5242900C928E9 /* AppReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
+		82FCE89928C5242F00C928E9 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		82FCE89B28C5243500C928E9 /* AppAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAction.swift; sourceTree = "<group>"; };
+		82FCE89D28C5243F00C928E9 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		82FCE8A028C56B9100C928E9 /* AppleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInButton.swift; sourceTree = "<group>"; };
+		82FCE8A328C578CA00C928E9 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		82FCE8A528C578D600C928E9 /* AccountReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountReducer.swift; sourceTree = "<group>"; };
+		82FCE8A728C578DD00C928E9 /* AccountState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountState.swift; sourceTree = "<group>"; };
+		82FCE8A928C578EA00C928E9 /* AccountAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAction.swift; sourceTree = "<group>"; };
+		82FCE8AB28C578F300C928E9 /* AccountEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEnvironment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				82D35A8628ADCC8F00572C52 /* Components */,
+				82FCE89428C523D200C928E9 /* Meta */,
 				82D35A8C28B1154E00572C52 /* Scenes */,
 			);
 			path = UI;
@@ -196,9 +229,10 @@
 			isa = PBXGroup;
 			children = (
 				8292BE1928A9F9F900471B59 /* Conversation.swift */,
+				8292BE1D28A9FA5000471B59 /* Identifier.swift */,
 				8292BE0D28A960F800471B59 /* Message.swift */,
 				8292BE1B28A9FA1A00471B59 /* Participant.swift */,
-				8292BE1D28A9FA5000471B59 /* Identifier.swift */,
+				82FCE88728C4D9AF00C928E9 /* Tag.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -206,7 +240,6 @@
 		8292BE0F28A9789F00471B59 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8292BE1028A9790300471B59 /* View+Discover.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -229,6 +262,7 @@
 		82D35A8628ADCC8F00572C52 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				82FCE8A028C56B9100C928E9 /* AppleSignInButton.swift */,
 				82D35A8728ADCCA800572C52 /* ProfileImage.swift */,
 			);
 			path = Components;
@@ -237,6 +271,8 @@
 		82D35A8C28B1154E00572C52 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				82FCE8A228C578BD00C928E9 /* Account */,
+				82FCE88928C5068E00C928E9 /* Auth */,
 				82D35A8D28B1155700572C52 /* Home */,
 				82D35A8F28B1156200572C52 /* Compose */,
 				82D35A8E28B1155C00572C52 /* Conversation */,
@@ -278,6 +314,42 @@
 				82B94ACC28B5BD0900BC8F59 /* ComposeEnvironment.swift */,
 			);
 			path = Compose;
+			sourceTree = "<group>";
+		};
+		82FCE88928C5068E00C928E9 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				82FCE88A28C5069D00C928E9 /* AuthView.swift */,
+				82FCE88E28C50E7300C928E9 /* AuthReducer.swift */,
+				82FCE89028C50EC900C928E9 /* AuthState.swift */,
+				82FCE88C28C50C0B00C928E9 /* AuthAction.swift */,
+				82FCE89228C50EDE00C928E9 /* AuthEnvironment.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		82FCE89428C523D200C928E9 /* Meta */ = {
+			isa = PBXGroup;
+			children = (
+				82FCE89528C523EC00C928E9 /* AppView.swift */,
+				82FCE89728C5242900C928E9 /* AppReducer.swift */,
+				82FCE89928C5242F00C928E9 /* AppState.swift */,
+				82FCE89B28C5243500C928E9 /* AppAction.swift */,
+				82FCE89D28C5243F00C928E9 /* AppEnvironment.swift */,
+			);
+			path = Meta;
+			sourceTree = "<group>";
+		};
+		82FCE8A228C578BD00C928E9 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				82FCE8A328C578CA00C928E9 /* AccountView.swift */,
+				82FCE8A528C578D600C928E9 /* AccountReducer.swift */,
+				82FCE8A728C578DD00C928E9 /* AccountState.swift */,
+				82FCE8A928C578EA00C928E9 /* AccountAction.swift */,
+				82FCE8AB28C578F300C928E9 /* AccountEnvironment.swift */,
+			);
+			path = Account;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -416,29 +488,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82FCE88828C4D9AF00C928E9 /* Tag.swift in Sources */,
 				82D35A8528ADCB2700572C52 /* HomeView.swift in Sources */,
 				82B94ACB28B5BCFE00BC8F59 /* ComposeAction.swift in Sources */,
 				8292BE1A28A9F9F900471B59 /* Conversation.swift in Sources */,
+				82FCE89C28C5243500C928E9 /* AppAction.swift in Sources */,
 				82D35A9128B1157F00572C52 /* HomeReducer.swift in Sources */,
+				82FCE89328C50EDE00C928E9 /* AuthEnvironment.swift in Sources */,
 				8292BE0E28A960F800471B59 /* Message.swift in Sources */,
 				82D35A9528B11A5300572C52 /* HomeAction.swift in Sources */,
 				82D35A9328B11A3400572C52 /* HomeState.swift in Sources */,
 				82D35A9728B11B5D00572C52 /* ConversationState.swift in Sources */,
+				82FCE8A128C56B9100C928E9 /* AppleSignInButton.swift in Sources */,
 				82B94AC928B5BCD300BC8F59 /* ComposeReducer.swift in Sources */,
+				82FCE89A28C5242F00C928E9 /* AppState.swift in Sources */,
 				82D35A8828ADCCA800572C52 /* ProfileImage.swift in Sources */,
 				82D35A9B28B11BE600572C52 /* ConversationEnvironment.swift in Sources */,
+				82FCE89628C523EC00C928E9 /* AppView.swift in Sources */,
+				82FCE88F28C50E7400C928E9 /* AuthReducer.swift in Sources */,
+				82FCE89128C50EC900C928E9 /* AuthState.swift in Sources */,
 				82D35A9D28B14FE800572C52 /* ConversationAction.swift in Sources */,
 				82D35A9928B11BA100572C52 /* HomeEnvironment.swift in Sources */,
+				82FCE8AC28C578F300C928E9 /* AccountEnvironment.swift in Sources */,
 				8292BDE328A958B600471B59 /* ConversationView.swift in Sources */,
 				8292BE1C28A9FA1A00471B59 /* Participant.swift in Sources */,
+				82FCE88B28C5069D00C928E9 /* AuthView.swift in Sources */,
+				82FCE8A428C578CA00C928E9 /* AccountView.swift in Sources */,
+				82FCE8A828C578DD00C928E9 /* AccountState.swift in Sources */,
 				82D35A9F28B1501000572C52 /* ConversationReducer.swift in Sources */,
 				8292BDE128A958B600471B59 /* TowerApp.swift in Sources */,
+				82FCE8AA28C578EA00C928E9 /* AccountAction.swift in Sources */,
 				8292BE1428A97CD800471B59 /* MessagesGateway.swift in Sources */,
 				8292BE1E28A9FA5000471B59 /* Identifier.swift in Sources */,
+				82FCE88D28C50C0B00C928E9 /* AuthAction.swift in Sources */,
+				82FCE89828C5242900C928E9 /* AppReducer.swift in Sources */,
 				82B94AC728B5BA2700BC8F59 /* ComposeView.swift in Sources */,
 				82B94ACD28B5BD0900BC8F59 /* ComposeEnvironment.swift in Sources */,
 				82B94ACF28B5BD9300BC8F59 /* ComposeState.swift in Sources */,
-				8292BE1128A9790300471B59 /* View+Discover.swift in Sources */,
+				82FCE89E28C5243F00C928E9 /* AppEnvironment.swift in Sources */,
+				82FCE8A628C578D600C928E9 /* AccountReducer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

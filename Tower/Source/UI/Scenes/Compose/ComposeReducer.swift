@@ -21,8 +21,9 @@ public let composeReducer = ComposeReducer.init { state, action, env in
     case .start:
         state.isComposingFocused = false
         state.conversation.messages.append(
-            .init(content: state.message, sender: Participant.sender.id)
+            .init(content: state.message, sender: state.user.id)
         )
+        state.conversation.participants.append(state.user)
         
         return .none
         

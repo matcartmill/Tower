@@ -6,9 +6,24 @@ public typealias ConversationReducer = Reducer<ConversationState, ConversationAc
 
 public let conversationReducer = ConversationReducer.init { state, action, env in
     switch action {
+    case .dismissMoreMenu:
+        state.isMoreMenuOpen = false
+        
+        return .none
+        
+    case .leave:
+        return .none
+        
     case .sendMessage:
-        state.conversation.messages.append(.init(content: state.newMessage, sender: Participant.sender.id))
+        state.conversation.messages.append(
+            .init(content: state.newMessage, sender: state.user.id)
+        )
         state.newMessage = ""
+        
+        return .none
+        
+    case .showMoreMenu:
+        state.isMoreMenuOpen = true
         
         return .none
         

@@ -1,4 +1,7 @@
-public enum HomeAction: Equatable {
+public enum HomeAction {
+    // Account
+    case openAccount
+    
     // Compose
     case openComposer
     
@@ -8,6 +11,7 @@ public enum HomeAction: Equatable {
     case item(id: Conversation.ID, action: ConversationAction)
     
     // Bridges
-    case conversation(ConversationAction)
+    case account(AccountAction)
     case compose(ComposeAction)
+    case conversation(ConversationAction)
 }

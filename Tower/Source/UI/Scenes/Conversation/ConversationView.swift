@@ -14,10 +14,13 @@ struct ConversationView: View {
                 ScrollViewReader { proxy in
                     List {
                         ForEach(viewStore.conversation.messages) { message in
-                            ConversationMessage(message: message)
-                                .listRowBackground(Color.clear)
-                                .listRowSeparator(.hidden)
-                                .listRowInsets(.init(top: 0, leading: 0, bottom: 20, trailing: 0))
+                            ConversationMessage(
+                                message: message,
+                                user: viewStore.user
+                            )
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 20, trailing: 0))
                         }
                     }
                     .scrollIndicators(.hidden)
@@ -29,7 +32,7 @@ struct ConversationView: View {
                     }
                 }
                 
-                HStack {
+                HStack(spacing: 16) {
                     TextField(
                         "What's on your mind?",
                         text: viewStore.binding(
@@ -67,6 +70,32 @@ struct ConversationView: View {
                     .clipShape(Circle())
                 }
             }
+            .toolbar {
+                Button(action: { viewStore.send(.showMoreMenu) }) {
+                    Image("icons/more")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 28)
+                        .tint(Color("colors/content/primary"))
+                }
+                .frame(alignment: .trailing)
+            }
+            .actionSheet(
+                isPresented: viewStore.binding(
+                    get: \.isMoreMenuOpen,
+                    send: ConversationAction.dismissMoreMenu
+                )
+            ) {
+                ActionSheet(
+                    title: Text("Conversation Options"),
+                    buttons: [
+                        ActionSheet.Button.destructive(Text("Leave conversation")) {
+                            viewStore.send(.leave(viewStore.conversation.id))
+                        },
+                        ActionSheet.Button.cancel()
+                    ]
+                )
+            }
             .padding()
             .background(
                 Color("colors/background/base")
@@ -78,16 +107,17 @@ struct ConversationView: View {
 
 struct ConversationMessage: View {
     let message: Message
+    let user: Participant
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            if message.sender == Participant.sender.id {
+            if message.sender == user.id {
                 Spacer(minLength: 30)
-                ConversationMessageContent(message: message)
-                ProfileImage(participant: .sender)
+                ConversationMessageContent(message: message, user: user)
+                ProfileImage(participant: user)
             } else {
-                ProfileImage(participant: .receiver)
-                ConversationMessageContent(message: message)
+                ProfileImage(participant: .sender)
+                ConversationMessageContent(message: message, user: user)
                 Spacer(minLength: 30)
             }
         }
@@ -96,15 +126,16 @@ struct ConversationMessage: View {
 
 struct ConversationMessageContent: View {
     let message: Message
+    let user: Participant
     
     private var foreground: Color {
-        message.sender == Participant.sender.id
+        message.sender == user.id
             ? .white
             : Color("colors/content/primary")
     }
     
     private var gradient: Gradient {
-        Gradient(colors: message.sender == Participant.sender.id
+        Gradient(colors: message.sender == user.id
             ? [Color("colors/background/chat/outgoing_start"), Color("colors/background/chat/outgoing_end")]
             : [Color("colors/background/chat/incoming")]
         )

@@ -4,9 +4,9 @@ import SwiftUI
 struct TowerApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView(store: .init(
+            AppView(store: .init(
                 initialState: .init(),
-                reducer: homeReducer,
+                reducer: appReducer,
                 environment: .live
             ))
         }
