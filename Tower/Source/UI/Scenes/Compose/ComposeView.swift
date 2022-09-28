@@ -41,8 +41,6 @@ struct ComposeView: View {
                         .clipShape(Capsule())
                     }
                     HStack(spacing: 12) {
-                        ProfileImage(participant: viewStore.user)
-                        
                         Button(action: {}) {
                             HStack(spacing: 6) {
                                 Text("Public")
@@ -94,7 +92,7 @@ struct ComposeView_Previews: PreviewProvider {
         ComposeView(store: .init(
             initialState: .init(
                 conversation: .init(
-                    participants: [Participant.sender],
+                    participants: [User.sender],
                     messages: []
                 ),
                 user: .sender

@@ -5,5 +5,5 @@ public struct ConversationState: Equatable, Identifiable {
     public var newMessage = ""
     public var conversation: Conversation
     public var isMoreMenuOpen = false
-    public var user: Participant
+    public var user: User
 }

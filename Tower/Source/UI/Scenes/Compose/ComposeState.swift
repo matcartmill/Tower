@@ -6,5 +6,5 @@ public struct ComposeState: Equatable {
     public var isComposingFocused = false
     public var conversation: Conversation
     public var message = ""
-    public var user: Participant
+    public var user: User
 }

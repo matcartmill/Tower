@@ -35,15 +35,15 @@ public let homeReducer = HomeReducer.combine(
                         messages: [
                            .init(
                                content: "Hey everyone, I’ve got something on my mind that I would love to share. Please bear with me, this could get a bit lengthy.",
-                               sender: Participant.sender.id
+                               sender: User.sender
                            ),
                            .init(
                                content: "No worries! Feel free to vent. I’m here to listen!",
-                               sender: Participant.receiver.id
+                               sender: User.receiver
                            ),
                            .init(
                                content: "Vent all you need.",
-                               sender: Participant.receiver.id
+                               sender: User.receiver
                            )
                         ]
                     ),
@@ -65,7 +65,7 @@ public let homeReducer = HomeReducer.combine(
         case .openComposer:
             state.newConversation = .init(
                 conversation: .init(
-                    participants: [Participant.sender],
+                    participants: [User.sender],
                     messages: []
                 ),
                 user: state.user

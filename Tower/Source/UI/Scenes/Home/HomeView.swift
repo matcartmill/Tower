@@ -62,12 +62,33 @@ struct HomeView: View {
                         .ignoresSafeArea()
                 )
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: { viewStore.send(.openAccount) }) {
                             Image("icons/account")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .tint(Color("colors/content/primary"))
+                                .frame(alignment: .leading)
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { viewStore.send(.openAccount) }) {
+                            HStack(spacing: 6) {
+                                Image("icons/conversation")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 20)
+                                    .tint(Color("colors/content/button/secondary"))
+                                
+                                Text("2")
+                                    .font(.footnote.bold())
+                                    .foregroundColor(Color("colors/content/button/secondary"))
+                            }
+                            .padding(.vertical, 3)
+                            .padding(.horizontal, 12)
+                            .background(Color("colors/background/button/secondary"))
+                            .clipShape(Capsule())
                         }
                     }
                 }
@@ -108,30 +129,20 @@ struct ConversationListItem: View {
     let conversation: Conversation
     
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            if let owner = conversation.participants.first(where: { $0.id == conversation.messages.first?.sender }) {
-                ProfileImage(participant: owner)
-            } else {
-                Color("colors/background/secondary")
-                    .frame(width: 40, height: 40, alignment: .leading)
-                    .clipShape(Circle())
-            }
+        VStack(alignment: .leading, spacing: 12) {
+            Text(conversation.messages[0].content)
+                .font(.headline)
+                .foregroundColor(Color("colors/content/primary"))
+                .lineLimit(2)
             
-            VStack(alignment: .leading, spacing: 12) {
-                Text(conversation.messages[0].content)
-                    .font(.headline)
-                    .foregroundColor(Color("colors/content/primary"))
-                    .lineLimit(2)
+            HStack {
+                Text("\(conversation.participants.count) participants")
+                    .font(.footnote)
+                    .foregroundColor(Color("colors/content/secondary"))
                 
-                HStack {
-                    Text("\(conversation.participants.count) participants")
-                        .font(.footnote)
-                        .foregroundColor(Color("colors/content/secondary"))
-                    
-                    Text("Posted 1 min ago")
-                        .font(.footnote)
-                        .foregroundColor(Color("colors/content/secondary"))
-                }
+                Text("Posted 1 min ago")
+                    .font(.footnote)
+                    .foregroundColor(Color("colors/content/secondary"))
             }
         }
     }

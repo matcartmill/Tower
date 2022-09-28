@@ -3,26 +3,17 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AuthView: View {
-    @Environment (\.colorScheme) var colorScheme
     let store: AuthStore
     
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 48) {
-                // App title and welcome
-                Group {
-                    VStack {
-                        Text("TOWER")
-                            .font(.system(size: 60).bold())
-                            .foregroundColor(Color("colors/content/primary"))
-                        
-                        Text("Let's get started by logging in")
-                            .font(.callout)
-                            .foregroundColor(Color("colors/content/primary"))
-                    }
-                }
+                Image("icons/tower")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 150)
+                    .foregroundColor(Color("colors/content/primary"))
                 
-                // Loading or Login button
                 if viewStore.isAuthenticating {
                     ProgressView()
                         .frame(height: 44)

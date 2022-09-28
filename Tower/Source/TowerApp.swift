@@ -7,7 +7,7 @@ struct TowerApp: App {
             AppView(store: .init(
                 initialState: .init(),
                 reducer: appReducer,
-                environment: .live
+                environment: .mock
             ))
         }
     }

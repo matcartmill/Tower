@@ -1,3 +1,4 @@
+import Combine
 import ComposableArchitecture
 import Foundation
 
@@ -10,21 +11,26 @@ public let authReducer = AuthReducer.init { state, action, env in
     case .showAuthError:
         return .none
         
-    case .failed(let errorMessage):
-        state.isAuthenticating = false
-        state.errorMessage = errorMessage
-        return .none
-        
     case .authenticate:
         state.isAuthenticating = true
+        
         return .task {
-            try! await DispatchQueue.main.sleep(for: 1)
-            return .succeeded
+            await .authenticationResponse(TaskResult {
+                let identity = try await env.identityProvider.identify()
+                let session = try await env.sessionGateway.exchange(identity)
+                return session
+            })
         }
         
-    case .succeeded:
-        state.user = Participant.receiver
+    case .authenticationResponse(.success(let session)):
+        env.sessionStore.update(session)
+        state.user = session.user
         state.isAuthenticating = false
+        return .none
+        
+    case .authenticationResponse(.failure(let error)):
+        state.isAuthenticating = false
+        state.errorMessage = error.localizedDescription
         return .none
     }
 }

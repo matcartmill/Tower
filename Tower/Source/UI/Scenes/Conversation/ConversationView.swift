@@ -107,16 +107,14 @@ struct ConversationView: View {
 
 struct ConversationMessage: View {
     let message: Message
-    let user: Participant
+    let user: User
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            if message.sender == user.id {
+            if message.sender == user {
                 Spacer(minLength: 30)
                 ConversationMessageContent(message: message, user: user)
-                ProfileImage(participant: user)
             } else {
-                ProfileImage(participant: .sender)
                 ConversationMessageContent(message: message, user: user)
                 Spacer(minLength: 30)
             }
@@ -126,16 +124,16 @@ struct ConversationMessage: View {
 
 struct ConversationMessageContent: View {
     let message: Message
-    let user: Participant
+    let user: User
     
     private var foreground: Color {
-        message.sender == user.id
+        message.sender == user
             ? .white
             : Color("colors/content/primary")
     }
     
     private var gradient: Gradient {
-        Gradient(colors: message.sender == user.id
+        Gradient(colors: message.sender == user
             ? [Color("colors/background/chat/outgoing_start"), Color("colors/background/chat/outgoing_end")]
             : [Color("colors/background/chat/incoming")]
         )

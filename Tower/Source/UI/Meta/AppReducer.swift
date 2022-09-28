@@ -9,12 +9,12 @@ public let appReducer = AppReducer.combine(
     authReducer.optional().pullback(
         state: \.authState,
         action: /AppAction.auth,
-        environment: { _ in .live }
+        environment: { $0.authEnvironment }
     ),
     homeReducer.optional().pullback(
         state: \.homeState,
         action: /AppAction.home,
-        environment: { _ in .live }
+        environment: { $0.homeEnvironment }
     ),
     .init { state, action, env in
         switch action {
@@ -34,10 +34,8 @@ public let appReducer = AppReducer.combine(
             
         // Bridge - Auth
             
-        case .auth(.succeeded):
-            guard let user = state.authState?.user else { return .none }
-            
-            return .init(value: .showHome(user))
+        case .auth(.authenticationResponse(.success(let session))):
+            return .init(value: .showHome(session.user))
             
         case .auth:
             return .none

@@ -16,7 +16,7 @@ public let conversationReducer = ConversationReducer.init { state, action, env i
         
     case .sendMessage:
         state.conversation.messages.append(
-            .init(content: state.newMessage, sender: state.user.id)
+            .init(content: state.newMessage, sender: state.user)
         )
         state.newMessage = ""
         
