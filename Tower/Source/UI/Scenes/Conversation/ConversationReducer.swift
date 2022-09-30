@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DomainKit
 
 public typealias ConversationStore = Store<ConversationState, ConversationAction>
 public typealias ConversationViewStore = ViewStore<ConversationState, ConversationAction>

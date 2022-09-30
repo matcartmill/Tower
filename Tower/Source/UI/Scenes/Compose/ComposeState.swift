@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DomainKit
 import IdentifiedCollections
 
 public struct ComposeState: Equatable {

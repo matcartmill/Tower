@@ -1,3 +1,5 @@
+import DomainKit
+
 public enum ConversationAction: Equatable {
     case dismissMoreMenu
     case leave(Conversation.ID)

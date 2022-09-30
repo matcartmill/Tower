@@ -1,3 +1,5 @@
+import DomainKit
+
 public struct Session: Equatable {
     public struct Token: Equatable {
         public let value: String

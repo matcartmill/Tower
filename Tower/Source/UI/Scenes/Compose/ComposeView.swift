@@ -1,5 +1,6 @@
-import SwiftUI
 import ComposableArchitecture
+import DomainKit
+import SwiftUI
 
 struct ComposeView: View {
     @FocusState private var isComposingFocused: Bool

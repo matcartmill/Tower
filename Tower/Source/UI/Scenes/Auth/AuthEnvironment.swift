@@ -20,7 +20,7 @@ extension AuthEnvironment {
 extension AuthEnvironment {
     public static let mock = Self(
         mainQueue: .main,
-        identityProvider: AppleIdentityProvider(),
+        identityProvider: MockIdentityProvider(),
         sessionGateway: MockSessionGateway(),
         sessionStore: SessionStore()
     )

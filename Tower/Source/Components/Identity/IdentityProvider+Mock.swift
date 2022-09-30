@@ -1,4 +1,4 @@
-import Combine
+import DomainKit
 
 class MockIdentityProvider: IdentityProvider {
     func identify() async throws -> Identity {

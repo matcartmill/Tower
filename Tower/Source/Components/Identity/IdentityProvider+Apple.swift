@@ -1,4 +1,5 @@
 import AuthenticationServices
+import DomainKit
 import Foundation
 
 public final class AppleIdentityProvider: NSObject, IdentityProvider {

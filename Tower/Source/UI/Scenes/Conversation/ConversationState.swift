@@ -1,4 +1,6 @@
+import DomainKit
 import IdentifiedCollections
+import Toolbox
 
 public struct ConversationState: Equatable, Identifiable {
     public var id: Identifier<Conversation> { conversation.id }

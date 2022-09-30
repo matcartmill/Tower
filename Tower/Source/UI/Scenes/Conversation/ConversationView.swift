@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DomainKit
 import SwiftUI
 
 struct ConversationView: View {

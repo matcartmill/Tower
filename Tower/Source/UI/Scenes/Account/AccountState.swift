@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DomainKit
 
 public struct AccountState: Equatable {
     public var user: User

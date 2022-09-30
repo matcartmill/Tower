@@ -1,3 +1,4 @@
+import DomainKit
 import Foundation
 
 public class MockSessionGateway: SessionGateway {
