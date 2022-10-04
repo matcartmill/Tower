@@ -1,7 +1,6 @@
-public struct AppState: Equatable {
-    public var authRequired = true
-    
-    public var authState: AuthState?
-    public var conversationsState: ConversationsState?
-    public var journalState: JournalState?
+public enum AppState: Equatable {
+    case loading(AppLoadingState)
+    case loggedIn(LoggedInState)
+    case loggedOut(AuthState)
+    case onboarding(OnboardingState)
 }

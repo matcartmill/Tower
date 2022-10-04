@@ -4,7 +4,7 @@ public struct AppEnvironment {
     public let mainQueue: DispatchQueue
     public let authEnvironment: AuthEnvironment
     public let conversationsEnvironment: ConversationsEnvironment
-    public let journalEnvironment: JournalEnvironment
+    public let trackingEnvironment: TrackingEnvironment
 }
 
 extension AppEnvironment {
@@ -12,13 +12,13 @@ extension AppEnvironment {
         mainQueue: .main,
         authEnvironment: .live,
         conversationsEnvironment: .live,
-        journalEnvironment: .init()
+        trackingEnvironment: .init()
     )
     
     public static let mock: Self = .init(
         mainQueue: .main,
         authEnvironment: .mock,
         conversationsEnvironment: .mock,
-        journalEnvironment: .init()
+        trackingEnvironment: .init()
     )
 }

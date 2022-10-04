@@ -9,7 +9,7 @@ let package = Package(
         .library(
             name: "Toolbox",
             targets: ["Toolbox"]
-        ),
+        )
     ],
     dependencies: [],
     targets: [
@@ -20,6 +20,6 @@ let package = Package(
         .testTarget(
             name: "ToolboxTests",
             dependencies: ["Toolbox"]
-        ),
+        )
     ]
 )

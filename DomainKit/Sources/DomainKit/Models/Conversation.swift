@@ -1,15 +1,20 @@
 import Foundation
-import IdentifiedCollections
 import Toolbox
 
 public struct Conversation: Identifiable, Equatable {
     public let id: Identifier<Self>
-    public var participants: [User]
-    public var messages: IdentifiedArrayOf<Message>
+    public var author: User
+    public var participant: User?
+    public var messages: [Message]
     
-    public init(participants: [User], messages: IdentifiedArrayOf<Message>) {
+    public init(
+        author: User,
+        participant: User?,
+        messages: [Message]
+    ) {
         self.id = .init()
-        self.participants = participants
+        self.author = author
+        self.participant = participant
         self.messages = messages
     }
 }

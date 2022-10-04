@@ -9,7 +9,7 @@ let package = Package(
         .library(
             name: "DomainKit",
             targets: ["DomainKit"]
-        ),
+        )
     ],
     dependencies: [
         .package(name: "Toolbox", path: "../Toolbox")
@@ -17,7 +17,9 @@ let package = Package(
     targets: [
         .target(
             name: "DomainKit",
-            dependencies: ["Toolbox"]
+            dependencies: [
+                "Toolbox"
+            ]
         ),
         .testTarget(
             name: "DomainKitTests",

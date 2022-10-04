@@ -7,55 +7,71 @@ public typealias AppViewStore = ViewStore<AppState, AppAction>
 public typealias AppReducer = Reducer<AppState, AppAction, AppEnvironment>
 
 public let appReducer = AppReducer.combine(
-    authReducer.optional().pullback(
-        state: \.authState,
+    authReducer.pullback(
+        state: /AppState.loggedOut,
         action: /AppAction.auth,
         environment: { $0.authEnvironment }
     ),
-    conversationsReducer.optional().pullback(
-        state: \.conversationsState,
-        action: /AppAction.conversations,
-        environment: { $0.conversationsEnvironment }
+    loggedInReducer.pullback(
+        state: /AppState.loggedIn,
+        action: /AppAction.loggedIn,
+        environment: { _ in .init() }
     ),
-    journalReducer.optional().pullback(
-        state: \.journalState,
-        action: /AppAction.journal,
-        environment: { $0.journalEnvironment }
+    onboardingReducer.pullback(
+        state: /AppState.onboarding,
+        action: /AppAction.onboarding,
+        environment: { _ in .init() }
+    ),
+    appLoadingReducer.pullback(
+        state: /AppState.loading,
+        action: /AppAction.loading,
+        environment: { _ in .init() }
     ),
     .init { state, action, env in
-        switch action {
-        case .viewShown:
-            return .task {
-                try! await DispatchQueue.main.sleep(for: 1)
-                return .showAuth
-            }
-            
+        switch action {            
         case .showAuth:
-            state.authState = .init()
+            state = .loggedOut(.init())
             return .none
             
         case .showLoggedInExperience(let user):
-            state.conversationsState = .init(user: user)
-            state.journalState = .init()
+            state = .loggedIn(.init(
+                conversationsState: .init(user: user),
+                trackingState: .init(),
+                notificationsState: .init()
+            ))
+            return .none
+            
+        case .showOnboardingExperience(let user):
+            state = .onboarding(.username(.init()))
             return .none
             
         // Bridge - Auth
             
         case .auth(.authenticationResponse(.success(let session))):
-            state.authRequired = false
-            return .init(value: .showLoggedInExperience(session.user))
+            return .init(value: .showOnboardingExperience(session.user))
             
         case .auth:
             return .none
             
-        // Bridge - Home
+        // Bridge - Logged In
             
-        case .conversations:
+        case .loggedIn:
             return .none
             
-        // Bridge - Dashboard
+        // Bridge - Onboarding
             
-        case .journal:
+        case .onboarding(.complete):
+            return .init(value: .showLoggedInExperience(.sender))
+            
+        case .onboarding:
+            return .none
+            
+        // Bridge - Loading
+            
+        case .loading(.loaded):
+            return .init(value: .showAuth)
+            
+        case .loading:
             return .none
         }
     }

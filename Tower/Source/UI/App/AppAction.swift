@@ -1,12 +1,11 @@
 import DomainKit
 
 public enum AppAction {
-    case viewShown
-
     // Experience
     
     case showAuth
     case showLoggedInExperience(User)
+    case showOnboardingExperience(User)
     
     // Bridge - Auth
     
@@ -14,9 +13,13 @@ public enum AppAction {
     
     // Bridge - Conversations (List)
     
-    case conversations(ConversationsAction)
+    case loggedIn(LoggedInAction)
     
-    // Bridge - Journal
+    // Bridge - Onboarding
     
-    case journal(JournalAction)
+    case onboarding(OnboardingAction)
+    
+    // Bridge - Loading
+    
+    case loading(AppLoadingAction)
 }
