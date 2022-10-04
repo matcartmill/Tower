@@ -23,7 +23,7 @@ public struct OnboardingProfilePictureView: View {
                         .multilineTextAlignment(.center)
                 }
                 
-                Button("Next") { viewStore.send(.next) }
+                Button("Next") { viewStore.send(.next, animation: .default) }
                     .frame(width: 200)
                     .buttonStyle(PrimaryButtonStyle())
                     

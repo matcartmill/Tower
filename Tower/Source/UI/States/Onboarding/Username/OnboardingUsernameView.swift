@@ -28,7 +28,7 @@ public struct OnboardingUsernameView: View {
                     .font(.title2)
                     .fontWeight(.bold)
                 
-                Button("Next") { viewStore.send(.next) }
+                Button("Next") { viewStore.send(.next, animation: .default) }
                     .frame(width: 200)
                     .disabled(username.isEmpty)
                     .buttonStyle(PrimaryButtonStyle())

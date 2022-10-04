@@ -15,24 +15,36 @@ public struct OnboardingView: View {
                 action: OnboardingAction.username
             ) {
                 OnboardingUsernameView(store: $0)
+                    .transition(
+                        .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
+                    )
             }
             CaseLet(
                 state: /OnboardingState.profilePicture,
                 action: OnboardingAction.profilePicture
             ) {
                 OnboardingProfilePictureView(store: $0)
+                    .transition(
+                        .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
+                    )
             }
             CaseLet(
                 state: /OnboardingState.privacy,
                 action: OnboardingAction.privacy
             ) {
                 OnboardingPrivacyView(store: $0)
+                    .transition(
+                        .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
+                    )
             }
             CaseLet(
                 state: /OnboardingState.permissions,
                 action: OnboardingAction.permissions
             ) {
                 OnboardingPermissionsView(store: $0)
+                    .transition(
+                        .asymmetric(insertion: .move(edge: .trailing), removal: .opacity)
+                    )
             }
         }
     }
