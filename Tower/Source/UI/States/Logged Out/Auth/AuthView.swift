@@ -12,12 +12,19 @@ public struct AuthView: View {
     public var body: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 48) {
+                Text("T O W E R")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color("colors/content/primary"))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
                 if viewStore.isAuthenticating {
                     ProgressView()
                         .frame(height: 44)
                 } else {
                     AppleSignInButton()
-                        .frame(width: 260, height: 44)
+                        .frame(maxWidth: 375, maxHeight: 50)
+                        .padding(.bottom, 40)
                         .onTapGesture { viewStore.send(.authenticate) }
                 }
             }

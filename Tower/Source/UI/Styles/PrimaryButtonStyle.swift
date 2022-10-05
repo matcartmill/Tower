@@ -32,7 +32,7 @@ struct PrimaryButtonStyle: ButtonStyle {
                     ? foregroundColor.opacity(0.7)
                     : foregroundColor
             )
-            .font(.callout)
+            .font(.body)
             .fontWeight(.bold)
             .clipShape(Capsule())
     }

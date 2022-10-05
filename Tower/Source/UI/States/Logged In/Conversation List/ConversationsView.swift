@@ -117,7 +117,7 @@ public struct ConversationsView: View {
                         )
                     ) {
                         ConversationOnboardingView(store: $0)
-                            .presentationDetents([.fraction(0.45)])
+                            .presentationDetents([.medium])
                     }
                 }
             }

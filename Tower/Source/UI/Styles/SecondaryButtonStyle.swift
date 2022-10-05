@@ -17,7 +17,7 @@ struct SecondaryButtonStyle: ButtonStyle {
                     ? foregrouncColor.opacity(0.7)
                     : foregrouncColor
             )
-            .font(.callout)
+            .font(.body)
             .fontWeight(.bold)
     }
 }
