@@ -162,7 +162,7 @@ struct HomeView_Previews: PreviewProvider {
         ConversationsView(store: .init(
             initialState: .init(conversations: [], user: .sender),
             reducer: conversationsReducer,
-            environment: .live
+            environment: .init()
         ))
     }
 }

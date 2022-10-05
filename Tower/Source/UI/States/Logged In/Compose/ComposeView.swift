@@ -100,7 +100,7 @@ struct ComposeView_Previews: PreviewProvider {
                 user: .sender
             ),
             reducer: composeReducer,
-            environment: .live
+            environment: .init()
         ))
     }
 }

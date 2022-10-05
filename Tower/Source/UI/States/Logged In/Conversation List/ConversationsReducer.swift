@@ -10,7 +10,7 @@ public let conversationsReducer = ConversationsReducer.combine(
     composeReducer.optional().pullback(
         state: \.newConversation,
         action: /ConversationsAction.compose,
-        environment: { _ in .live }
+        environment: { _ in .init() }
     ),
     conversationOnboardingReducer.optional().pullback(
         state: \.conversationOnboardingState,
@@ -20,17 +20,17 @@ public let conversationsReducer = ConversationsReducer.combine(
     conversationReducer.optional().pullback(
         state: \.selectedConversation,
         action: /ConversationsAction.conversation,
-        environment: { _ in .live }
+        environment: { _ in .init() }
     ),
     conversationReducer.forEach(
         state: \.conversations,
         action: /ConversationsAction.item(id:action:),
-        environment: { _ in .live }
+        environment: { _ in .init() }
     ),
     accountReducer.optional().pullback(
         state: \.accountState,
         action: /ConversationsAction.account,
-        environment: { _ in .live }
+        environment: { _ in .init() }
     ),
     .init { state, action, env in
         switch action {

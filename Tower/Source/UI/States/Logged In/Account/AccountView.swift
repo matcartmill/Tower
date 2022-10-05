@@ -63,7 +63,7 @@ struct AccountView_Previews: PreviewProvider {
         AccountView(store: .init(
             initialState: .init(user: .sender),
             reducer: accountReducer,
-            environment: .live
+            environment: .init()
         ))
     }
 }

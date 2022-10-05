@@ -24,10 +24,6 @@ public let onboardingReducer = OnboardingReducer.combine(
             state = .profilePicture(.init())
             return .none
             
-        case .showPrivacyOnboarding:
-            state = .privacy(.init())
-            return .none
-            
         case .showPermissionsOnboarding:
             state = .permissions(.init())
             return .none
@@ -40,11 +36,6 @@ public let onboardingReducer = OnboardingReducer.combine(
         // Bridges - Profile Picture
             
         case .profilePicture(.next):
-            return .init(value: .showPrivacyOnboarding)
-            
-        // Bridges - Privacy
-            
-        case .privacy(.next):
             return .init(value: .showPermissionsOnboarding)
             
         // Bridges - Permissions

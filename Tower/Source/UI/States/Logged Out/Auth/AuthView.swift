@@ -30,13 +30,3 @@ struct AuthView: View {
         }
     }
 }
-
-struct AuthView_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthView(store: .init(
-            initialState: .init(),
-            reducer: authReducer,
-            environment: .live
-        ))
-    }
-}

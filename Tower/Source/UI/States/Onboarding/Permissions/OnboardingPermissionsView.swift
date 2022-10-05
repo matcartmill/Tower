@@ -10,23 +10,26 @@ public struct OnboardingPermissionsView: View {
 
     public var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 16) {
+            VStack(spacing: 32) {
+               OnboardingIconView(image: Image("icons/notification-indicator"))
+                
                 Group {
-                    Text("Customize your experience by opting into these services")
+                    Text("Enhance your experience by opting into push notifications")
                         .font(.title)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
                     
-                    Text("The following permissions are suggested to help you get the most out of the application but are in no way required. Choose whichever services you'd like to opt into. Or none at all. Your choice.")
+                    Text("We'll send you notifications when you pair with someone for a conversation or when someone replies to your post.")
                         .font(.body)
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                 }
                 
-                Button("Next") { viewStore.send(.next, animation: .default) }
-                    .frame(width: 200)
+                Button("Enable Push Notifications") { viewStore.send(.next, animation: .default) }
+                    .frame(width: 300)
                     .buttonStyle(PrimaryButtonStyle())
-                    
+                
+                Button("Skip for now") { viewStore.send(.next, animation: .default) }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()

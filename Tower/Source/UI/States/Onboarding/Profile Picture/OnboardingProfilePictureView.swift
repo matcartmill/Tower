@@ -10,22 +10,30 @@ public struct OnboardingProfilePictureView: View {
 
     public var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 16) {
+            VStack(spacing: 32) {
+                OnboardingIconView(image: Image("icons/chat-bubble"))
+                
                 Group {
                     Text("Want to spruce up your profile a bit?")
-                        .font(.title)
+                        .font(.title2)
                         .fontWeight(.bold)
+                        .foregroundColor(Color("colors/content/primary"))
                         .multilineTextAlignment(.center)
                     
                     Text("Adding a profile picture gives a face to your (awesome) name, but we understand if you'd rather be private.")
                         .font(.body)
                         .fontWeight(.medium)
+                        .foregroundColor(Color("colors/content/secondary"))
                         .multilineTextAlignment(.center)
                 }
                 
-                Button("Next") { viewStore.send(.next, animation: .default) }
+                Button("Choose a photo") { viewStore.send(.next, animation: .default) }
                     .frame(width: 200)
                     .buttonStyle(PrimaryButtonStyle())
+                
+                Button("Skip for now") { viewStore.send(.next, animation: .default) }
+                    .frame(width: 200)
+                    .buttonStyle(SecondaryButtonStyle())
                     
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

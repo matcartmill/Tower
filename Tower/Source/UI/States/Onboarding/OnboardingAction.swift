@@ -3,7 +3,6 @@ public enum OnboardingAction {
     
     case showUsernameOnboarding
     case showProfilePictureOnboarding
-    case showPrivacyOnboarding
     case showPermissionsOnboarding
     
     // Bridge - Username
@@ -13,10 +12,6 @@ public enum OnboardingAction {
     // Bridge - Profile Picture
     
     case profilePicture(OnboardingProfilePictureAction)
-    
-    // Bridge - Privacy
-    
-    case privacy(OnboardingPrivacyAction)
     
     // Bridge - Permissions
     

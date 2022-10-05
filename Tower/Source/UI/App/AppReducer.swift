@@ -15,12 +15,12 @@ public let appReducer = AppReducer.combine(
     loggedInReducer.pullback(
         state: /AppState.loggedIn,
         action: /AppAction.loggedIn,
-        environment: { _ in .init() }
+        environment: { $0.loggedInEnvironment }
     ),
     onboardingReducer.pullback(
         state: /AppState.onboarding,
         action: /AppAction.onboarding,
-        environment: { _ in .init() }
+        environment: { $0.onboardingEnvironment }
     ),
     appLoadingReducer.pullback(
         state: /AppState.loading,

@@ -49,16 +49,6 @@
 		82B3549A28EBDC7600DFE825 /* OnboardingUsernameEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3549528EBDC7600DFE825 /* OnboardingUsernameEnvironment.swift */; };
 		82B3549B28EBDC7600DFE825 /* OnboardingUsernameReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3549628EBDC7600DFE825 /* OnboardingUsernameReducer.swift */; };
 		82B3549C28EBDC7600DFE825 /* OnboardingUsernameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3549728EBDC7600DFE825 /* OnboardingUsernameState.swift */; };
-		82B354A328EBDC8F00DFE825 /* OnboardingPrivacyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3549E28EBDC8F00DFE825 /* OnboardingPrivacyAction.swift */; };
-		82B354A428EBDC8F00DFE825 /* OnboardingPrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B3549F28EBDC8F00DFE825 /* OnboardingPrivacyView.swift */; };
-		82B354A528EBDC8F00DFE825 /* OnboardingPrivacyEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354A028EBDC8F00DFE825 /* OnboardingPrivacyEnvironment.swift */; };
-		82B354A628EBDC8F00DFE825 /* OnboardingPrivacyReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354A128EBDC8F00DFE825 /* OnboardingPrivacyReducer.swift */; };
-		82B354A728EBDC8F00DFE825 /* OnboardingPrivacyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354A228EBDC8F00DFE825 /* OnboardingPrivacyState.swift */; };
-		82B354AE28EBDCA400DFE825 /* OnboardingPermissionsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354A928EBDCA400DFE825 /* OnboardingPermissionsAction.swift */; };
-		82B354AF28EBDCA400DFE825 /* OnboardingPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354AA28EBDCA400DFE825 /* OnboardingPermissionsView.swift */; };
-		82B354B028EBDCA400DFE825 /* OnboardingPermissionsEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354AB28EBDCA400DFE825 /* OnboardingPermissionsEnvironment.swift */; };
-		82B354B128EBDCA400DFE825 /* OnboardingPermissionsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354AC28EBDCA400DFE825 /* OnboardingPermissionsReducer.swift */; };
-		82B354B228EBDCA400DFE825 /* OnboardingPermissionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354AD28EBDCA400DFE825 /* OnboardingPermissionsState.swift */; };
 		82B354B928EBDCC200DFE825 /* OnboardingProfilePictureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354B428EBDCC200DFE825 /* OnboardingProfilePictureAction.swift */; };
 		82B354BA28EBDCC200DFE825 /* OnboardingProfilePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354B528EBDCC200DFE825 /* OnboardingProfilePictureView.swift */; };
 		82B354BB28EBDCC200DFE825 /* OnboardingProfilePictureEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354B628EBDCC200DFE825 /* OnboardingProfilePictureEnvironment.swift */; };
@@ -77,6 +67,12 @@
 		82B354D928ECC45400DFE825 /* AppLoadingEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354D428ECC45400DFE825 /* AppLoadingEnvironment.swift */; };
 		82B354DA28ECC45400DFE825 /* AppLoadingReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354D528ECC45400DFE825 /* AppLoadingReducer.swift */; };
 		82B354DB28ECC45400DFE825 /* AppLoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354D628ECC45400DFE825 /* AppLoadingState.swift */; };
+		82B354DD28ECFEA400DFE825 /* OnboardingIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354DC28ECFEA400DFE825 /* OnboardingIconView.swift */; };
+		82B354E428ED094900DFE825 /* OnboardingPermissionsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354DF28ED094900DFE825 /* OnboardingPermissionsAction.swift */; };
+		82B354E528ED094900DFE825 /* OnboardingPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E028ED094900DFE825 /* OnboardingPermissionsView.swift */; };
+		82B354E628ED094900DFE825 /* OnboardingPermissionsEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E128ED094900DFE825 /* OnboardingPermissionsEnvironment.swift */; };
+		82B354E728ED094900DFE825 /* OnboardingPermissionsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E228ED094900DFE825 /* OnboardingPermissionsReducer.swift */; };
+		82B354E828ED094900DFE825 /* OnboardingPermissionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E328ED094900DFE825 /* OnboardingPermissionsState.swift */; };
 		82B94AC728B5BA2700BC8F59 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B94AC628B5BA2700BC8F59 /* ComposeView.swift */; };
 		82B94AC928B5BCD300BC8F59 /* ComposeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B94AC828B5BCD300BC8F59 /* ComposeReducer.swift */; };
 		82B94ACB28B5BCFE00BC8F59 /* ComposeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B94ACA28B5BCFE00BC8F59 /* ComposeAction.swift */; };
@@ -177,16 +173,6 @@
 		82B3549528EBDC7600DFE825 /* OnboardingUsernameEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingUsernameEnvironment.swift; sourceTree = "<group>"; };
 		82B3549628EBDC7600DFE825 /* OnboardingUsernameReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingUsernameReducer.swift; sourceTree = "<group>"; };
 		82B3549728EBDC7600DFE825 /* OnboardingUsernameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingUsernameState.swift; sourceTree = "<group>"; };
-		82B3549E28EBDC8F00DFE825 /* OnboardingPrivacyAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPrivacyAction.swift; sourceTree = "<group>"; };
-		82B3549F28EBDC8F00DFE825 /* OnboardingPrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPrivacyView.swift; sourceTree = "<group>"; };
-		82B354A028EBDC8F00DFE825 /* OnboardingPrivacyEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPrivacyEnvironment.swift; sourceTree = "<group>"; };
-		82B354A128EBDC8F00DFE825 /* OnboardingPrivacyReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPrivacyReducer.swift; sourceTree = "<group>"; };
-		82B354A228EBDC8F00DFE825 /* OnboardingPrivacyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPrivacyState.swift; sourceTree = "<group>"; };
-		82B354A928EBDCA400DFE825 /* OnboardingPermissionsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsAction.swift; sourceTree = "<group>"; };
-		82B354AA28EBDCA400DFE825 /* OnboardingPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsView.swift; sourceTree = "<group>"; };
-		82B354AB28EBDCA400DFE825 /* OnboardingPermissionsEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsEnvironment.swift; sourceTree = "<group>"; };
-		82B354AC28EBDCA400DFE825 /* OnboardingPermissionsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsReducer.swift; sourceTree = "<group>"; };
-		82B354AD28EBDCA400DFE825 /* OnboardingPermissionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsState.swift; sourceTree = "<group>"; };
 		82B354B428EBDCC200DFE825 /* OnboardingProfilePictureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingProfilePictureAction.swift; sourceTree = "<group>"; };
 		82B354B528EBDCC200DFE825 /* OnboardingProfilePictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingProfilePictureView.swift; sourceTree = "<group>"; };
 		82B354B628EBDCC200DFE825 /* OnboardingProfilePictureEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingProfilePictureEnvironment.swift; sourceTree = "<group>"; };
@@ -205,6 +191,12 @@
 		82B354D428ECC45400DFE825 /* AppLoadingEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingEnvironment.swift; sourceTree = "<group>"; };
 		82B354D528ECC45400DFE825 /* AppLoadingReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingReducer.swift; sourceTree = "<group>"; };
 		82B354D628ECC45400DFE825 /* AppLoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingState.swift; sourceTree = "<group>"; };
+		82B354DC28ECFEA400DFE825 /* OnboardingIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingIconView.swift; sourceTree = "<group>"; };
+		82B354DF28ED094900DFE825 /* OnboardingPermissionsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsAction.swift; sourceTree = "<group>"; };
+		82B354E028ED094900DFE825 /* OnboardingPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsView.swift; sourceTree = "<group>"; };
+		82B354E128ED094900DFE825 /* OnboardingPermissionsEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsEnvironment.swift; sourceTree = "<group>"; };
+		82B354E228ED094900DFE825 /* OnboardingPermissionsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsReducer.swift; sourceTree = "<group>"; };
+		82B354E328ED094900DFE825 /* OnboardingPermissionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsState.swift; sourceTree = "<group>"; };
 		82B94AC628B5BA2700BC8F59 /* ComposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		82B94AC828B5BCD300BC8F59 /* ComposeReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeReducer.swift; sourceTree = "<group>"; };
 		82B94ACA28B5BCFE00BC8F59 /* ComposeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeAction.swift; sourceTree = "<group>"; };
@@ -422,9 +414,8 @@
 		82B3548728EBDBFE00DFE825 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				82B354DE28ED092A00DFE825 /* Permissions */,
 				82B354B328EBDCAF00DFE825 /* Profile Picture */,
-				82B354A828EBDC9400DFE825 /* Permissions */,
-				82B3549D28EBDC7900DFE825 /* Privacy */,
 				82B3549228EBDC6300DFE825 /* Username */,
 				82B3548828EBDC1800DFE825 /* OnboardingAction.swift */,
 				82B3548928EBDC1800DFE825 /* OnboardingView.swift */,
@@ -445,30 +436,6 @@
 				82B3549528EBDC7600DFE825 /* OnboardingUsernameEnvironment.swift */,
 			);
 			path = Username;
-			sourceTree = "<group>";
-		};
-		82B3549D28EBDC7900DFE825 /* Privacy */ = {
-			isa = PBXGroup;
-			children = (
-				82B3549F28EBDC8F00DFE825 /* OnboardingPrivacyView.swift */,
-				82B354A128EBDC8F00DFE825 /* OnboardingPrivacyReducer.swift */,
-				82B354A228EBDC8F00DFE825 /* OnboardingPrivacyState.swift */,
-				82B3549E28EBDC8F00DFE825 /* OnboardingPrivacyAction.swift */,
-				82B354A028EBDC8F00DFE825 /* OnboardingPrivacyEnvironment.swift */,
-			);
-			path = Privacy;
-			sourceTree = "<group>";
-		};
-		82B354A828EBDC9400DFE825 /* Permissions */ = {
-			isa = PBXGroup;
-			children = (
-				82B354AA28EBDCA400DFE825 /* OnboardingPermissionsView.swift */,
-				82B354AC28EBDCA400DFE825 /* OnboardingPermissionsReducer.swift */,
-				82B354AD28EBDCA400DFE825 /* OnboardingPermissionsState.swift */,
-				82B354A928EBDCA400DFE825 /* OnboardingPermissionsAction.swift */,
-				82B354AB28EBDCA400DFE825 /* OnboardingPermissionsEnvironment.swift */,
-			);
-			path = Permissions;
 			sourceTree = "<group>";
 		};
 		82B354B328EBDCAF00DFE825 /* Profile Picture */ = {
@@ -531,12 +498,25 @@
 			path = "App Loading";
 			sourceTree = "<group>";
 		};
+		82B354DE28ED092A00DFE825 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				82B354E028ED094900DFE825 /* OnboardingPermissionsView.swift */,
+				82B354E228ED094900DFE825 /* OnboardingPermissionsReducer.swift */,
+				82B354E328ED094900DFE825 /* OnboardingPermissionsState.swift */,
+				82B354DF28ED094900DFE825 /* OnboardingPermissionsAction.swift */,
+				82B354E128ED094900DFE825 /* OnboardingPermissionsEnvironment.swift */,
+			);
+			path = Permissions;
+			sourceTree = "<group>";
+		};
 		82D35A8628ADCC8F00572C52 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				82FCE8A028C56B9100C928E9 /* AppleSignInButton.swift */,
 				82B3548528EA35E500DFE825 /* ProfileImage.swift */,
 				82B354C328EC6C3D00DFE825 /* UnderlinedTextField.swift */,
+				82B354DC28ECFEA400DFE825 /* OnboardingIconView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -800,21 +780,18 @@
 				82B354CE28ECC1B100DFE825 /* LoggedInView.swift in Sources */,
 				82F0178628E510CC00C99740 /* TrackingReducer.swift in Sources */,
 				82B3549C28EBDC7600DFE825 /* OnboardingUsernameState.swift in Sources */,
+				82B354DD28ECFEA400DFE825 /* OnboardingIconView.swift in Sources */,
 				82B354C028EC65F400DFE825 /* PrimaryButtonStyle.swift in Sources */,
 				82B354D728ECC45400DFE825 /* AppLoadingAction.swift in Sources */,
-				82B354B128EBDCA400DFE825 /* OnboardingPermissionsReducer.swift in Sources */,
 				827EEB0428D8A8140044BCD5 /* IdentityProvider+Mock.swift in Sources */,
 				82B354D028ECC1B100DFE825 /* LoggedInReducer.swift in Sources */,
 				827EEB4A28E28CBF0044BCD5 /* SessionStore.swift in Sources */,
 				82D35A8528ADCB2700572C52 /* ConversationsView.swift in Sources */,
-				82B354A728EBDC8F00DFE825 /* OnboardingPrivacyState.swift in Sources */,
-				82B354A628EBDC8F00DFE825 /* OnboardingPrivacyReducer.swift in Sources */,
 				82B3548D28EBDC1800DFE825 /* OnboardingAction.swift in Sources */,
 				82B94ACB28B5BCFE00BC8F59 /* ComposeAction.swift in Sources */,
 				82B3549028EBDC1800DFE825 /* OnboardingReducer.swift in Sources */,
 				82B354B928EBDCC200DFE825 /* OnboardingProfilePictureAction.swift in Sources */,
 				82FCE89C28C5243500C928E9 /* AppAction.swift in Sources */,
-				82B354A428EBDC8F00DFE825 /* OnboardingPrivacyView.swift in Sources */,
 				82B3548228E8AF0900DFE825 /* NotificationsEnvironment.swift in Sources */,
 				82B3549B28EBDC7600DFE825 /* OnboardingUsernameReducer.swift in Sources */,
 				826A5D2128E7E59000ADE473 /* Conversation OnboardingView.swift in Sources */,
@@ -823,7 +800,6 @@
 				82B3548028E8AF0900DFE825 /* NotificationsAction.swift in Sources */,
 				82B354DA28ECC45400DFE825 /* AppLoadingReducer.swift in Sources */,
 				82B3548428E8AF0900DFE825 /* NotificationsState.swift in Sources */,
-				82B354B028EBDCA400DFE825 /* OnboardingPermissionsEnvironment.swift in Sources */,
 				82B3548E28EBDC1800DFE825 /* OnboardingView.swift in Sources */,
 				82B354BB28EBDCC200DFE825 /* OnboardingProfilePictureEnvironment.swift in Sources */,
 				82FCE89328C50EDE00C928E9 /* AuthEnvironment.swift in Sources */,
@@ -841,10 +817,9 @@
 				82FCE89128C50EC900C928E9 /* AuthState.swift in Sources */,
 				82D35A9D28B14FE800572C52 /* ConversationAction.swift in Sources */,
 				826A5D2728E7EAAE00ADE473 /* Conversation OnboardingEnvironment.swift in Sources */,
-				82B354B228EBDCA400DFE825 /* OnboardingPermissionsState.swift in Sources */,
-				82B354AF28EBDCA400DFE825 /* OnboardingPermissionsView.swift in Sources */,
 				82D35A9928B11BA100572C52 /* ConversationsEnvironment.swift in Sources */,
 				82B354D128ECC1B100DFE825 /* LoggedInState.swift in Sources */,
+				82B354E828ED094900DFE825 /* OnboardingPermissionsState.swift in Sources */,
 				82FCE8AC28C578F300C928E9 /* AccountEnvironment.swift in Sources */,
 				82B3549928EBDC7600DFE825 /* OnboardingUsernameView.swift in Sources */,
 				8292BDE328A958B600471B59 /* ConversationView.swift in Sources */,
@@ -858,12 +833,12 @@
 				82FCE8A828C578DD00C928E9 /* AccountState.swift in Sources */,
 				82D35A9F28B1501000572C52 /* ConversationReducer.swift in Sources */,
 				8292BDE128A958B600471B59 /* TowerApp.swift in Sources */,
+				82B354E728ED094900DFE825 /* OnboardingPermissionsReducer.swift in Sources */,
 				826A5D2528E7EA4F00ADE473 /* Conversation OnboardingAction.swift in Sources */,
 				82B3548128E8AF0900DFE825 /* NotificationsView.swift in Sources */,
 				82FCE8AA28C578EA00C928E9 /* AccountAction.swift in Sources */,
 				82B354D828ECC45400DFE825 /* AppLoadingView.swift in Sources */,
 				82FCE88D28C50C0B00C928E9 /* AuthAction.swift in Sources */,
-				82B354A328EBDC8F00DFE825 /* OnboardingPrivacyAction.swift in Sources */,
 				829832B828E6975B00A05525 /* User+Extension.swift in Sources */,
 				826A5D2328E7E8FF00ADE473 /* Conversation OnboardingState.swift in Sources */,
 				826A5D2928E7EACC00ADE473 /* Conversation OnboardingReducer.swift in Sources */,
@@ -871,18 +846,19 @@
 				82B3549828EBDC7600DFE825 /* OnboardingUsernameAction.swift in Sources */,
 				82FCE89828C5242900C928E9 /* AppReducer.swift in Sources */,
 				82F0178728E510CC00C99740 /* TrackingState.swift in Sources */,
+				82B354E528ED094900DFE825 /* OnboardingPermissionsView.swift in Sources */,
 				82B3549128EBDC1800DFE825 /* OnboardingState.swift in Sources */,
 				82B94AC728B5BA2700BC8F59 /* ComposeView.swift in Sources */,
 				82F0178328E510CC00C99740 /* TrackingAction.swift in Sources */,
+				82B354E428ED094900DFE825 /* OnboardingPermissionsAction.swift in Sources */,
 				82B3549A28EBDC7600DFE825 /* OnboardingUsernameEnvironment.swift in Sources */,
 				82B94ACD28B5BD0900BC8F59 /* ComposeEnvironment.swift in Sources */,
-				82B354A528EBDC8F00DFE825 /* OnboardingPrivacyEnvironment.swift in Sources */,
 				827EEB4E28E2906C0044BCD5 /* Identity.swift in Sources */,
 				82B354CF28ECC1B100DFE825 /* LoggedInEnvironment.swift in Sources */,
 				827EEB4C28E28D350044BCD5 /* Session.swift in Sources */,
+				82B354E628ED094900DFE825 /* OnboardingPermissionsEnvironment.swift in Sources */,
 				82B354BD28EBDCC200DFE825 /* OnboardingProfilePictureState.swift in Sources */,
 				82F0178428E510CC00C99740 /* TrackingView.swift in Sources */,
-				82B354AE28EBDCA400DFE825 /* OnboardingPermissionsAction.swift in Sources */,
 				82B3548628EA35E500DFE825 /* ProfileImage.swift in Sources */,
 				82B354BC28EBDCC200DFE825 /* OnboardingProfilePictureReducer.swift in Sources */,
 				82B94ACF28B5BD9300BC8F59 /* ComposeState.swift in Sources */,
