@@ -20,18 +20,18 @@ public struct OnboardingProfilePictureView: View {
                         .foregroundColor(Color("colors/content/primary"))
                         .multilineTextAlignment(.center)
                     
-                    Text("Adding a profile picture gives a face to your (awesome) name, but we understand if you'd rather be private.")
+                    Text("Adding a profile picture puts a face to your name, but we understand if you'd rather be private.")
                         .font(.body)
                         .fontWeight(.medium)
                         .foregroundColor(Color("colors/content/secondary"))
                         .multilineTextAlignment(.center)
                 }
                 
-                Button("Choose a photo") { viewStore.send(.next, animation: .default) }
+                Button("Choose a photo") { viewStore.send(.selectPhoto) }
                     .frame(width: 200)
                     .buttonStyle(PrimaryButtonStyle())
                 
-                Button("Skip for now") { viewStore.send(.next, animation: .default) }
+                Button("Next") { viewStore.send(.skip, animation: .default) }
                     .frame(width: 200)
                     .buttonStyle(SecondaryButtonStyle())
                     

@@ -7,7 +7,21 @@ public typealias OnboardingProfilePictureReducer = Reducer<OnboardingProfilePict
 
 public let onboardingProfilePictureReducer = OnboardingProfilePictureReducer { state, action, env in
     switch action {
-    case .next:
+    case .requestPermission:
+        env.permission.requestAccess { _ in }
+        
+        return .none
+        
+    case .selectPhoto:
+        switch env.permission.status() {
+        case .unknown:
+            return .init(value: .requestPermission)
+            
+        case .authorized, .denied:
+            return .none
+        }
+        
+    case .skip:
         return .none
     }
 }

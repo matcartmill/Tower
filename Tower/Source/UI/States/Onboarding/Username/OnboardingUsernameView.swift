@@ -35,7 +35,7 @@ public struct OnboardingUsernameView: View {
                 Button("Next") { viewStore.send(.next, animation: .default) }
                     .frame(width: 200)
                     .disabled(username.isEmpty)
-                    .buttonStyle(PrimaryButtonStyle())
+                    .buttonStyle(SecondaryButtonStyle())
                     
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

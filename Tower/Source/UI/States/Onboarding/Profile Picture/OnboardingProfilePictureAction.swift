@@ -1,3 +1,5 @@
 public enum OnboardingProfilePictureAction {
-    case next
+    case requestPermission
+    case selectPhoto
+    case skip
 }

@@ -25,11 +25,13 @@ public struct OnboardingPermissionsView: View {
                         .multilineTextAlignment(.center)
                 }
                 
-                Button("Enable Push Notifications") { viewStore.send(.next, animation: .default) }
+                Button("Enable Push Notifications") { viewStore.send(.requestPermission, animation: .default) }
                     .frame(width: 300)
                     .buttonStyle(PrimaryButtonStyle())
                 
-                Button("Skip for now") { viewStore.send(.next, animation: .default) }
+                Button("Finish up") { viewStore.send(.next, animation: .default) }
+                    .frame(width: 200)
+                    .buttonStyle(SecondaryButtonStyle())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
@@ -37,6 +39,7 @@ public struct OnboardingPermissionsView: View {
                 Color("colors/background/base")
                     .ignoresSafeArea()
             )
+            .onAppear { viewStore.send(.viewAppeared) }
         }
     }
 }

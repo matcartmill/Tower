@@ -9,5 +9,13 @@ public let onboardingPermissionsReducer = OnboardingPermissionsReducer { state, 
     switch action {
     case .next:
         return .none
+        
+    case .requestPermission:
+        env.permission.requestAccess { _ in }
+        return .none
+        
+    case .viewAppeared:
+        state.pushOptInState = env.permission.status()
+        return .none
     }
 }

@@ -1,13 +1,21 @@
 import SwiftUI
 
 struct SecondaryButtonStyle: ButtonStyle {
+    @Environment (\.isEnabled) private var isEnabled
+    
+    private var foregrouncColor: Color {
+        isEnabled
+        ? Color("colors/content/button/secondary")
+        : Color("colors/content/button/secondary_disabled")
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(maxWidth: .infinity)
             .foregroundColor(
                 configuration.isPressed
-                    ? Color("colors/content/button/secondary").opacity(0.7)
-                    : Color("colors/content/button/secondary")
+                    ? foregrouncColor.opacity(0.7)
+                    : foregrouncColor
             )
             .font(.callout)
             .fontWeight(.bold)
