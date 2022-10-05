@@ -2,14 +2,14 @@ import ComposableArchitecture
 import DomainKit
 import SwiftUI
 
-struct ConversationView: View {
-    let store: ConversationStore
+public struct ConversationView: View {
+    public let store: ConversationStore
         
-    init(store: ConversationStore) {
+    public init(store: ConversationStore) {
         self.store = store
     }
     
-    var body: some View {
+    public var body: some View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
                 ScrollViewReader { proxy in
@@ -111,7 +111,7 @@ struct ConversationView: View {
     }
 }
 
-struct ConversationMessage: View {
+private struct ConversationMessage: View {
     let message: Message
     let user: User
     
@@ -128,7 +128,7 @@ struct ConversationMessage: View {
     }
 }
 
-struct ConversationMessageContent: View {
+private struct ConversationMessageContent: View {
     let message: Message
     let user: User
     
@@ -150,11 +150,5 @@ struct ConversationMessageContent: View {
                     : Color("colors/background/chat/incoming")
             )
             .clipShape(RoundedRectangle(cornerRadius: 20))
-    }
-}
-
-struct ConversationView_Previews: PreviewProvider {
-    static var previews: some View {
-        EmptyView()
     }
 }

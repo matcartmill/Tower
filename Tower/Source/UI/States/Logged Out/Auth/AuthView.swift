@@ -2,10 +2,14 @@ import AuthenticationServices
 import ComposableArchitecture
 import SwiftUI
 
-struct AuthView: View {
-    let store: AuthStore
+public struct AuthView: View {
+    public let store: AuthStore
     
-    var body: some View {
+    public init(store: AuthStore) {
+        self.store = store
+    }
+    
+    public var body: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 48) {
                 if viewStore.isAuthenticating {
@@ -17,7 +21,9 @@ struct AuthView: View {
                         .onTapGesture { viewStore.send(.authenticate) }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
+            .background(Color("colors/background/base").ignoresSafeArea())
             .alert(
                 "Oops!",
                 isPresented: viewStore.binding(

@@ -19,5 +19,7 @@ struct AppView: View {
                 OnboardingView(store: $0)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("colors/background/base").ignoresSafeArea())
     }
 }

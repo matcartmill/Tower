@@ -2,10 +2,14 @@ import ComposableArchitecture
 import DomainKit
 import SwiftUI
 
-struct ConversationsView: View {
-    let store: ConversationsStore
+public struct ConversationsView: View {
+    public let store: ConversationsStore
     
-    var body: some View {
+    public init(store: ConversationsStore) {
+        self.store = store
+    }
+    
+    public var body: some View {
         WithViewStore(store) { viewStore in
             NavigationStack {
                 ZStack(alignment: .bottomTrailing) {
@@ -121,7 +125,7 @@ struct ConversationsView: View {
     }
 }
 
-struct ConversationListItem: View {
+private struct ConversationListItem: View {
     let conversation: Conversation
     
     var body: some View {
@@ -154,15 +158,5 @@ struct ConversationListItem: View {
                     .clipShape(Circle())
             }
         }
-    }
-}
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        ConversationsView(store: .init(
-            initialState: .init(conversations: [], user: .sender),
-            reducer: conversationsReducer,
-            environment: .init()
-        ))
     }
 }

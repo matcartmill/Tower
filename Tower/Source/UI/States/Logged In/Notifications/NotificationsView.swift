@@ -10,7 +10,7 @@ public struct NotificationsView: View {
 
     public var body: some View {
         WithViewStore(store) { viewStore in
-
+            Color("colors/background/base").ignoresSafeArea()
         }
     }
 }

@@ -16,7 +16,7 @@ public struct OnboardingView: View {
             ) {
                 OnboardingUsernameView(store: $0)
                     .transition(
-                        .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
+                        .asymmetric(insertion: .move(edge: .top), removal: .move(edge: .leading))
                     )
             }
             CaseLet(
@@ -34,7 +34,7 @@ public struct OnboardingView: View {
             ) {
                 OnboardingPermissionsView(store: $0)
                     .transition(
-                        .asymmetric(insertion: .move(edge: .trailing), removal: .opacity)
+                        .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .bottom).combined(with: .opacity))
                     )
             }
         }
