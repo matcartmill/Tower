@@ -5,13 +5,9 @@ public struct LoggedInEnvironment {
     public let trackingEnvironment: TrackingEnvironment
     public let notificationsEnvironment: NotificationsEnvironment
     
-    public init(
-        conversationsEnvironment: ConversationsEnvironment,
-        trackingEnvironment: TrackingEnvironment,
-        notificationsEnvironment: NotificationsEnvironment
-    ) {
-        self.conversationsEnvironment = conversationsEnvironment
-        self.trackingEnvironment = trackingEnvironment
-        self.notificationsEnvironment = notificationsEnvironment
+    public init() {
+        self.conversationsEnvironment = .init()
+        self.trackingEnvironment = .init()
+        self.notificationsEnvironment = .init()
     }
 }

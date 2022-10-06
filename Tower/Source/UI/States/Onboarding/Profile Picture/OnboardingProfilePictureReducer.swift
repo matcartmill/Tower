@@ -21,7 +21,7 @@ public let onboardingProfilePictureReducer = OnboardingProfilePictureReducer { s
             return .none
         }
         
-    case .skip:
+    case .next:
         return .none
     }
 }

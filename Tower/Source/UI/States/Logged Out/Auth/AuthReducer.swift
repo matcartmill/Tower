@@ -21,6 +21,7 @@ public let authReducer = AuthReducer { state, action, env in
                 return session
             })
         }
+        .animation()
         
     case .authenticationResponse(.success(let session)):
         env.sessionStore.update(session)

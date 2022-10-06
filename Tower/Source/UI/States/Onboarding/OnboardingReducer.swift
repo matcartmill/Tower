@@ -45,7 +45,7 @@ public let onboardingReducer = OnboardingReducer.combine(
             
         // Bridges - Profile Picture
             
-        case .profilePicture(.skip):
+        case .profilePicture(.next):
             return .init(value: .showPermissionsOnboarding)
             
         case .profilePicture:

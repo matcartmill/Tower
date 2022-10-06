@@ -39,16 +39,11 @@ public struct AppEnvironment {
             sessionStore: sessionStore
         )
         
-        self.loggedInEnvironment = .init(
-            conversationsEnvironment: .init(),
-            trackingEnvironment: .init(),
-            notificationsEnvironment: .init()
-        )
+        self.loggedInEnvironment = .init()
         
         self.onboardingEnvironment = .init(
-            usernameEnvironment: .init(),
-            profilePictureEnvironment: .init(permission: photosPermission),
-            permissionsEnvironment: .init(permission: notificationsPermission)
+            notificationsPermission: notificationsPermission,
+            photosPermission: photosPermission
         )
     }
 }
@@ -65,10 +60,16 @@ extension AppEnvironment {
     
     public static var mock: Self {
         .init(
-//            photosPermission: .init(name: "Photos", status: { .authorized }, requestAccess: { _ in }),
-//            notificationsPermission: .init(name: "Notifications", status: { .authorized }, requestAccess: { _ in }),
-            photosPermission: .photos,
-            notificationsPermission: .notifications,
+            photosPermission: .init(
+                name: "Photos",
+                status: { .authorized },
+                requestAccess: { _ in }
+            ),
+            notificationsPermission: .init(
+                name: "Notifications",
+                status: { .authorized },
+                requestAccess: { _ in }
+            ),
             identityProvider: MockIdentityProvider(),
             sessionGateway: MockSessionGateway()
         )

@@ -1,4 +1,5 @@
 import Foundation
+import Toolbox
 
 public struct OnboardingEnvironment {
     public let usernameEnvironment: OnboardingUsernameEnvironment
@@ -6,12 +7,11 @@ public struct OnboardingEnvironment {
     public let permissionsEnvironment: OnboardingPermissionsEnvironment
     
     public init (
-        usernameEnvironment: OnboardingUsernameEnvironment,
-        profilePictureEnvironment: OnboardingProfilePictureEnvironment,
-        permissionsEnvironment: OnboardingPermissionsEnvironment
+        notificationsPermission: Permission<Notifications>,
+        photosPermission: Permission<Photos>
     ) {
-        self.usernameEnvironment = usernameEnvironment
-        self.profilePictureEnvironment = profilePictureEnvironment
-        self.permissionsEnvironment = permissionsEnvironment
+        self.usernameEnvironment = .init()
+        self.profilePictureEnvironment = .init(permission: photosPermission)
+        self.permissionsEnvironment = .init(permission: notificationsPermission)
     }
 }

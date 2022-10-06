@@ -67,12 +67,13 @@
 		82B354D928ECC45400DFE825 /* AppLoadingEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354D428ECC45400DFE825 /* AppLoadingEnvironment.swift */; };
 		82B354DA28ECC45400DFE825 /* AppLoadingReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354D528ECC45400DFE825 /* AppLoadingReducer.swift */; };
 		82B354DB28ECC45400DFE825 /* AppLoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354D628ECC45400DFE825 /* AppLoadingState.swift */; };
-		82B354DD28ECFEA400DFE825 /* OnboardingIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354DC28ECFEA400DFE825 /* OnboardingIconView.swift */; };
+		82B354DD28ECFEA400DFE825 /* CalloutIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354DC28ECFEA400DFE825 /* CalloutIcon.swift */; };
 		82B354E428ED094900DFE825 /* OnboardingPermissionsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354DF28ED094900DFE825 /* OnboardingPermissionsAction.swift */; };
 		82B354E528ED094900DFE825 /* OnboardingPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E028ED094900DFE825 /* OnboardingPermissionsView.swift */; };
 		82B354E628ED094900DFE825 /* OnboardingPermissionsEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E128ED094900DFE825 /* OnboardingPermissionsEnvironment.swift */; };
 		82B354E728ED094900DFE825 /* OnboardingPermissionsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E228ED094900DFE825 /* OnboardingPermissionsReducer.swift */; };
 		82B354E828ED094900DFE825 /* OnboardingPermissionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354E328ED094900DFE825 /* OnboardingPermissionsState.swift */; };
+		82B354EB28EE016300DFE825 /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B354EA28EE016300DFE825 /* CalloutView.swift */; };
 		82B94AC728B5BA2700BC8F59 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B94AC628B5BA2700BC8F59 /* ComposeView.swift */; };
 		82B94AC928B5BCD300BC8F59 /* ComposeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B94AC828B5BCD300BC8F59 /* ComposeReducer.swift */; };
 		82B94ACB28B5BCFE00BC8F59 /* ComposeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B94ACA28B5BCFE00BC8F59 /* ComposeAction.swift */; };
@@ -191,12 +192,13 @@
 		82B354D428ECC45400DFE825 /* AppLoadingEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingEnvironment.swift; sourceTree = "<group>"; };
 		82B354D528ECC45400DFE825 /* AppLoadingReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingReducer.swift; sourceTree = "<group>"; };
 		82B354D628ECC45400DFE825 /* AppLoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLoadingState.swift; sourceTree = "<group>"; };
-		82B354DC28ECFEA400DFE825 /* OnboardingIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingIconView.swift; sourceTree = "<group>"; };
+		82B354DC28ECFEA400DFE825 /* CalloutIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutIcon.swift; sourceTree = "<group>"; };
 		82B354DF28ED094900DFE825 /* OnboardingPermissionsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsAction.swift; sourceTree = "<group>"; };
 		82B354E028ED094900DFE825 /* OnboardingPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsView.swift; sourceTree = "<group>"; };
 		82B354E128ED094900DFE825 /* OnboardingPermissionsEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsEnvironment.swift; sourceTree = "<group>"; };
 		82B354E228ED094900DFE825 /* OnboardingPermissionsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsReducer.swift; sourceTree = "<group>"; };
 		82B354E328ED094900DFE825 /* OnboardingPermissionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPermissionsState.swift; sourceTree = "<group>"; };
+		82B354EA28EE016300DFE825 /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		82B94AC628B5BA2700BC8F59 /* ComposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		82B94AC828B5BCD300BC8F59 /* ComposeReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeReducer.swift; sourceTree = "<group>"; };
 		82B94ACA28B5BCFE00BC8F59 /* ComposeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeAction.swift; sourceTree = "<group>"; };
@@ -516,7 +518,8 @@
 				82FCE8A028C56B9100C928E9 /* AppleSignInButton.swift */,
 				82B3548528EA35E500DFE825 /* ProfileImage.swift */,
 				82B354C328EC6C3D00DFE825 /* UnderlinedTextField.swift */,
-				82B354DC28ECFEA400DFE825 /* OnboardingIconView.swift */,
+				82B354DC28ECFEA400DFE825 /* CalloutIcon.swift */,
+				82B354EA28EE016300DFE825 /* CalloutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -780,7 +783,7 @@
 				82B354CE28ECC1B100DFE825 /* LoggedInView.swift in Sources */,
 				82F0178628E510CC00C99740 /* TrackingReducer.swift in Sources */,
 				82B3549C28EBDC7600DFE825 /* OnboardingUsernameState.swift in Sources */,
-				82B354DD28ECFEA400DFE825 /* OnboardingIconView.swift in Sources */,
+				82B354DD28ECFEA400DFE825 /* CalloutIcon.swift in Sources */,
 				82B354C028EC65F400DFE825 /* PrimaryButtonStyle.swift in Sources */,
 				82B354D728ECC45400DFE825 /* AppLoadingAction.swift in Sources */,
 				827EEB0428D8A8140044BCD5 /* IdentityProvider+Mock.swift in Sources */,
@@ -831,6 +834,7 @@
 				82B354D928ECC45400DFE825 /* AppLoadingEnvironment.swift in Sources */,
 				827EEB8128E2AE0E0044BCD5 /* SessionGateway+Live.swift in Sources */,
 				82FCE8A828C578DD00C928E9 /* AccountState.swift in Sources */,
+				82B354EB28EE016300DFE825 /* CalloutView.swift in Sources */,
 				82D35A9F28B1501000572C52 /* ConversationReducer.swift in Sources */,
 				8292BDE128A958B600471B59 /* TowerApp.swift in Sources */,
 				82B354E728ED094900DFE825 /* OnboardingPermissionsReducer.swift in Sources */,

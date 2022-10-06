@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct OnboardingIconView: View {
+struct CalloutIcon: View {
     let image: Image
     
     var body: some View {

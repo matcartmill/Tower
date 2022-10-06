@@ -10,29 +10,20 @@ public struct OnboardingPermissionsView: View {
 
     public var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 32) {
-               OnboardingIconView(image: Image("icons/notification-indicator"))
-                
-                Group {
-                    Text("Enhance your experience by opting into push notifications")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
-                    
-                    Text("We'll send you notifications when you pair with someone for a conversation or when someone replies to your post.")
-                        .font(.body)
-                        .fontWeight(.medium)
-                        .multilineTextAlignment(.center)
-                }
-                
-                Button("Enable Push Notifications") { viewStore.send(.requestPermission, animation: .default) }
-                    .frame(width: 300)
-                    .buttonStyle(PrimaryButtonStyle())
-                
-                Button("Finish up") { viewStore.send(.next, animation: .default) }
-                    .frame(width: 200)
-                    .buttonStyle(SecondaryButtonStyle())
-            }
+            CalloutView<EmptyView>(
+                image: Image("icons/notification-indicator"),
+                title: "Enhance your experience by opting into push notifications",
+                details: "We'll send you notifications when you pair with someone for a conversation or when someone replies to your post.",
+                primaryAction: .init(
+                    title: "Enable Push Notifications",
+                    execute: { viewStore.send(.requestPermission, animation: .default) }
+                ),
+                secondaryAction: .init(
+                    title: "Finish up",
+                    execute: { viewStore.send(.next, animation: .default) }
+                ),
+                canProceed: true
+            )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
             .background(
