@@ -2,9 +2,9 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct AppLoadingView: View {
-    public let store: AppLoadingStore
+    public let store: StoreOf<AppLoading>
 
-    public init(store: AppLoadingStore) {
+    public init(store: StoreOf<AppLoading>) {
         self.store = store
     }
 

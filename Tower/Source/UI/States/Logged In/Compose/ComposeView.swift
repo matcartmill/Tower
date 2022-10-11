@@ -5,9 +5,9 @@ import SwiftUI
 public struct ComposeView: View {
     @FocusState private var isComposingFocused: Bool
     
-    public let store: ComposeStore
+    public let store: StoreOf<Compose>
     
-    public init(store: ComposeStore) {
+    public init(store: StoreOf<Compose>) {
         self.store = store
     }
     
@@ -64,22 +64,13 @@ public struct ComposeView: View {
                     "What's on your mind?",
                     text: viewStore.binding(
                         get: \.message,
-                        send: ComposeAction.textFieldChanged
+                        send: Compose.Action.textFieldChanged
                     ),
                     axis: .vertical
                 )
                 .frame(maxHeight: .infinity, alignment: .top)
                 .foregroundColor(Color("colors/content/primary"))
                 .focused($isComposingFocused)
-            }
-            .onAppear {
-                viewStore.send(.viewLoaded)
-            }
-            .onChange(of: viewStore.isComposingFocused) {
-                isComposingFocused = $0
-            }
-            .onChange(of: isComposingFocused) {
-                viewStore.send(.binding(.set(\.$isComposingFocused, $0)))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()

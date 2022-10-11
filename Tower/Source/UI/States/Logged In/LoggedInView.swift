@@ -2,9 +2,9 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct LoggedInView: View {
-    public let store: LoggedInStore
+    public let store: StoreOf<LoggedIn>
 
-    public init(store: LoggedInStore) {
+    public init(store: StoreOf<LoggedIn>) {
         self.store = store
     }
 
@@ -13,8 +13,8 @@ public struct LoggedInView: View {
             TabView {
                 ConversationsView(
                     store: store.scope(
-                        state: \.conversationsState,
-                        action: LoggedInAction.conversations
+                        state: \.conversations,
+                        action: LoggedIn.Action.conversations
                     )
                 )
                 .tabItem {
@@ -26,8 +26,8 @@ public struct LoggedInView: View {
                 
                 TrackingView(
                     store: store.scope(
-                        state: \.trackingState,
-                        action: LoggedInAction.tracking
+                        state: \.tracking,
+                        action: LoggedIn.Action.tracking
                     )
                 )
                 .tabItem {
@@ -39,8 +39,8 @@ public struct LoggedInView: View {
                 
                 NotificationsView(
                     store: store.scope(
-                        state: \.notificationsState,
-                        action: LoggedInAction.notifications
+                        state: \.notifications,
+                        action: LoggedIn.Action.notifications
                     )
                 )
                 .tabItem {

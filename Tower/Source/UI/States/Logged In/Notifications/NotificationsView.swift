@@ -2,9 +2,9 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct NotificationsView: View {
-    public let store: NotificationsStore
+    public let store: StoreOf<Notifications>
 
-    public init(store: NotificationsStore) {
+    public init(store: StoreOf<Notifications>) {
         self.store = store
     }
 

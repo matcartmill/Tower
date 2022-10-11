@@ -2,37 +2,37 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct OnboardingView: View {
-    public let store: OnboardingStore
+    public let store: StoreOf<Onboarding>
 
-    public init(store: OnboardingStore) {
+    public init(store: StoreOf<Onboarding>) {
         self.store = store
     }
 
     public var body: some View {
         SwitchStore(store) {
             CaseLet(
-                state: /OnboardingState.username,
-                action: OnboardingAction.username
+                state: /Onboarding.State.username,
+                action: Onboarding.Action.username
             ) {
-                OnboardingUsernameView(store: $0)
+                UsernameOnboardingStepView(store: $0)
                     .transition(
                         .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .leading))
                     )
             }
             CaseLet(
-                state: /OnboardingState.profilePicture,
-                action: OnboardingAction.profilePicture
+                state: /Onboarding.State.avatar,
+                action: Onboarding.Action.avatar
             ) {
-                OnboardingProfilePictureView(store: $0)
+                AvatarOnboardingStepView(store: $0)
                     .transition(
                         .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
                     )
             }
             CaseLet(
-                state: /OnboardingState.permissions,
-                action: OnboardingAction.permissions
+                state: /Onboarding.State.notifications,
+                action: Onboarding.Action.notifications
             ) {
-                OnboardingPermissionsView(store: $0)
+                NotificationsOnboardingStepView(store: $0)
                     .transition(
                         .asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .bottom).combined(with: .opacity))
                     )

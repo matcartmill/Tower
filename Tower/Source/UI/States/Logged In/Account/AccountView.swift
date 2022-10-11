@@ -2,7 +2,11 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct AccountView: View {
-    let store: AccountStore
+    public let store: StoreOf<Account>
+    
+    public init(store: StoreOf<Account>) {
+        self.store = store
+    }
     
     public var body: some View {
         WithViewStore(store) { viewStore in
@@ -55,15 +59,5 @@ public struct AccountView: View {
             .padding(24)
             .background(Color("colors/background/base").ignoresSafeArea())
         }
-    }
-}
-
-struct AccountView_Previews: PreviewProvider {
-    static var previews: some View {
-        AccountView(store: .init(
-            initialState: .init(user: .sender),
-            reducer: accountReducer,
-            environment: .init()
-        ))
     }
 }

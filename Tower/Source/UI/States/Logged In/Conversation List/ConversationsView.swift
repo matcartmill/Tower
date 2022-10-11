@@ -3,9 +3,9 @@ import DomainKit
 import SwiftUI
 
 public struct ConversationsView: View {
-    public let store: ConversationsStore
+    public let store: StoreOf<Conversations>
     
-    public init(store: ConversationsStore) {
+    public init(store: StoreOf<Conversations>) {
         self.store = store
     }
     
@@ -32,15 +32,15 @@ public struct ConversationsView: View {
                                         
                                         return true
                                     },
-                                    send: ConversationsAction.dismissConversation
+                                    send: Conversations.Action.dismissConversation
                                 )) {
                                     IfLetStore(
                                         store.scope(
                                             state: \.selectedConversation,
-                                            action: ConversationsAction.conversation
+                                            action: Conversations.Action.conversation
                                         ),
                                         then: {
-                                            ConversationView(store: $0)
+                                            ConversationDetailView(store: $0)
                                         }
                                     )
                                 }
@@ -82,12 +82,12 @@ public struct ConversationsView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .fullScreenCover(isPresented: viewStore.binding(
                     get: { $0.newConversation != nil },
-                    send: ConversationsAction.compose(.cancel)
+                    send: Conversations.Action.compose(.cancel)
                 )) {
                     IfLetStore(
                         store.scope(
                             state: \.newConversation,
-                            action: ConversationsAction.compose
+                            action: Conversations.Action.compose
                         )
                     ) {
                         ComposeView(store: $0)
@@ -95,12 +95,12 @@ public struct ConversationsView: View {
                 }
                 .sheet(isPresented: viewStore.binding(
                     get: { $0.accountState != nil },
-                    send: ConversationsAction.account(.close)
+                    send: Conversations.Action.account(.close)
                 )) {
                     IfLetStore(
                         store.scope(
                             state: \.accountState,
-                            action: ConversationsAction.account
+                            action: Conversations.Action.account
                         )
                     ) {
                         AccountView(store: $0)
@@ -108,12 +108,12 @@ public struct ConversationsView: View {
                 }
                 .sheet(isPresented: viewStore.binding(
                     get: { $0.conversationOnboardingState != nil },
-                    send: ConversationsAction.onboarding(.cancel)
+                    send: Conversations.Action.onboarding(.cancel)
                 )) {
                     IfLetStore(
                         store.scope(
                             state: \.conversationOnboardingState,
-                            action: ConversationsAction.onboarding
+                            action: Conversations.Action.onboarding
                         )
                     ) {
                         ConversationOnboardingView(store: $0)
