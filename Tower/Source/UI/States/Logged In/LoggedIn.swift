@@ -5,13 +5,13 @@ public struct LoggedIn: ReducerProtocol {
     public struct State: Equatable {
         var conversations: Conversations.State
         var tracking: Tracking.State
-        var notifications: Notifications.State
+        var notifications: NotificationsList.State
     }
     
     public enum Action {
         case conversations(Conversations.Action)
         case tracking(Tracking.Action)
-        case notifications(Notifications.Action)
+        case notifications(NotificationsList.Action)
     }
     
     public var body: some ReducerProtocol<State, Action> {
@@ -22,7 +22,7 @@ public struct LoggedIn: ReducerProtocol {
             Tracking()
         }
         Scope(state: \.notifications, action: /Action.notifications) {
-            Notifications()
+            NotificationsList()
         }
     }
 }

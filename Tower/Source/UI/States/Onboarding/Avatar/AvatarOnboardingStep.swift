@@ -13,24 +13,24 @@ public struct AvatarOnboardingStep: ReducerProtocol {
         case selectPhoto
     }
     
+    @Dependency (\.permissions) private var permissions
+    
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .requestPermission:
-                // env.permission.requestAccess { _ in }
+                permissions.photos.requestAccess { _ in }
                 
                 return .none
                 
             case .selectPhoto:
-                //            switch env.permission.status() {
-                //            case .unknown:
-                //                return .init(value: .requestPermission)
-                //
-                //            case .authorized, .denied:
-                //                return .none
-                //            }
-                
-                return .none
+                switch permissions.photos.status() {
+                case .unknown:
+                    return .init(value: .requestPermission)
+    
+                case .authorized, .denied:
+                    return .none
+                }
                 
             case .next:
                 return .none
