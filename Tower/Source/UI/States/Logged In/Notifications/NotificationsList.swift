@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import Foundation
 
-public struct Notifications: ReducerProtocol {
+public struct NotificationsList: ReducerProtocol {
     public struct State: Equatable { }
     
     public enum Action { }

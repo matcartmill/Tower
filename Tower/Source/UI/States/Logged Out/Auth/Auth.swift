@@ -16,6 +16,10 @@ public struct Auth: ReducerProtocol {
         case authenticationResponse(TaskResult<Session>)
     }
     
+    @Dependency(\.identityProvider) private var identityProvider
+    @Dependency(\.sessionGateway) private var sessionGateway
+    @Dependency(\.sessionStore) private var sessionStore
+    
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
@@ -27,15 +31,15 @@ public struct Auth: ReducerProtocol {
                 
                 return .task {
                     await .authenticationResponse(TaskResult {
-                        //let identity = try await env.identityProvider.identify()
-                        //let session = try await env.sessionGateway.exchange(identity)
-                        return Session(token: .init("abc"), user: .sender)
+                        let identity = try await identityProvider.identify()
+                        let session = try await sessionGateway.exchange(identity)
+                        return session
                     })
                 }
                 .animation()
                 
             case .authenticationResponse(.success(let session)):
-                // env.sessionStore.update(session)
+                sessionStore.update(session)
                 state.user = session.user
                 state.isAuthenticating = false
                 return .none
