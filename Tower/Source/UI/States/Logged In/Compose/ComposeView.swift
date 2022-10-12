@@ -15,7 +15,7 @@ public struct ComposeView: View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 24) {
                 HStack {
-                    Button(action: { viewStore.send(.cancel) }) {
+                    Button(action: { viewStore.send(.close) }) {
                         Text("Cancel")
                             .font(.callout)
                             .foregroundColor(Color("colors/content/primary"))
@@ -30,14 +30,14 @@ public struct ComposeView: View {
                             .font(.subheadline.bold())
                             .foregroundColor(
                                 viewStore.message.isEmpty
-                                    ? Color("colors/content/button/primary_disabled")
-                                    : Color("colors/content/button/primary")
+                                ? Color("colors/content/button/primary_disabled")
+                                : Color("colors/content/button/primary")
                             )
                     }
                     .background(
                         viewStore.message.isEmpty
-                            ? Color("colors/background/button/primary_disabled")
-                            : Color("colors/background/button/primary")
+                        ? Color("colors/background/button/primary_disabled")
+                        : Color("colors/background/button/primary")
                     )
                     .clipShape(Capsule())
                 }

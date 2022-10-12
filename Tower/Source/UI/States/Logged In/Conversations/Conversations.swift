@@ -20,6 +20,7 @@ public struct Conversations: ReducerProtocol {
         
         // Compose
         case openComposer
+        case closeComposer
         
         // Notifications
         case openNotifications
@@ -80,6 +81,11 @@ public struct Conversations: ReducerProtocol {
                 
                 return .none
                 
+            case .closeComposer:
+                state.newConversation = nil
+                
+                return .none
+                
             // Conversation
                 
             case .openConversation(let id):
@@ -122,17 +128,17 @@ public struct Conversations: ReducerProtocol {
                 state.conversations.insert(
                     .init(conversation: conversation, user: state.user),
                     at: 0)
-                state.newConversation = nil
                 
-                return .init(value: .openConversation(id: conversation.id))
+                return .merge(
+                    .task { .closeComposer },
+                    .task { .openConversation(id: conversation.id) }
+                )
                 
             case .compose(.textFieldChanged):
                 return .none
                 
-            case .compose(.cancel):
-                state.newConversation = nil
-                
-                return .none
+            case .compose(.close):
+                return .task { .closeComposer }
                 
             // Bridges - Conversation
                 
@@ -153,7 +159,7 @@ public struct Conversations: ReducerProtocol {
                 
             // Bridges - Conversation Onboarding
 
-            case .onboarding(.select):
+            case .onboarding(.next):
                 state.conversationOnboardingState = nil
                 state.newConversation = .init(
                     conversation: .init(

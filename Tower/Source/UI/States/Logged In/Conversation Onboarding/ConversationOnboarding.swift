@@ -5,7 +5,7 @@ public struct ConversationOnboarding: ReducerProtocol {
     
     public enum Action {
         case cancel
-        case select
+        case next
     }
     
     public var body: some ReducerProtocol<State, Action> {

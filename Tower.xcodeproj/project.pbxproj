@@ -367,7 +367,7 @@
 				82FCE8A228C578BD00C928E9 /* Account */,
 				82D35A8F28B1156200572C52 /* Compose */,
 				82D35A8E28B1155C00572C52 /* Conversation */,
-				82D35A8D28B1155700572C52 /* Conversation List */,
+				82D35A8D28B1155700572C52 /* Conversations */,
 				82FFF47E28E7E444008FEA93 /* Conversation Onboarding */,
 				82B3547A28E8AEF600DFE825 /* Notifications */,
 				82D5B00E28E5043A006DB3F3 /* Tracking */,
@@ -437,13 +437,13 @@
 			path = States;
 			sourceTree = "<group>";
 		};
-		82D35A8D28B1155700572C52 /* Conversation List */ = {
+		82D35A8D28B1155700572C52 /* Conversations */ = {
 			isa = PBXGroup;
 			children = (
 				82D35A8428ADCB2700572C52 /* ConversationsView.swift */,
 				82D35A9028B1157F00572C52 /* Conversations.swift */,
 			);
-			path = "Conversation List";
+			path = Conversations;
 			sourceTree = "<group>";
 		};
 		82D35A8E28B1155C00572C52 /* Conversation */ = {

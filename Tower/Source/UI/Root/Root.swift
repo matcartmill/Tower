@@ -77,6 +77,7 @@ struct Root: ReducerProtocol {
         }
         .ifCaseLet(/State.loggedOut, action: /Action.auth) {
             Auth()
+                .dependency(\.identityProvider, MockIdentityProvider())
         }
         .ifCaseLet(/State.onboarding, action: /Action.onboarding) {
             Onboarding()

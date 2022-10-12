@@ -11,7 +11,7 @@ public struct Compose: ReducerProtocol {
     public enum Action {
         case textFieldChanged(String)
         case start
-        case cancel
+        case close
     }
     
     public var body: some ReducerProtocol<State, Action> {
@@ -30,7 +30,7 @@ public struct Compose: ReducerProtocol {
                 
                 return .none
                 
-            case .cancel:
+            case .close:
                 return .none
             }
         }

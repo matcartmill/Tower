@@ -16,11 +16,11 @@ public struct ConversationOnboardingView: View {
                 details: "If you need immediate mental health support please dial your local health crisis number.",
                 primaryAction: .init(
                     title: "I understand",
-                    execute: { }
+                    execute: { viewStore.send(.next) }
                 ),
                 secondaryAction: .init(
                     title: "Cancel",
-                    execute: { }
+                    execute: { viewStore.send(.cancel) }
                 ),
                 canProceed: true
             )

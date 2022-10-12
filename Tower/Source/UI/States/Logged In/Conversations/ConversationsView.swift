@@ -82,7 +82,7 @@ public struct ConversationsView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .fullScreenCover(isPresented: viewStore.binding(
                     get: { $0.newConversation != nil },
-                    send: Conversations.Action.compose(.cancel)
+                    send: Conversations.Action.compose(.close)
                 )) {
                     IfLetStore(
                         store.scope(

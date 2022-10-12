@@ -93,8 +93,9 @@ public struct ConversationDetailView: View {
                 )
             ) {
                 ActionSheet(
-                    title: Text("Conversation Options"),
+                    title: Text("Options"),
                     buttons: [
+                        ActionSheet.Button.default(Text("Report")),
                         ActionSheet.Button.destructive(Text("Leave conversation")) {
                             viewStore.send(.leave(viewStore.conversation.id))
                         },
