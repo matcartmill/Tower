@@ -4,11 +4,12 @@ import SwiftUI
 struct TowerApp: App {
     var body: some Scene {
         WindowGroup {
-            AppView(store: .init(
-                initialState: .loading(.init()),
-                reducer: appReducer,
-                environment: .mock
-            ))
+            RootView(
+                store: .init(
+                    initialState: .loading(.init()),
+                    reducer: Root()
+                )
+            )
         }
     }
 }

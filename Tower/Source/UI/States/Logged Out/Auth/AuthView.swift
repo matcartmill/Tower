@@ -3,9 +3,9 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct AuthView: View {
-    public let store: AuthStore
+    public let store: StoreOf<Auth>
     
-    public init(store: AuthStore) {
+    public init(store: StoreOf<Auth>) {
         self.store = store
     }
     
@@ -35,7 +35,7 @@ public struct AuthView: View {
                 "Oops!",
                 isPresented: viewStore.binding(
                     get: { $0.errorMessage != nil },
-                    send: AuthAction.showAuthError
+                    send: Auth.Action.showAuthError
                 ),
                 actions: { Button("Okay") {} },
                 message: { Text("Something went wrong during the sign-in process.") }

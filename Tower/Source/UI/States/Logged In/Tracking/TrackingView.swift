@@ -29,10 +29,9 @@ public struct TrackingView: View {
         )
     ]
     
-    @State private var foo = false
-    public let store: TrackingStore
+    public let store: StoreOf<Tracking>
 
-    public init(store: TrackingStore) {
+    public init(store: StoreOf<Tracking>) {
         self.store = store
     }
 
