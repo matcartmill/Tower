@@ -1,0 +1,13 @@
+"Onboarding.Avatar.title" = "Want to spruce up your profile a bit?";
+"Onboarding.Avatar.details" = "Adding a profile picture puts a face to your name, but we understand if you'd rather be private.";
+"Onboarding.Avatar.Button.title" = "Choose a Photo";
+
+"Onboarding.Notifications.title" = "Want to spruce up your profile a bit?";
+"Onboarding.Notifications.details" = "Adding a profile picture puts a face to your name, but we understand if you'd rather be  private.";
+"Onboarding.Notifications.Button.title" = "Enable Push Notifications";
+
+"Onboarding.Username.title" = "What should we call you?";
+"Onboarding.Username.details" = "Your unique username will be used as an alias when chatting with others using the platform.";
+
+"Onboarding.Button.next" = "Next";
+"Onboarding.Button.finishUp" = "Finish up";

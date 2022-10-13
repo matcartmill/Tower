@@ -1,0 +1,14 @@
+input_dir: Tower
+output_dir: Tower/Sources/Generated/
+strings:
+  - inputs:
+      - Resources/Strings/en.lproj
+    outputs:
+    - templateName: structured-swift5
+      output: L10n.swift
+xcassets:
+  - inputs:
+      - Resources/Assets.xcassets
+    outputs:
+      - templateName: swift5
+        output: Assets.swift

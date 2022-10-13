@@ -54,6 +54,11 @@
 		82D1453328F6389500EE202D /* Permissions+Dependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D1453228F6389500EE202D /* Permissions+Dependency.swift */; };
 		82D1453528F6466F00EE202D /* Permissions+Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D1453428F6466F00EE202D /* Permissions+Container.swift */; };
 		82D1453728F64E8700EE202D /* IdentityProvider+Dependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D1453628F64E8700EE202D /* IdentityProvider+Dependency.swift */; };
+		82D1453A28F7704A00EE202D /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 82D1453928F7704A00EE202D /* Starscream */; };
+		82D1453D28F7708000EE202D /* WebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D1453C28F7708000EE202D /* WebSocketClient.swift */; };
+		82D1454428F7AD8C00EE202D /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D1454328F7AD8C00EE202D /* L10n.swift */; };
+		82D1454628F7AD9500EE202D /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D1454528F7AD9500EE202D /* Assets.swift */; };
+		82D1454B28F7AE3C00EE202D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 82D1454D28F7AE3C00EE202D /* Localizable.strings */; };
 		82D35A8528ADCB2700572C52 /* ConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D35A8428ADCB2700572C52 /* ConversationsView.swift */; };
 		82D35A9128B1157F00572C52 /* Conversations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D35A9028B1157F00572C52 /* Conversations.swift */; };
 		82D35A9F28B1501000572C52 /* ConversationDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D35A9E28B1501000572C52 /* ConversationDetail.swift */; };
@@ -136,6 +141,10 @@
 		82D1453228F6389500EE202D /* Permissions+Dependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permissions+Dependency.swift"; sourceTree = "<group>"; };
 		82D1453428F6466F00EE202D /* Permissions+Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Permissions+Container.swift"; sourceTree = "<group>"; };
 		82D1453628F64E8700EE202D /* IdentityProvider+Dependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdentityProvider+Dependency.swift"; sourceTree = "<group>"; };
+		82D1453C28F7708000EE202D /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
+		82D1454328F7AD8C00EE202D /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		82D1454528F7AD9500EE202D /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		82D1454C28F7AE3C00EE202D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		82D35A8428ADCB2700572C52 /* ConversationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsView.swift; sourceTree = "<group>"; };
 		82D35A9028B1157F00572C52 /* Conversations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversations.swift; sourceTree = "<group>"; };
 		82D35A9E28B1501000572C52 /* ConversationDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetail.swift; sourceTree = "<group>"; };
@@ -158,6 +167,7 @@
 				829832BB28E6981900A05525 /* Toolbox in Frameworks */,
 				829832B528E6958700A05525 /* DomainKit in Frameworks */,
 				829832BF28E7267600A05525 /* ComposableArchitecture in Frameworks */,
+				82D1453A28F7704A00EE202D /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +193,7 @@
 			children = (
 				827EEB0028D418E50044BCD5 /* Identity */,
 				827EEB4828E28CB20044BCD5 /* Session */,
+				82D1453B28F7706D00EE202D /* WebSockets */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -236,8 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				827EEB4728E252C60044BCD5 /* Tower.entitlements */,
-				8292BE0A28A9608A00471B59 /* Source */,
-				8292BDE428A958B700471B59 /* Assets.xcassets */,
+				82D1454728F7ADF900EE202D /* Resources */,
+				8292BE0A28A9608A00471B59 /* Sources */,
 				8292BDE628A958B700471B59 /* Preview Content */,
 			);
 			path = Tower;
@@ -268,16 +279,17 @@
 			path = TowerUITests;
 			sourceTree = "<group>";
 		};
-		8292BE0A28A9608A00471B59 /* Source */ = {
+		8292BE0A28A9608A00471B59 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				8292BDE028A958B600471B59 /* TowerApp.swift */,
 				827EEAFD28D418470044BCD5 /* Components */,
 				82F0178C28E5237F00C99740 /* Extensions */,
+				82D1454228F7AD7F00EE202D /* Generated */,
 				829832BC28E6A66700A05525 /* Repositories */,
 				8292BE0B28A9609000471B59 /* UI */,
 			);
-			path = Source;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		8292BE0B28A9609000471B59 /* UI */ = {
@@ -414,6 +426,40 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		82D1453B28F7706D00EE202D /* WebSockets */ = {
+			isa = PBXGroup;
+			children = (
+				82D1453C28F7708000EE202D /* WebSocketClient.swift */,
+			);
+			path = WebSockets;
+			sourceTree = "<group>";
+		};
+		82D1454228F7AD7F00EE202D /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				82D1454328F7AD8C00EE202D /* L10n.swift */,
+				82D1454528F7AD9500EE202D /* Assets.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		82D1454728F7ADF900EE202D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				82D1454828F7AE0900EE202D /* Strings */,
+				8292BDE428A958B700471B59 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		82D1454828F7AE0900EE202D /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				82D1454D28F7AE3C00EE202D /* Localizable.strings */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		82D35A8628ADCC8F00572C52 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -538,6 +584,7 @@
 				829832B428E6958700A05525 /* DomainKit */,
 				829832BA28E6981900A05525 /* Toolbox */,
 				829832BE28E7267600A05525 /* ComposableArchitecture */,
+				82D1453928F7704A00EE202D /* Starscream */,
 			);
 			productName = Tower;
 			productReference = 8292BDDD28A958B600471B59 /* Tower.app */;
@@ -613,6 +660,7 @@
 			mainGroup = 8292BDD428A958B600471B59;
 			packageReferences = (
 				829832BD28E7267600A05525 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				82D1453828F7704A00EE202D /* XCRemoteSwiftPackageReference "Starscream" */,
 			);
 			productRefGroup = 8292BDDE28A958B600471B59 /* Products */;
 			projectDirPath = "";
@@ -631,6 +679,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8292BDE828A958B700471B59 /* Preview Assets.xcassets in Resources */,
+				82D1454B28F7AE3C00EE202D /* Localizable.strings in Resources */,
 				8292BDE528A958B700471B59 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -670,6 +719,7 @@
 				82D1453328F6389500EE202D /* Permissions+Dependency.swift in Sources */,
 				82B3549B28EBDC7600DFE825 /* UsernameOnboardingStep.swift in Sources */,
 				826A5D2128E7E59000ADE473 /* ConversationOnboardingView.swift in Sources */,
+				82D1453D28F7708000EE202D /* WebSocketClient.swift in Sources */,
 				82D35A9128B1157F00572C52 /* Conversations.swift in Sources */,
 				82B354C428EC6C3D00DFE825 /* UnderlinedTextField.swift in Sources */,
 				82D1453728F64E8700EE202D /* IdentityProvider+Dependency.swift in Sources */,
@@ -681,6 +731,7 @@
 				82FCE89628C523EC00C928E9 /* RootView.swift in Sources */,
 				82FCE88F28C50E7400C928E9 /* Auth.swift in Sources */,
 				82B3549928EBDC7600DFE825 /* UsernameOnboardingStepView.swift in Sources */,
+				82D1454628F7AD9500EE202D /* Assets.swift in Sources */,
 				8292BDE328A958B600471B59 /* ConversationDetailView.swift in Sources */,
 				82B354C228EC674800DFE825 /* SecondaryButtonStyle.swift in Sources */,
 				827EEAFF28D4186F0044BCD5 /* IdentityProvider.swift in Sources */,
@@ -706,6 +757,7 @@
 				82B354BC28EBDCC200DFE825 /* AvatarOnboardingStep.swift in Sources */,
 				82D1453528F6466F00EE202D /* Permissions+Container.swift in Sources */,
 				82D1453128F633EC00EE202D /* APIClient+Dependency.swift in Sources */,
+				82D1454428F7AD8C00EE202D /* L10n.swift in Sources */,
 				82FCE8A628C578D600C928E9 /* Account.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,6 +793,17 @@
 			targetProxy = 8292BDF828A958B700471B59 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		82D1454D28F7AE3C00EE202D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				82D1454C28F7AE3C00EE202D /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		8292BDFF28A958B700471B59 /* Debug */ = {
@@ -873,8 +936,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -904,8 +967,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1045,6 +1108,14 @@
 				minimumVersion = 0.39.1;
 			};
 		};
+		82D1453828F7704A00EE202D /* XCRemoteSwiftPackageReference "Starscream" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daltoniam/Starscream.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1060,6 +1131,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 829832BD28E7267600A05525 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		82D1453928F7704A00EE202D /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 82D1453828F7704A00EE202D /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
