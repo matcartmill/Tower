@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import Foundation
-import Toolbox
 
 public struct AvatarOnboardingStep: ReducerProtocol {
     public struct State: Equatable {

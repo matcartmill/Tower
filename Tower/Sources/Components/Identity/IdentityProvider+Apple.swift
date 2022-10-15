@@ -1,5 +1,4 @@
 import AuthenticationServices
-import DomainKit
 import Foundation
 
 public final class AppleIdentityProvider: NSObject, IdentityProvider {
@@ -35,7 +34,7 @@ extension AppleIdentityProvider: ASAuthorizationControllerDelegate {
             }
 
             checkedThrowingContinuation?.resume(returning: .init(
-                id: .init(appleIDCredential.user),
+                provider: .apple,
                 jwt: jwt
             ))
             checkedThrowingContinuation = nil

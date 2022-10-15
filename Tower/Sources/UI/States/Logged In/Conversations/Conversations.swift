@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import SwiftUI
-import DomainKit
 
 public struct Conversations: ReducerProtocol {
     public struct State: Equatable {

@@ -1,14 +1,9 @@
-import DomainKit
-
 public struct Session: Equatable {
-    public struct Token: Equatable {
-        public let value: String
-        
-        public init(_ value: String) {
-            self.value = value
-        }
-    }
-    
-    public var token: Token
+    public var jwt: JWT
     public var user: User
+    
+    public init(jwt: JWT, user: User) {
+        self.jwt = jwt
+        self.user = user
+    }
 }

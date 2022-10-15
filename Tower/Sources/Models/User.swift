@@ -1,8 +1,7 @@
 import Foundation
-import Toolbox
 
-public struct User: Equatable {
-    public struct Metadata: Equatable {
+public struct User: Codable, Equatable {
+    public struct Metadata: Codable, Equatable {
         public var onboardingCompleted: Bool
         public var profileImageUrl: URL?
         
@@ -13,10 +12,10 @@ public struct User: Equatable {
     }
     
     public let id: Identifier<Self>
-    public var username: String
+    public var username: String?
     public var metadata: Metadata
     
-    public init(username: String, metadata: Metadata) {
+    public init(username: String?, metadata: Metadata) {
         self.id = .init()
         self.username = username
         self.metadata = metadata

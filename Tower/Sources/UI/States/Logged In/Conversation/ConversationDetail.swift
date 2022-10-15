@@ -1,6 +1,4 @@
 import ComposableArchitecture
-import DomainKit
-import Toolbox
 
 public struct ConversationDetail: ReducerProtocol {
     public struct State: Equatable, Identifiable {

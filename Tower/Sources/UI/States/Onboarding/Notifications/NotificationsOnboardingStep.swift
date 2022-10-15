@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import Foundation
-import Toolbox
 
 public struct NotificationsOnboardingStep: ReducerProtocol {
     public struct State: Equatable {

@@ -1,7 +1,6 @@
 import Foundation
-import Toolbox
 
-public struct Conversation: Identifiable, Equatable {
+public struct Conversation: Codable, Identifiable, Equatable {
     public let id: Identifier<Self>
     public var author: User
     public var participant: User?

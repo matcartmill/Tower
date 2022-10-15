@@ -1,5 +1,3 @@
-import Toolbox
-
 class Permissions {
     let notifications: Permission<Notifications>
     let photos: Permission<Photos>

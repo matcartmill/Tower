@@ -1,5 +1,4 @@
 import ComposableArchitecture
-import DomainKit
 import SwiftUI
 
 public struct ConversationsView: View {
@@ -134,7 +133,7 @@ private struct ConversationListItem: View {
                 .frame(width: 40, height: 40)
             
             VStack(alignment: .leading, spacing: 12) {
-                Text(conversation.messages[0].sender.username)
+                Text(conversation.messages[0].sender.username!)
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)

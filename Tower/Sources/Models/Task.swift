@@ -1,8 +1,7 @@
 import Foundation
-import Toolbox
 
-public struct Task: Equatable, Identifiable {
-    public enum Frequency: Equatable {
+public struct Task: Codable, Equatable, Identifiable {
+    public enum Frequency: Codable, Equatable {
         case daily, weekly, monthly
     }
     

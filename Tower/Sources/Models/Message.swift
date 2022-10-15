@@ -1,7 +1,6 @@
 import Foundation
-import Toolbox
 
-public struct Message: Equatable, Identifiable {
+public struct Message: Codable, Equatable, Identifiable {
     public let id: Identifier<Self>
     public let content: String
     public let sender: User

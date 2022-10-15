@@ -1,5 +1,4 @@
 import ComposableArchitecture
-import DomainKit
 
 public struct Compose: ReducerProtocol {
     public struct State: Equatable {

@@ -1,4 +1,3 @@
-import DomainKit
 import SwiftUI
 
 public struct ProfileImage: View {
