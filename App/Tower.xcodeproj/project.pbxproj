@@ -32,9 +32,8 @@
 		8218AE5D28FB166200EE8A1F /* UserNotificationsClient in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE5C28FB166200EE8A1F /* UserNotificationsClient */; };
 		8218AE5F28FB193600EE8A1F /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE5E28FB193600EE8A1F /* CoreUI */; };
 		8218AE6128FB229E00EE8A1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8218AE6028FB229E00EE8A1F /* Assets.xcassets */; };
+		8218AE6328FB2AEA00EE8A1F /* AppDelegateFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */; };
 		8292BDE128A958B600471B59 /* TowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDE028A958B600471B59 /* TowerApp.swift */; };
-		82E9103428F85CC4009A444C /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9103228F85CC3009A444C /* Optional+Extensions.swift */; };
-		82E9103528F85CC4009A444C /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9103328F85CC4009A444C /* TimeInterval+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,8 +43,6 @@
 		827EEB4728E252C60044BCD5 /* Tower.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tower.entitlements; sourceTree = "<group>"; };
 		8292BDDD28A958B600471B59 /* Tower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tower.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8292BDE028A958B600471B59 /* TowerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerApp.swift; sourceTree = "<group>"; };
-		82E9103228F85CC3009A444C /* Optional+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
-		82E9103328F85CC4009A444C /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +57,7 @@
 				8218AE3328FB15A900EE8A1F /* AppLoadingFeature in Frameworks */,
 				8218AE5F28FB193600EE8A1F /* CoreUI in Frameworks */,
 				8218AE5328FB15A900EE8A1F /* TrackingFeature in Frameworks */,
+				8218AE6328FB2AEA00EE8A1F /* AppDelegateFeature in Frameworks */,
 				8218AE3928FB15A900EE8A1F /* ConversationFeature in Frameworks */,
 				8218AE2728FB12AD00EE8A1F /* ComposableArchitecture in Frameworks */,
 				8218AE3D28FB15A900EE8A1F /* ConversationsFeature in Frameworks */,
@@ -124,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				8292BDE028A958B600471B59 /* TowerApp.swift */,
-				82F0178C28E5237F00C99740 /* Extensions */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -134,15 +131,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		82F0178C28E5237F00C99740 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				82E9103228F85CC3009A444C /* Optional+Extensions.swift */,
-				82E9103328F85CC4009A444C /* TimeInterval+Extension.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,6 +174,7 @@
 				8218AE5A28FB166200EE8A1F /* RemoteNotificationsClient */,
 				8218AE5C28FB166200EE8A1F /* UserNotificationsClient */,
 				8218AE5E28FB193600EE8A1F /* CoreUI */,
+				8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */,
 			);
 			productName = Tower;
 			productReference = 8292BDDD28A958B600471B59 /* Tower.app */;
@@ -244,8 +233,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8292BDE128A958B600471B59 /* TowerApp.swift in Sources */,
-				82E9103428F85CC4009A444C /* Optional+Extensions.swift in Sources */,
-				82E9103528F85CC4009A444C /* TimeInterval+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,6 +551,10 @@
 		8218AE5E28FB193600EE8A1F /* CoreUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreUI;
+		};
+		8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppDelegateFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

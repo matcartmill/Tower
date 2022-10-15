@@ -23,6 +23,7 @@ var package = Package(
         
         // Features
         .library(name: "AccountFeature", targets: ["AccountFeature"]),
+        .library(name: "AppDelegateFeature", targets: ["AppDelegateFeature"]),
         .library(name: "AppLoadingFeature", targets: ["AppLoadingFeature"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
         .library(name: "ComposeFeature", targets: ["ComposeFeature"]),
@@ -104,6 +105,15 @@ var package = Package(
             dependencies: [
                 "CoreUI",
                 "Models",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "AppDelegateFeature",
+            dependencies: [
+                "APIClient",
+                "Session",
+                "UserNotificationsClient",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),

@@ -1,4 +1,5 @@
 import APIClient
+import AppDelegateFeature
 import AppLoadingFeature
 import AuthFeature
 import ComposableArchitecture
@@ -22,13 +23,7 @@ public struct Root: ReducerProtocol {
     
     public enum Action {
         // App Delegate
-        public enum AppDelegateAction {
-            case didFinishLaunching
-            case didRegisterForRemoteNotifications(TaskResult<Data>)
-            case userNotifications(UserNotificationClient.DelegateEvent)
-        }
-        
-        case appDelegate(AppDelegateAction)
+        case appDelegate(ApplicationDelegate.Action)
         
         // Scene Delegate
         case didChangeScenePhase(ScenePhase)
@@ -45,8 +40,6 @@ public struct Root: ReducerProtocol {
         case loading(AppLoading.Action)
     }
     
-    // private let appDelegateState = ApplicationDelegate.State()
-    
     @Dependency(\.apiClient) private var apiClient
     @Dependency(\.remoteNotifications) private var remoteNotifications
     @Dependency(\.sessionStore) private var sessionStore
@@ -55,32 +48,13 @@ public struct Root: ReducerProtocol {
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
+        Scope(state: \.appDelegate, action: /Action.appDelegate) {
+            ApplicationDelegate()
+        }
+        
         Reduce { state, action in
             switch action {
-            case .appDelegate(.didFinishLaunching):
-                return .run { send in
-                    await withThrowingTaskGroup(of: Void.self) { group in
-                        group.addTask {
-                            for await event in self.userNotifications.delegate() {
-                                await send(.appDelegate(.userNotifications(event)))
-                            }
-                        }
-                    }
-                }
-                
-            case .appDelegate(.didRegisterForRemoteNotifications(.success(let tokenData))):
-                guard let session = sessionStore.session else { return .none }
-                
-                let token = tokenData.map { String(format: "%02.2hhx", $0) }.joined()
-                
-                return .fireAndForget {
-                    _ = apiClient.associateDeviceToken(session.jwt, token)
-                }
-                
-            case .appDelegate(.didRegisterForRemoteNotifications):
-                return .none
-                
-            case .appDelegate(.userNotifications):
+            case .appDelegate:
                 return .none
                 
             case .showAuth:
@@ -157,5 +131,12 @@ public struct Root: ReducerProtocol {
         .ifCaseLet(/State.loading, action: /Action.loading) {
             AppLoading()
         }
+    }
+}
+
+extension Root.State {
+    public var appDelegate: Void {
+        get { () }
+        set { }
     }
 }

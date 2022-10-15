@@ -1,23 +1,46 @@
+import APIClient
 import ComposableArchitecture
 import Foundation
+import Session
+import UserNotificationsClient
 
-struct ApplicationDelegate: ReducerProtocol {
-    struct State { }
+public struct ApplicationDelegate: ReducerProtocol {
+    public typealias State = Void
     
-    enum Action {
+    public enum Action {
         case didFinishLaunching
         case didRegisterForRemoteNotifications(TaskResult<Data>)
         case userNotifications(UserNotificationClient.DelegateEvent)
     }
     
-    var body: some ReducerProtocol<State, Action> {
+    @Dependency(\.apiClient) private var apiClient
+    @Dependency(\.sessionStore) private var sessionStore
+    @Dependency(\.userNotifications) private var userNotifications
+    
+    public init() { }
+    
+    public var body: some ReducerProtocol<State, Action> {
         Reduce { _, action in
             switch action {
             case .didFinishLaunching:
-                return .none
+                return .run { send in
+                    await withThrowingTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            for await event in self.userNotifications.delegate() {
+                                await send(.userNotifications(event))
+                            }
+                        }
+                    }
+                }
                 
-            case .didRegisterForRemoteNotifications(.success(let data)):
-                return .none
+            case .didRegisterForRemoteNotifications(.success(let tokenData)):
+                guard let session = sessionStore.session else { return .none }
+                
+                let token = tokenData.map { String(format: "%02.2hhx", $0) }.joined()
+                
+                return .fireAndForget {
+                    _ = apiClient.associateDeviceToken(session.jwt, token)
+                }
                 
             case .didRegisterForRemoteNotifications:
                 return .none
