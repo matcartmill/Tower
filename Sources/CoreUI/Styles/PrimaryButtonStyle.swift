@@ -1,23 +1,23 @@
 import SwiftUI
 
-struct PrimaryButtonStyle: ButtonStyle {
+public struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
+    
+    public init() { }
     
     private var backgroundColor: Color {
         return isEnabled
         ? Asset.Colors.Background.Button.primary.swiftUIColor
         : Asset.Colors.Background.Button.primaryDisabled.swiftUIColor
-            
     }
     
     private var foregroundColor: Color {
         return isEnabled
         ? Asset.Colors.Content.Button.primary.swiftUIColor
         : Asset.Colors.Content.Button.primaryDisabled.swiftUIColor
-            
     }
     
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(maxWidth: .infinity, maxHeight: 44)
             .padding(.vertical, 6)

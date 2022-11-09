@@ -1,7 +1,9 @@
 import SwiftUI
 
-struct SecondaryButtonStyle: ButtonStyle {
+public struct SecondaryButtonStyle: ButtonStyle {
     @Environment (\.isEnabled) private var isEnabled
+    
+    public init() { }
     
     private var foregrouncColor: Color {
         isEnabled
@@ -9,7 +11,7 @@ struct SecondaryButtonStyle: ButtonStyle {
         : Asset.Colors.Content.Button.secondaryDisabled.swiftUIColor
     }
     
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(maxWidth: .infinity)
             .foregroundColor(

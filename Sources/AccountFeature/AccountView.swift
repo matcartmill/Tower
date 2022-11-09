@@ -47,11 +47,15 @@ public struct AccountView: View {
                         isOn: viewStore.binding(\.$notificationsEnabled)
                     )
                     .font(.body)
+                    
+                    Button("Enable Push") {
+                        viewStore.send(.enablePush)
+                    }
                 }
                 
                 Spacer()
                 
-                Button(action: {}) {
+                Button(action: { viewStore.send(.logout) }) {
                     Text("Sign out")
                         .foregroundColor(.red)
                 }

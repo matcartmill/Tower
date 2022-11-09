@@ -6,6 +6,11 @@
 	<dict>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>192.168.2.233</key>
+			<string></string>
+		</dict>
 	</dict>
 </dict>
 </plist>

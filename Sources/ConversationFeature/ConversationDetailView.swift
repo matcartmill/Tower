@@ -44,7 +44,7 @@ public struct ConversationDetailView: View {
                     )
                     .padding(16)
                     .frame(maxWidth: .infinity, maxHeight: 44)
-                    .background(Asset.Colors.Background.secondary.swiftUIColor)
+                    .background(Asset.Colors.Background.tertiary.swiftUIColor)
                     .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
                     .clipShape(RoundedRectangle(cornerRadius: 22))
                     .submitLabel(.send)
@@ -104,6 +104,7 @@ public struct ConversationDetailView: View {
                     ]
                 )
             }
+            .task { await viewStore.send(.openWebSocket).finish() }
             .padding()
             .background(
                 Asset.Colors.Background.base.swiftUIColor
@@ -119,7 +120,7 @@ private struct ConversationMessage: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            if message.sender == user {
+            if message.authorId == user.id {
                 Spacer(minLength: 30)
                 ConversationMessageContent(message: message, user: user)
             } else {
@@ -135,7 +136,7 @@ private struct ConversationMessageContent: View {
     let user: User
     
     private var foreground: Color {
-        message.sender == user
+        message.authorId == user.id
         ? .white
         : Asset.Colors.Content.primary.swiftUIColor
     }
@@ -147,7 +148,7 @@ private struct ConversationMessageContent: View {
             .font(.callout)
             .foregroundColor(foreground)
             .background(
-                message.sender == user
+                message.authorId == user.id
                 ? Asset.Colors.Background.Chat.outgoing.swiftUIColor
                 : Asset.Colors.Background.Chat.incoming.swiftUIColor
             )

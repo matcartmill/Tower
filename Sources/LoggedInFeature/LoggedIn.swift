@@ -1,3 +1,4 @@
+import APIClient
 import ComposableArchitecture
 import ConversationsFeature
 import Foundation
@@ -28,9 +29,11 @@ public struct LoggedIn: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Scope(state: \.conversations, action: /Action.conversations) {
             Conversations()
+//                .dependency(\.apiClient, .mock)
         }
         Scope(state: \.tracking, action: /Action.tracking) {
             Tracking()
+                .dependency(\.apiClient, .mock)
         }
         Scope(state: \.notifications, action: /Action.notifications) {
             NotificationsList()

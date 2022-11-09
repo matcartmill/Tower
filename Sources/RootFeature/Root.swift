@@ -54,6 +54,10 @@ public struct Root: ReducerProtocol {
         
         Reduce { state, action in
             switch action {
+            case .appDelegate(.didRegisterForRemoteNotifications(let result)):
+                print(result)
+                return .none
+                
             case .appDelegate:
                 return .none
                 
@@ -67,7 +71,9 @@ public struct Root: ReducerProtocol {
                     tracking: .init(tasks: []),
                     notifications: .init()
                 ))
-                return .none
+                return .fireAndForget {
+                    await remoteNotifications.register()
+                }
                 
             case .showOnboardingExperience:
                 state = .onboarding(.username(.init()))
@@ -76,12 +82,19 @@ public struct Root: ReducerProtocol {
             // Bridge - Auth
                 
             case .auth(.authenticationResponse(.success(let session))):
-                return .init(value: .showOnboardingExperience(session.user))
+                if session.user.username != nil {
+                    return .init(value: .showLoggedInExperience(session.user))
+                } else {
+                    return .init(value: .showOnboardingExperience(session.user))
+                }
                 
             case .auth:
                 return .none
                 
             // Bridge - Logged In
+                
+            case .loggedIn(.conversations(.account(.logout))):
+                return .task { .showAuth }
                 
             case .loggedIn:
                 return .none
@@ -122,8 +135,8 @@ public struct Root: ReducerProtocol {
         }
         .ifCaseLet(/State.loggedOut, action: /Action.auth) {
             Auth()
-                .dependency(\.identityProvider, MockIdentityProvider())
-                .dependency(\.apiClient, .mock)
+//                .dependency(\.identityProvider, MockIdentityProvider())
+//                .dependency(\.apiClient, .mock)
         }
         .ifCaseLet(/State.onboarding, action: /Action.onboarding) {
             Onboarding()

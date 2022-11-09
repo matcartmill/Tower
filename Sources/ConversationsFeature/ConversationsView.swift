@@ -5,9 +5,19 @@ import ConversationFeature
 import ConversationOnboardingFeature
 import CoreUI
 import Models
+import MyConversationsFeature
+import OpenConversationsFeature
 import SwiftUI
 
 public struct ConversationsView: View {
+    struct TabPreference: PreferenceKey {
+        static var defaultValue: [Conversations.Tab: Anchor<CGRect>] = [:]
+
+        static func reduce(value: inout [Conversations.Tab: Anchor<CGRect>], nextValue: () -> [Conversations.Tab: Anchor<CGRect>]) {
+            value.merge(nextValue(), uniquingKeysWith: { a, _ in a })
+        }
+    }
+    
     public let store: StoreOf<Conversations>
     
     public init(store: StoreOf<Conversations>) {
@@ -18,43 +28,69 @@ public struct ConversationsView: View {
         WithViewStore(store) { viewStore in
             NavigationStack {
                 ZStack(alignment: .bottomTrailing) {
-                    List {
-                        ForEach(viewStore.conversations) { state in
-                            ConversationListItem(conversation: state.conversation)
-                                .listRowBackground(Color.clear)
-                                .listRowSeparator(.hidden)
-                                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                .padding(.vertical)
-                                .onTapGesture {
-                                    viewStore.send(.openConversation(id: state.conversation.id))
+                    VStack(alignment: .leading, spacing: 20) {
+                        VStack {
+                            HStack(spacing: 18) {
+                                SegmentButton(title: "Open Requests", isActive: viewStore.activeTab == .openConversations) {
+                                    viewStore.send(.viewOpenRequests, animation: .spring())
                                 }
-                                .navigationDestination(isPresented: viewStore.binding(
-                                    get: {
-                                        guard
-                                            let conversation = $0.selectedConversation,
-                                            conversation.id == state.conversation.id
-                                        else { return false }
-                                        
-                                        return true
-                                    },
-                                    send: Conversations.Action.dismissConversation
-                                )) {
-                                    IfLetStore(
-                                        store.scope(
-                                            state: \.selectedConversation,
-                                            action: Conversations.Action.conversation
-                                        ),
-                                        then: {
-                                            ConversationDetailView(store: $0)
-                                        }
-                                    )
+                                .anchorPreference(key: TabPreference.self, value: .bounds) { [.openConversations: $0] }
+                                
+                                SegmentButton(title: "My Conversations", isActive: viewStore.activeTab == .myConversations) {
+                                    viewStore.send(.viewMyConversations, animation: .spring())
                                 }
+                                .anchorPreference(key: TabPreference.self, value: .bounds) { [.myConversations: $0] }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 24)
+                            .padding(.horizontal)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .overlayPreferenceValue(TabPreference.self) { value in
+                            if let value = value[viewStore.activeTab] {
+                                GeometryReader { proxy in
+                                    Asset.Colors.Content.primary.swiftUIColor
+                                        .frame(width: 50, height: 3)
+                                        .clipShape(Capsule())
+                                        .offset(x: proxy[value].minX, y: proxy[value].maxY)
+                                }
+                            }
+                        }
+                        
+                        switch viewStore.activeTab {
+                        case .openConversations:
+                            let openConversationsStore = store.scope(
+                                state: \.openConversationsState,
+                                action: Conversations.Action.openConversations
+                            )
+                            
+                            OpenConversationsView(store: openConversationsStore)
+                                .transition(.move(edge: .leading))
+                            
+                        case .myConversations:
+                            let myConversationsStore = store.scope(
+                                state: \.myConversationsState,
+                                action: Conversations.Action.myConversations
+                            )
+                            
+                            MyConversationsView(store: myConversationsStore)
+                                .transition(.move(edge: .trailing))
                         }
                     }
-                    .padding()
-                    .scrollContentBackground(.hidden)
-                    .scrollIndicators(.hidden)
-                    .listStyle(.plain)
+                    .navigationDestination(isPresented: viewStore.binding(
+                        get: { return $0.selectedConversation != nil },
+                        send: Conversations.Action.dismissConversation
+                    )) {
+                        IfLetStore(
+                            store.scope(
+                                state: \.selectedConversation,
+                                action: Conversations.Action.conversation
+                            ),
+                            then: {
+                                ConversationDetailView(store: $0)
+                            }
+                        )
+                    }
                     
                     Button(action: { viewStore.send(.openComposer) }) {
                         Asset.Icons.plus.swiftUIImage
@@ -68,12 +104,12 @@ public struct ConversationsView: View {
                     .clipShape(Circle())
                     .padding([.bottom, .trailing], 30)
                 }
-                .background(
-                    Asset.Colors.Background.base.swiftUIColor
-                        .ignoresSafeArea()
-                )
+                .background(Asset.Colors.Background.base.swiftUIColor.ignoresSafeArea())
+                .onAppear { viewStore.send(.viewShown) }
+                .navigationBarTitle(Text("Conversations"))
+                .navigationBarTitleDisplayMode(.automatic)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
+                    ToolbarItemGroup {
                         Button(action: { viewStore.send(.openAccount) }) {
                             Asset.Icons.account.swiftUIImage
                                 .resizable()
@@ -83,8 +119,6 @@ public struct ConversationsView: View {
                         }
                     }
                 }
-                .onAppear { viewStore.send(.viewShown) }
-                .navigationBarTitleDisplayMode(.inline)
                 .fullScreenCover(isPresented: viewStore.binding(
                     get: { $0.newConversation != nil },
                     send: Conversations.Action.compose(.close)
@@ -130,38 +164,20 @@ public struct ConversationsView: View {
     }
 }
 
-private struct ConversationListItem: View {
-    let conversation: Conversation
+struct SegmentButton: View {
+    let title: String
+    var isActive: Bool
+    var action: () -> Void
     
     var body: some View {
-        HStack(alignment: .top, spacing: 20) {
-            ProfileImage(conversation.author)
-                .frame(width: 40, height: 40)
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text(conversation.messages[0].sender.username!)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
-                    .lineLimit(1)
-                
-                Text(conversation.messages[0].content)
-                    .font(.callout)
-                    .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
-                    .lineLimit(2)
-            }
-            
-            VStack(alignment: .trailing) {
-                Text("2:34 PM")
-                    .font(.footnote)
-                Text("2")
-                    .padding(10)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .font(.footnote)
-                    .fontWeight(.bold)
-                    .clipShape(Circle())
-            }
+        VStack(alignment: .leading) {
+            Button(title) { action() }
+                .padding(.bottom, 8)
+                .font(.title3)
+                .fontWeight(.bold)
+                .foregroundColor(
+                    isActive ? Asset.Colors.Content.primary.swiftUIColor : Asset.Colors.Content.secondary.swiftUIColor
+                )
         }
     }
 }

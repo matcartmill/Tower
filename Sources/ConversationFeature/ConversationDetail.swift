@@ -1,36 +1,56 @@
 import ComposableArchitecture
+import Foundation
 import Identifier
+import JWT
 import Models
+import NetworkEnvironment
+import Session
 
 public struct ConversationDetail: ReducerProtocol {
     public struct State: Equatable, Identifiable {
-        public var id: Identifier<Conversation> { conversation.id }
-        public var newMessage: String
+        public var id: UUID = .init()
         public var conversation: Conversation
-        public var isMoreMenuOpen: Bool
         public var user: User
+        public var newMessage = ""
+        public var isMoreMenuOpen = false
         
-        public init(newMessage: String = "", conversation: Conversation, isMoreMenuOpen: Bool = false, user: User) {
-            self.newMessage = newMessage
+        public init(conversation: Conversation, user: User) {
             self.conversation = conversation
-            self.isMoreMenuOpen = isMoreMenuOpen
             self.user = user
         }
     }
     
     public enum Action {
+        case openWebSocket
         case dismissMoreMenu
         case leave(Conversation.ID)
         case sendMessage
+        case receivedMessage(Message)
         case showMoreMenu
         case textFieldChanged(String)
     }
+    
+    @Dependency(\.sessionStore) var sessionStore
+    @Dependency(\.urlSession) var urlSession
+    @Dependency(\.conversationGateway) var gateway
     
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
+            case .openWebSocket:
+                let conversationId = state.conversation.id
+
+                return .run { subscriber in
+                    for await action in try gateway.open(conversationId) {
+                        switch action {
+                        case .addMessage(let message):
+                            await subscriber.send(.receivedMessage(message))
+                        }
+                    }
+                }
+                
             case .dismissMoreMenu:
                 state.isMoreMenuOpen = false
                 
@@ -40,11 +60,15 @@ public struct ConversationDetail: ReducerProtocol {
                 return .none
                 
             case .sendMessage:
-                state.conversation.messages.append(
-                    .init(content: state.newMessage, sender: state.user)
-                )
+                let message = state.newMessage
                 state.newMessage = ""
                 
+                return .fireAndForget {
+                    try await gateway.send(message)
+                }
+                
+            case .receivedMessage(let message):
+                state.conversation.messages.append(message)
                 return .none
                 
             case .showMoreMenu:

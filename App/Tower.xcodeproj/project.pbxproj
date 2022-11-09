@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8212519A2902356A00834532 /* NetworkEnvironment in Frameworks */ = {isa = PBXBuildFile; productRef = 821251992902356A00834532 /* NetworkEnvironment */; };
+		8212520F290EA6FB00834532 /* CalendarFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8212520E290EA6FB00834532 /* CalendarFeature */; };
+		821252152919F20100834532 /* ConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 821252142919F20100834532 /* ConversationsFeature */; };
 		8218AE2728FB12AD00EE8A1F /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE2628FB12AD00EE8A1F /* ComposableArchitecture */; };
 		8218AE2928FB12AD00EE8A1F /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE2828FB12AD00EE8A1F /* Dependencies */; };
 		8218AE2F28FB15A900EE8A1F /* AccountFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE2E28FB15A900EE8A1F /* AccountFeature */; };
@@ -16,7 +19,6 @@
 		8218AE3728FB15A900EE8A1F /* ComposeFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3628FB15A900EE8A1F /* ComposeFeature */; };
 		8218AE3928FB15A900EE8A1F /* ConversationFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3828FB15A900EE8A1F /* ConversationFeature */; };
 		8218AE3B28FB15A900EE8A1F /* ConversationOnboardingFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3A28FB15A900EE8A1F /* ConversationOnboardingFeature */; };
-		8218AE3D28FB15A900EE8A1F /* ConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3C28FB15A900EE8A1F /* ConversationsFeature */; };
 		8218AE3F28FB15A900EE8A1F /* Identifier in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3E28FB15A900EE8A1F /* Identifier */; };
 		8218AE4128FB15A900EE8A1F /* JWT in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE4028FB15A900EE8A1F /* JWT */; };
 		8218AE4328FB15A900EE8A1F /* LoggedInFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE4228FB15A900EE8A1F /* LoggedInFeature */; };
@@ -34,6 +36,9 @@
 		8218AE6128FB229E00EE8A1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8218AE6028FB229E00EE8A1F /* Assets.xcassets */; };
 		8218AE6328FB2AEA00EE8A1F /* AppDelegateFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */; };
 		8292BDE128A958B600471B59 /* TowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDE028A958B600471B59 /* TowerApp.swift */; };
+		82A5071A291C02DF000906F6 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 82A50719291C02DF000906F6 /* AnyCodable */; };
+		82B12AD4291A239B007FBDE4 /* MyConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82B12AD3291A239B007FBDE4 /* MyConversationsFeature */; };
+		82B12AD6291A239F007FBDE4 /* OpenConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,8 +55,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				821252152919F20100834532 /* ConversationsFeature in Frameworks */,
 				8218AE4928FB15A900EE8A1F /* OnboardingFeature in Frameworks */,
 				8218AE4128FB15A900EE8A1F /* JWT in Frameworks */,
+				82B12AD6291A239F007FBDE4 /* OpenConversationsFeature in Frameworks */,
+				82A5071A291C02DF000906F6 /* AnyCodable in Frameworks */,
 				8218AE4328FB15A900EE8A1F /* LoggedInFeature in Frameworks */,
 				8218AE2F28FB15A900EE8A1F /* AccountFeature in Frameworks */,
 				8218AE3328FB15A900EE8A1F /* AppLoadingFeature in Frameworks */,
@@ -59,17 +67,19 @@
 				8218AE5328FB15A900EE8A1F /* TrackingFeature in Frameworks */,
 				8218AE6328FB2AEA00EE8A1F /* AppDelegateFeature in Frameworks */,
 				8218AE3928FB15A900EE8A1F /* ConversationFeature in Frameworks */,
+				82B12AD4291A239B007FBDE4 /* MyConversationsFeature in Frameworks */,
 				8218AE2728FB12AD00EE8A1F /* ComposableArchitecture in Frameworks */,
-				8218AE3D28FB15A900EE8A1F /* ConversationsFeature in Frameworks */,
 				8218AE4B28FB15A900EE8A1F /* Permissions in Frameworks */,
 				8218AE4728FB15A900EE8A1F /* NotificationsFeature in Frameworks */,
 				8218AE5928FB15A900EE8A1F /* WebSockets in Frameworks */,
 				8218AE3528FB15A900EE8A1F /* AuthFeature in Frameworks */,
+				8212519A2902356A00834532 /* NetworkEnvironment in Frameworks */,
 				8218AE3128FB15A900EE8A1F /* APIClient in Frameworks */,
 				8218AE3728FB15A900EE8A1F /* ComposeFeature in Frameworks */,
 				8218AE5D28FB166200EE8A1F /* UserNotificationsClient in Frameworks */,
 				8218AE5B28FB166200EE8A1F /* RemoteNotificationsClient in Frameworks */,
 				8218AE4F28FB15A900EE8A1F /* RootFeature in Frameworks */,
+				8212520F290EA6FB00834532 /* CalendarFeature in Frameworks */,
 				8218AE2928FB12AD00EE8A1F /* Dependencies in Frameworks */,
 				8218AE3F28FB15A900EE8A1F /* Identifier in Frameworks */,
 				8218AE4528FB15A900EE8A1F /* Models in Frameworks */,
@@ -159,7 +169,6 @@
 				8218AE3628FB15A900EE8A1F /* ComposeFeature */,
 				8218AE3828FB15A900EE8A1F /* ConversationFeature */,
 				8218AE3A28FB15A900EE8A1F /* ConversationOnboardingFeature */,
-				8218AE3C28FB15A900EE8A1F /* ConversationsFeature */,
 				8218AE3E28FB15A900EE8A1F /* Identifier */,
 				8218AE4028FB15A900EE8A1F /* JWT */,
 				8218AE4228FB15A900EE8A1F /* LoggedInFeature */,
@@ -175,6 +184,12 @@
 				8218AE5C28FB166200EE8A1F /* UserNotificationsClient */,
 				8218AE5E28FB193600EE8A1F /* CoreUI */,
 				8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */,
+				821251992902356A00834532 /* NetworkEnvironment */,
+				8212520E290EA6FB00834532 /* CalendarFeature */,
+				821252142919F20100834532 /* ConversationsFeature */,
+				82B12AD3291A239B007FBDE4 /* MyConversationsFeature */,
+				82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */,
+				82A50719291C02DF000906F6 /* AnyCodable */,
 			);
 			productName = Tower;
 			productReference = 8292BDDD28A958B600471B59 /* Tower.app */;
@@ -454,6 +469,18 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		821251992902356A00834532 /* NetworkEnvironment */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NetworkEnvironment;
+		};
+		8212520E290EA6FB00834532 /* CalendarFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CalendarFeature;
+		};
+		821252142919F20100834532 /* ConversationsFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConversationsFeature;
+		};
 		8218AE2628FB12AD00EE8A1F /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8218AE2528FB12AD00EE8A1F /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
@@ -491,10 +518,6 @@
 		8218AE3A28FB15A900EE8A1F /* ConversationOnboardingFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ConversationOnboardingFeature;
-		};
-		8218AE3C28FB15A900EE8A1F /* ConversationsFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ConversationsFeature;
 		};
 		8218AE3E28FB15A900EE8A1F /* Identifier */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -555,6 +578,18 @@
 		8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppDelegateFeature;
+		};
+		82A50719291C02DF000906F6 /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AnyCodable;
+		};
+		82B12AD3291A239B007FBDE4 /* MyConversationsFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MyConversationsFeature;
+		};
+		82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OpenConversationsFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

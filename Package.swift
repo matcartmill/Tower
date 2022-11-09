@@ -10,11 +10,13 @@ var package = Package(
     ],
     products: [
         // Components
+        .library(name: "AnyCodable", targets: ["AnyCodable"]),
         .library(name: "APIClient", targets: ["APIClient"]),
         .library(name: "CoreUI", targets: ["CoreUI"]),
         .library(name: "Identifier", targets: ["Identifier"]),
         .library(name: "JWT", targets: ["JWT"]),
         .library(name: "Models", targets: ["Models"]),
+        .library(name: "NetworkEnvironment", targets: ["NetworkEnvironment"]),
         .library(name: "Permissions", targets: ["Permissions"]),
         .library(name: "RemoteNotificationsClient", targets: ["RemoteNotificationsClient"]),
         .library(name: "Session", targets: ["Session"]),
@@ -26,13 +28,16 @@ var package = Package(
         .library(name: "AppDelegateFeature", targets: ["AppDelegateFeature"]),
         .library(name: "AppLoadingFeature", targets: ["AppLoadingFeature"]),
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
+        .library(name: "CalendarFeature", targets: ["CalendarFeature"]),
         .library(name: "ComposeFeature", targets: ["ComposeFeature"]),
         .library(name: "ConversationFeature", targets: ["ConversationFeature"]),
         .library(name: "ConversationOnboardingFeature", targets: ["ConversationOnboardingFeature"]),
         .library(name: "ConversationsFeature", targets: ["ConversationsFeature"]),
         .library(name: "LoggedInFeature", targets: ["LoggedInFeature"]),
+        .library(name: "MyConversationsFeature", targets: ["MyConversationsFeature"]),
         .library(name: "NotificationsFeature", targets: ["NotificationsFeature"]),
         .library(name: "OnboardingFeature", targets: ["OnboardingFeature"]),
+        .library(name: "OpenConversationsFeature", targets: ["OpenConversationsFeature"]),
         .library(name: "RootFeature", targets: ["RootFeature"]),
         .library(name: "TrackingFeature", targets: ["TrackingFeature"]),
     ],
@@ -43,8 +48,13 @@ var package = Package(
     targets: [
         // Components
         .target(
+            name: "AnyCodable",
+            dependencies: []
+        ),
+        .target(
             name: "APIClient",
             dependencies: [
+                "NetworkEnvironment",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -64,6 +74,10 @@ var package = Package(
         .target(
             name: "Models",
             dependencies: ["Identifier"]
+        ),
+        .target(
+            name: "NetworkEnvironment",
+            dependencies: []
         ),
         .target(
             name: "Permissions",
@@ -103,8 +117,11 @@ var package = Package(
         .target(
             name: "AccountFeature",
             dependencies: [
+                "APIClient",
                 "CoreUI",
                 "Models",
+                "Permissions",
+                "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -135,6 +152,13 @@ var package = Package(
             ]
         ),
         .target(
+            name: "CalendarFeature",
+            dependencies: [
+                "CoreUI",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
             name: "ComposeFeature",
             dependencies: [
                 "CoreUI",
@@ -145,8 +169,11 @@ var package = Package(
         .target(
             name: "ConversationFeature",
             dependencies: [
+                "AnyCodable",
                 "CoreUI",
                 "Models",
+                "NetworkEnvironment",
+                "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -160,21 +187,37 @@ var package = Package(
         .target(
             name: "ConversationsFeature",
             dependencies: [
+                "APIClient",
                 "AccountFeature",
                 "ComposeFeature",
                 "ConversationFeature",
                 "ConversationOnboardingFeature",
                 "CoreUI",
                 "Models",
+                "MyConversationsFeature",
+                "OpenConversationsFeature",
+                "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
         .target(
             name: "LoggedInFeature",
             dependencies: [
+                "APIClient",
                 "ConversationsFeature",
                 "NotificationsFeature",
                 "TrackingFeature",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "MyConversationsFeature",
+            dependencies: [
+                "APIClient",
+                "ConversationFeature",
+                "CoreUI",
+                "Models",
+                "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -188,8 +231,19 @@ var package = Package(
         .target(
             name: "OnboardingFeature",
             dependencies: [
+                "APIClient",
                 "CoreUI",
                 "Permissions",
+                "Session",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "OpenConversationsFeature",
+            dependencies: [
+                "APIClient",
+                "CoreUI",
+                "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -206,7 +260,11 @@ var package = Package(
         .target(
             name: "TrackingFeature",
             dependencies: [
+                "APIClient",
+                "CalendarFeature",
                 "CoreUI",
+                "Models",
+                "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         )

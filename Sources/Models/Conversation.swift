@@ -3,18 +3,19 @@ import Identifier
 
 public struct Conversation: Codable, Identifiable, Equatable {
     public let id: Identifier<Self>
-    public var author: User
-    public var participant: User?
+    public var authorId: Identifier<User>
+    public var partnerId: Identifier<User>?
     public var messages: [Message]
     
     public init(
-        author: User,
-        participant: User?,
+        id: Identifier<Self>,
+        authorId: Identifier<User>,
+        partnerId: Identifier<User>?,
         messages: [Message]
     ) {
-        self.id = .init()
-        self.author = author
-        self.participant = participant
+        self.id = id
+        self.authorId = authorId
+        self.partnerId = partnerId
         self.messages = messages
     }
 }

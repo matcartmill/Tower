@@ -10,7 +10,7 @@ public struct ProfileImage: View {
     
     public var body: some View {
         AsyncImage(
-            url: user.metadata.profileImageUrl,
+            url: user.avatarUrl,
             content: { phase in
                 switch phase {
                 case .success(let image):

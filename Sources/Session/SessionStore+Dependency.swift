@@ -5,8 +5,8 @@ extension SessionStore: DependencyKey {
 }
 
 extension DependencyValues {
-  public var sessionStore: SessionStore {
-    get { self[SessionStore.self] }
-    set { self[SessionStore.self] = newValue }
-  }
+    public var sessionStore: SessionStore {
+        get { self[SessionStore.self] }
+        set { self[SessionStore.self] = newValue }
+    }
 }

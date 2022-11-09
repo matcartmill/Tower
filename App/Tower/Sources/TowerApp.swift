@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import NetworkEnvironment
 import RootFeature
 import SwiftUI
 
@@ -17,8 +18,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         self.viewStore.send(.appDelegate(.didFinishLaunching))
+        
         return true
-  }
+    }
 
     func application(
         _ application: UIApplication,
@@ -39,10 +41,14 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 struct TowerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var scenePhase
+    
+    private var networkEnvironment: NetworkEnvironment {
+        .current
+    }
 
     var body: some Scene {
         WindowGroup {
-            RootView(store: self.appDelegate.store)
+            RootView(store: self.appDelegate.store)            
         }
         .onChange(of: self.scenePhase) {
             self.appDelegate.viewStore.send(.didChangeScenePhase($0))

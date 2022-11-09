@@ -31,10 +31,7 @@ public struct Compose: ReducerProtocol {
                 return .none
                 
             case .start:
-                state.conversation.messages.append(
-                    .init(content: state.message, sender: state.user)
-                )
-                state.conversation.participant = state.user
+               // TODO: Network here
                 
                 return .none
                 

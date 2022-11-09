@@ -1,22 +1,35 @@
+import APIClient
 import ComposableArchitecture
 import AccountFeature
 import ComposeFeature
 import ConversationFeature
 import ConversationOnboardingFeature
 import Models
+import MyConversationsFeature
+import OpenConversationsFeature
+import Session
 import SwiftUI
 
 public struct Conversations: ReducerProtocol {
+    public enum Tab: Equatable {
+        case openConversations
+        case myConversations
+    }
+    
     public struct State: Equatable {
-        public var conversations: IdentifiedArrayOf<ConversationDetail.State> = []
+        public var myConversationsState: MyConversations.State
+        public var openConversationsState: OpenConversations.State
         public var user: User
         public var accountState: Account.State?
         public var newConversation: Compose.State?
         public var selectedConversation: ConversationDetail.State?
         public var conversationOnboardingState: ConversationOnboarding.State?
+        public var activeTab: Tab = .openConversations
         
         public init(user: User) {
             self.user = user
+            self.myConversationsState = .init(user: user)
+            self.openConversationsState = .init()
         }
     }
     
@@ -29,21 +42,31 @@ public struct Conversations: ReducerProtocol {
         // Compose
         case openComposer
         case closeComposer
+        case composingFailed
+        case composingSuccessful(Conversation.ID)
         
-        // Notifications
-        case openNotifications
-        
-        // Details
-        case openConversation(id: Conversation.ID)
+        // Conversation Detail
         case dismissConversation
-        case item(id: Conversation.ID, action: ConversationDetail.Action)
+        case openConversation(ConversationDetail.State)
+        
+        // Open Requests
+        case viewOpenRequests
+        
+        // My Conversations
+        case viewMyConversations
         
         // Bridges
         case account(Account.Action)
         case compose(Compose.Action)
         case conversation(ConversationDetail.Action)
+        case myConversations(MyConversations.Action)
         case onboarding(ConversationOnboarding.Action)
+        case openConversations(OpenConversations.Action)
     }
+    
+    @Dependency(\.apiClient) private var apiClient
+    @Dependency(\.conversationGateway) var conversationGateway
+    @Dependency(\.sessionStore) private var sessionStore
     
     public init() { }
     
@@ -51,36 +74,20 @@ public struct Conversations: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .viewShown:
-                state.conversations = [
-                    .init(
-                        conversation: .init(
-                            author: .sender,
-                            participant: .receiver,
-                            messages: [
-                               .init(
-                                   content: "Hey everyone, I’ve got something on my mind that I would love to share. Please bear with me, this could get a bit lengthy.",
-                                   sender: User.sender
-                               ),
-                               .init(
-                                   content: "No worries! Feel free to vent. I’m here to listen!",
-                                   sender: User.receiver
-                               ),
-                               .init(
-                                   content: "Vent all you need.",
-                                   sender: User.receiver
-                               )
-                            ]
-                        ),
-                        user: state.user
-                    )
-                ]
+                return .none
                 
+            case .viewMyConversations:
+                state.activeTab = .myConversations
+                return .none
+                
+            case .viewOpenRequests:
+                state.activeTab = .openConversations
                 return .none
                 
             // Account
             
             case .openAccount:
-                state.accountState = .init(user: state.user)
+                state.accountState = .init()
                 
                 return .none
             
@@ -96,29 +103,22 @@ public struct Conversations: ReducerProtocol {
                 
                 return .none
                 
-            // Conversation
+            case .composingFailed:
+                return .none
                 
-            case .openConversation(let id):
-                guard let conversationState = state.conversations[id: id] else { return .none }
-                
-                state.selectedConversation = .init(
-                    conversation: conversationState.conversation,
-                    user: state.user
+            case .composingSuccessful(let id):
+                return .merge(
+                    .task { .closeComposer }
                 )
                 
+            // Conversation Detail
+                
+            case .openConversation(let conversationState):
+                state.selectedConversation = conversationState
                 return .none
                 
             case .dismissConversation:
                 state.selectedConversation = nil
-                
-                return .none
-                
-            case .item:
-                return .none
-                
-            // Notifications
-                
-            case .openNotifications:
                 return .none
                 
             // Bridges - Account
@@ -133,16 +133,27 @@ public struct Conversations: ReducerProtocol {
             // Bridges - Compose
                 
             case .compose(.start):
-                guard let conversation = state.newConversation?.conversation else { return .none }
+                guard
+                    let conversation = state.newConversation?.conversation,
+                    let message = conversation.messages.first?.content,
+                    let jwt = sessionStore.session?.jwt
+                else { return .none }
                 
-                state.conversations.insert(
-                    .init(conversation: conversation, user: state.user),
-                    at: 0)
-                
-                return .merge(
-                    .task { .closeComposer },
-                    .task { .openConversation(id: conversation.id) }
-                )
+                return apiClient.createConversation(jwt, .init(message: .init(content: message)))
+                    .map { result in
+                        switch result {
+                        case .success(let response) where response.success:
+                            return .composingSuccessful(conversation.id)
+                            
+                        case .success(let response):
+                            print(response.error ?? "Something went wrong...")
+                            return .composingFailed
+                            
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                            return .composingFailed
+                        }
+                    }
                 
             case .compose(.textFieldChanged):
                 return .none
@@ -150,31 +161,15 @@ public struct Conversations: ReducerProtocol {
             case .compose(.close):
                 return .task { .closeComposer }
                 
-            // Bridges - Conversation
-                
-            case .conversation(.leave(let id)):
-                state.conversations = state.conversations.filter { $0.id != id }
-                
-                return .init(value: .dismissConversation)
-                
-            case .conversation(.sendMessage):
-                guard let conversation = state.selectedConversation else { return .none }
-                
-                state.conversations[id: conversation.id] = conversation
-                
-                return .none
-                
-            case .conversation:
-                return .none
-                
             // Bridges - Conversation Onboarding
 
             case .onboarding(.next):
                 state.conversationOnboardingState = nil
                 state.newConversation = .init(
                     conversation: .init(
-                        author: .sender,
-                        participant: nil,
+                        id: .init(),
+                        authorId: User.sender.id,
+                        partnerId: nil,
                         messages: []
                     ),
                     user: state.user
@@ -185,6 +180,24 @@ public struct Conversations: ReducerProtocol {
             case .onboarding(.cancel):
                 state.conversationOnboardingState = nil
                 
+                return .none
+            
+            // Bridges - Conversation Details
+                
+            case .conversation(_):
+                return .none
+                
+            // Bridges - My Conversations
+                
+            case .myConversations(.selectedConversation(let conversationState)):
+                return .task { .openConversation(conversationState) }
+                
+            case .myConversations:
+                return .none
+                
+            // Bridges - Open Conversations
+                
+            case .openConversations:
                 return .none
             }
         }
@@ -200,8 +213,13 @@ public struct Conversations: ReducerProtocol {
         .ifLet(\.selectedConversation, action: /Action.conversation) {
             ConversationDetail()
         }
-        .forEach(\.conversations, action: /Action.item(id:action:)) {
-            ConversationDetail()
+        
+        Scope(state: \.myConversationsState, action: /Action.myConversations) {
+            MyConversations()
+        }
+        
+        Scope(state: \.openConversationsState, action: /Action.openConversations) {
+            OpenConversations()
         }
     }
 }

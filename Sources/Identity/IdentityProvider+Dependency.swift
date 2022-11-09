@@ -6,8 +6,8 @@ public enum IdentityProviderKey: DependencyKey {
 }
 
 extension DependencyValues {
-  public var identityProvider: IdentityProvider {
-    get { self[IdentityProviderKey.self] }
-    set { self[IdentityProviderKey.self] = newValue }
-  }
+    public var identityProvider: IdentityProvider {
+        get { self[IdentityProviderKey.self] }
+        set { self[IdentityProviderKey.self] = newValue }
+    }
 }

@@ -8,6 +8,7 @@ public struct ApplicationDelegate: ReducerProtocol {
     public typealias State = Void
     
     public enum Action {
+        case nothing
         case didFinishLaunching
         case didRegisterForRemoteNotifications(TaskResult<Data>)
         case userNotifications(UserNotificationClient.DelegateEvent)
@@ -22,6 +23,9 @@ public struct ApplicationDelegate: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Reduce { _, action in
             switch action {
+            case .nothing:
+                return .none
+                
             case .didFinishLaunching:
                 return .run { send in
                     await withThrowingTaskGroup(of: Void.self) { group in
@@ -38,11 +42,24 @@ public struct ApplicationDelegate: ReducerProtocol {
                 
                 let token = tokenData.map { String(format: "%02.2hhx", $0) }.joined()
                 
-                return .fireAndForget {
-                    _ = apiClient.associateDeviceToken(session.jwt, token)
+                return apiClient.registerDeviceToken(
+                    session.jwt,
+                    .init(token: token)
+                )
+                .map {
+                    switch $0 {
+                    case .success(let response):
+                        print(response.success)
+                        
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                    
+                    return .nothing
                 }
                 
-            case .didRegisterForRemoteNotifications:
+            case .didRegisterForRemoteNotifications(.failure(let error)):
+                print(error)
                 return .none
                 
             case .userNotifications:

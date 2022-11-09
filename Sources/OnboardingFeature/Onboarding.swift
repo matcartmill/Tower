@@ -58,6 +58,9 @@ public struct Onboarding: ReducerProtocol {
         case .username(.next):
             return .init(value: .showProfilePictureOnboarding)
             
+        case .username:
+            return .none
+            
         // Bridges - Profile Picture
             
         case .avatar(.next):

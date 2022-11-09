@@ -3,12 +3,22 @@ import Identifier
 
 public struct Message: Codable, Equatable, Identifiable {
     public let id: Identifier<Self>
+    public let authorId: Identifier<User>
+    public let conversationId: Identifier<Conversation>
     public let content: String
-    public let sender: User
+    public let createdAt: Date?
     
-    public init(content: String, sender: User) {
-        self.id = .init()
+    public init(
+        id: Identifier<Self>,
+        authorId: Identifier<User>,
+        conversationId: Identifier<Conversation>,
+        content: String,
+        createdAt: Date?
+    ) {
+        self.id = id
+        self.authorId = authorId
+        self.conversationId = conversationId
         self.content = content
-        self.sender = sender
+        self.createdAt = createdAt
     }
 }

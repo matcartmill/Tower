@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Foundation
 import JWT
+import NetworkEnvironment
 
 extension APIClient: DependencyKey {
     public static let liveValue = Self(
@@ -9,6 +10,11 @@ extension APIClient: DependencyKey {
                 request.jsonBody(identity)
                 request.contentTypeJSON()
                 request.httpMethod = "POST"
+            }
+        },
+        logout: { token in
+            request(path: "v1", "auth", "logout") { request in
+                request.authorize(with: token)
             }
         },
         me: { token in
@@ -31,6 +37,28 @@ extension APIClient: DependencyKey {
                 request.contentTypeJSON()
                 request.authorize(with: token)
                 request.httpMethod = "PUT"
+            }
+        },
+        myConversations: { token in
+            request(path: "v1", "conversations") { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "GET"
+            }
+        },
+        joinableConversations: { token in
+            request(path: "v1", "conversations", "open") { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "GET"
+            }
+        },
+        createConversation: { token, conversation in
+            request(path: "v1", "conversations") { request in
+                request.jsonBody(conversation)
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "POST"
             }
         },
         addFriend: { token, userId in
@@ -57,9 +85,17 @@ extension APIClient: DependencyKey {
                 request.httpMethod = "POST"
             }
         },
-        associateDeviceToken: { token, deviceToken in
-            request(path: "v1", "connections", "block") { request in
-                request.jsonBody(deviceToken)
+        trackMood: { token, emotion in
+            request(path: "v1", "track", "mood") { request in
+                request.jsonBody(emotion)
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "POST"
+            }
+        },
+        registerDeviceToken: { token, deviceTokenRequest in
+            request(path: "v1", "deviceToken", "register") { request in
+                request.jsonBody(deviceTokenRequest)
                 request.contentTypeJSON()
                 request.authorize(with: token)
                 request.httpMethod = "POST"
@@ -74,6 +110,13 @@ extension APIClient {
             return .task {
                 await TaskResult {
                     .init(token: "foo")
+                }
+            }
+        },
+        logout: { _ in
+            return .task {
+                await TaskResult {
+                    .init(success: true, error: nil)
                 }
             }
         },
@@ -92,6 +135,23 @@ extension APIClient {
             }
         },
         updateAvatar: { _, _ in
+            return .task {
+                await TaskResult {
+                    .init(success: true, error: nil)
+                }
+            }
+        },
+        myConversations: { _ in
+            return .task {
+                await TaskResult { [] }
+            }
+        },
+        joinableConversations: { _ in
+            return .task {
+                await TaskResult { [] }
+            }
+        },
+        createConversation: { _, _ in
             return .task {
                 await TaskResult {
                     .init(success: true, error: nil)
@@ -119,7 +179,14 @@ extension APIClient {
                 }
             }
         },
-        associateDeviceToken: { _, _ in
+        trackMood: { _, _ in
+            return .task {
+                await TaskResult {
+                    .init(success: true, error: nil)
+                }
+            }
+        },
+        registerDeviceToken: { _, _ in
             return .task {
                 await TaskResult {
                     .init(success: true, error: nil)
@@ -140,12 +207,14 @@ private func request<T: Decodable>(
     path: String...,
     modify: @escaping (inout URLRequest) -> Void
 ) -> Effect<TaskResult<T>, Never> {
-    return .task {
+    let networkEnvironment: NetworkEnvironment = .current
+    
+    return .task { [networkEnvironment] in
         await TaskResult {
             var components = URLComponents()
-            components.scheme = "http"
-            components.host = "0.0.0.0"
-            components.port = 8080
+            components.scheme = networkEnvironment.apiProtocol
+            components.host = networkEnvironment.apiHost
+            components.port = networkEnvironment.apiPort
             components.path = "/" + path.joined(separator: "/")
             
             var request = URLRequest(url: components.url!)
@@ -156,7 +225,7 @@ private func request<T: Decodable>(
                 let value: T = try await URLSession.shared.execute(request)
                 return value
             } catch let error {
-                throw APIError.remote(error)
+                throw error
             }
         }
     }
@@ -164,20 +233,42 @@ private func request<T: Decodable>(
 
 private extension URLRequest {
     mutating func authorize(with jwt: JWT) {
+        print(jwt.token)
         self.setValue("Bearer \(jwt.token)", forHTTPHeaderField: "Authorization")
     }
     mutating func contentTypeJSON() {
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
     mutating func jsonBody<T: Encodable>(_ content: T) {
+        encoder.dateEncodingStrategy = .iso8601
         self.httpBody = try? encoder.encode(content)
     }
 }
 
 private extension URLSession {
     func execute<T: Decodable>(_ request: URLRequest) async throws -> T {
+        decoder.dateDecodingStrategy = .iso8601
+        
         let response = try await self.data(for: request)
-        return try decoder.decode(T.self, from: response.0)
+        
+        guard let httpResponse = response.1 as? HTTPURLResponse else {
+            throw APIError.noResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            if let apiError = try? decoder.decode(APIError.self, from: response.0) {
+                throw apiError
+            }
+            
+            throw APIError.invalidStatusCode
+        }
+        
+        do {
+            let parsed = try decoder.decode(T.self, from: response.0)
+            return parsed
+        } catch let error {
+            throw error
+        }
     }
 }
 
