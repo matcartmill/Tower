@@ -1,6 +1,6 @@
 import ComposableArchitecture
 
-public struct ConversationOnboarding: ReducerProtocol {
+public struct ConversationDisclosure: ReducerProtocol {
     public struct State: Equatable {
         public init() { }
     }

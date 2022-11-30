@@ -14,6 +14,7 @@ var package = Package(
         .library(name: "APIClient", targets: ["APIClient"]),
         .library(name: "CoreUI", targets: ["CoreUI"]),
         .library(name: "Identifier", targets: ["Identifier"]),
+        .library(name: "Identity", targets: ["Identity"]),
         .library(name: "JWT", targets: ["JWT"]),
         .library(name: "Models", targets: ["Models"]),
         .library(name: "NetworkEnvironment", targets: ["NetworkEnvironment"]),
@@ -21,7 +22,6 @@ var package = Package(
         .library(name: "RemoteNotificationsClient", targets: ["RemoteNotificationsClient"]),
         .library(name: "Session", targets: ["Session"]),
         .library(name: "UserNotificationsClient", targets: ["UserNotificationsClient"]),
-        .library(name: "WebSockets", targets: ["WebSockets"]),
         
         // Features
         .library(name: "AccountFeature", targets: ["AccountFeature"]),
@@ -30,20 +30,22 @@ var package = Package(
         .library(name: "AuthFeature", targets: ["AuthFeature"]),
         .library(name: "CalendarFeature", targets: ["CalendarFeature"]),
         .library(name: "ComposeFeature", targets: ["ComposeFeature"]),
+        .library(name: "ConversationDisclosureFeature", targets: ["ConversationDisclosureFeature"]),
         .library(name: "ConversationFeature", targets: ["ConversationFeature"]),
-        .library(name: "ConversationOnboardingFeature", targets: ["ConversationOnboardingFeature"]),
         .library(name: "ConversationsFeature", targets: ["ConversationsFeature"]),
+        .library(name: "IncomingRequestsFeature", targets: ["IncomingRequestsFeature"]),
+        .library(name: "InformationDisclosureFeature", targets: ["InformationDisclosureFeature"]),
         .library(name: "LoggedInFeature", targets: ["LoggedInFeature"]),
         .library(name: "MyConversationsFeature", targets: ["MyConversationsFeature"]),
         .library(name: "NotificationsFeature", targets: ["NotificationsFeature"]),
         .library(name: "OnboardingFeature", targets: ["OnboardingFeature"]),
         .library(name: "OpenConversationsFeature", targets: ["OpenConversationsFeature"]),
+        .library(name: "OutgoingRequestsFeature", targets: ["OutgoingRequestsFeature"]),
         .library(name: "RootFeature", targets: ["RootFeature"]),
         .library(name: "TrackingFeature", targets: ["TrackingFeature"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.42.0"),
-        .package(url: "https://github.com/daltoniam/Starscream", from: "4.0.0")
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.42.0")
     ],
     targets: [
         // Components
@@ -54,6 +56,7 @@ var package = Package(
         .target(
             name: "APIClient",
             dependencies: [
+                "Identity",
                 "NetworkEnvironment",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
@@ -102,13 +105,6 @@ var package = Package(
         .target(
             name: "UserNotificationsClient",
             dependencies: [
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ]
-        ),
-        .target(
-            name: "WebSockets",
-            dependencies: [
-                "Starscream",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -167,6 +163,13 @@ var package = Package(
             ]
         ),
         .target(
+            name: "ConversationDisclosureFeature",
+            dependencies: [
+                "CoreUI",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
             name: "ConversationFeature",
             dependencies: [
                 "AnyCodable",
@@ -178,25 +181,36 @@ var package = Package(
             ]
         ),
         .target(
-            name: "ConversationOnboardingFeature",
-            dependencies: [
-                "CoreUI",
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ]
-        ),
-        .target(
             name: "ConversationsFeature",
             dependencies: [
                 "APIClient",
                 "AccountFeature",
                 "ComposeFeature",
+                "ConversationDisclosureFeature",
                 "ConversationFeature",
-                "ConversationOnboardingFeature",
                 "CoreUI",
+                "IncomingRequestsFeature",
                 "Models",
                 "MyConversationsFeature",
                 "OpenConversationsFeature",
+                "OutgoingRequestsFeature",
                 "Session",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "IncomingRequestsFeature",
+            dependencies: [
+                "APIClient",
+                "Models",
+                "Session",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "InformationDisclosureFeature",
+            dependencies: [
+                "CoreUI",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -242,7 +256,17 @@ var package = Package(
             name: "OpenConversationsFeature",
             dependencies: [
                 "APIClient",
+                "ConversationFeature",
                 "CoreUI",
+                "Session",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "OutgoingRequestsFeature",
+            dependencies: [
+                "APIClient",
+                "Models",
                 "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]

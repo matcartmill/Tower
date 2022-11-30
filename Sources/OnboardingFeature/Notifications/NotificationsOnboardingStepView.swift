@@ -27,10 +27,7 @@ public struct NotificationsOnboardingStepView: View {
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
-            .background(
-                Asset.Colors.Background.base.swiftUIColor
-                    .ignoresSafeArea()
-            )
+            .themedBackground()
             .onAppear { viewStore.send(.viewAppeared) }
         }
     }

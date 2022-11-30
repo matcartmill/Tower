@@ -50,6 +50,27 @@ public class ConversationGateway {
         request.setValue("Bearer \(jwt().token)", forHTTPHeaderField: "Authorization")
         
         connection = session.webSocketTask(with: request)
+        configureCallbacks()
+        connection?.resume()
+        configureTimer()
+        
+        return stream
+    }
+    public func send(_ message: String) async throws {
+        let message = SendMessageRequest(content: message)
+        let data = try encoder.encode(message)
+        try await connection?.send(.data(data))
+    }
+    
+    public func close() {
+        timerCancellable?.cancel()
+        continuation?.finish()
+        connection?.cancel(with: .goingAway, reason: nil)
+    }
+    
+    // MARK: - Private
+    
+    private func configureCallbacks() {
         connection?.receive(completionHandler: { [weak self] result in
             guard let self = self else { return }
             
@@ -79,13 +100,15 @@ public class ConversationGateway {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            
+            self.configureCallbacks()
         })
-        connection?.resume()
-        
+    }
+    
+    private func configureTimer() {
+        timerCancellable?.cancel()
         timerCancellable = timer.sink(receiveValue: { [weak self] _ in
-            guard let self = self else {
-                return
-            }
+            guard let self = self else { return }
             
             self.connection?.sendPing(pongReceiveHandler: { error in
                 if let error = error {
@@ -94,19 +117,6 @@ public class ConversationGateway {
                 }
             })
         })
-        
-        return stream
-    }
-    public func send(_ message: String) async throws {
-        let message = SendMessageRequest(content: message)
-        let data = try encoder.encode(message)
-        try await connection?.send(.data(data))
-    }
-    
-    public func close() {
-        timerCancellable?.cancel()
-        continuation?.finish()
-        connection?.cancel(with: .goingAway, reason: nil)
     }
 }
 

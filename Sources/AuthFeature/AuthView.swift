@@ -30,10 +30,7 @@ public struct AuthView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
-            .background(
-                Asset.Colors.Background.base.swiftUIColor
-                    .ignoresSafeArea()
-            )
+            .themedBackground()
             .alert(
                 "Oops!",
                 isPresented: viewStore.binding(

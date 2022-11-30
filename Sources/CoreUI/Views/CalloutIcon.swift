@@ -6,7 +6,8 @@ struct CalloutIcon: View {
     var body: some View {
         image
             .resizable()
-            .frame(width: 50, height: 50)
+            .aspectRatio(1, contentMode: .fit)
+            .frame(minHeight: 30, maxHeight: 50)
             .padding(25)
             .background(
                 LinearGradient(

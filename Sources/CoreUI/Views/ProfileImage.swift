@@ -2,15 +2,15 @@ import Models
 import SwiftUI
 
 public struct ProfileImage: View {
-    private let user: User
+    private let url: URL?
     
-    public init(_ user: User) {
-        self.user = user
+    public init(_ url: URL?) {
+        self.url = url
     }
     
     public var body: some View {
         AsyncImage(
-            url: user.avatarUrl,
+            url: url,
             content: { phase in
                 switch phase {
                 case .success(let image):

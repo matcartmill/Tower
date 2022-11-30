@@ -22,7 +22,7 @@ public struct ConversationDetailView: View {
                             )
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: 0, leading: 0, bottom: 20, trailing: 0))
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 12, trailing: 0))
                         }
                     }
                     .scrollIndicators(.hidden)
@@ -30,7 +30,10 @@ public struct ConversationDetailView: View {
                     .listStyle(.plain)
                     .onChange(of: viewStore.conversation.messages) { newValue in
                         guard let last = newValue.last else { return }
-                        proxy.scrollTo(last.id, anchor: .bottom)
+                        
+                        withAnimation {
+                            proxy.scrollTo(last.id, anchor: .bottom)
+                        }
                     }
                 }
                 
@@ -77,6 +80,7 @@ public struct ConversationDetailView: View {
                     .disabled(viewStore.newMessage.isEmpty)
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button(action: { viewStore.send(.showMoreMenu) }) {
                     Asset.Icons.more.swiftUIImage
@@ -87,6 +91,7 @@ public struct ConversationDetailView: View {
                 }
                 .frame(alignment: .trailing)
             }
+            .toolbar(.hidden, for: .tabBar)
             .actionSheet(
                 isPresented: viewStore.binding(
                     get: \.isMoreMenuOpen,
@@ -106,10 +111,7 @@ public struct ConversationDetailView: View {
             }
             .task { await viewStore.send(.openWebSocket).finish() }
             .padding()
-            .background(
-                Asset.Colors.Background.base.swiftUIColor
-                    .ignoresSafeArea()
-            )
+            .themedBackground()
         }
     }
 }
@@ -144,7 +146,8 @@ private struct ConversationMessageContent: View {
     var body: some View {
         Text(message.content)
             .frame(alignment: .leading)
-            .padding(12)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
             .font(.callout)
             .foregroundColor(foreground)
             .background(
@@ -152,6 +155,6 @@ private struct ConversationMessageContent: View {
                 ? Asset.Colors.Background.Chat.outgoing.swiftUIColor
                 : Asset.Colors.Background.Chat.incoming.swiftUIColor
             )
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

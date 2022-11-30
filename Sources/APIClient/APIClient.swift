@@ -18,8 +18,14 @@ public struct APIClient {
     
     // Conversation
     public var myConversations: (_ token: JWT) -> Effect<TaskResult<[TransmittedConversation]>, Never>
-    public var joinableConversations: (_ token: JWT) -> Effect<TaskResult<[TransmittedConversation]>, Never>
-    public var createConversation: (_ token: JWT, _ request: CreateConversationRequest) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var openConversations: (_ token: JWT) -> Effect<TaskResult<PagedResponse<[ConversationSummary]>>, Never>
+    public var createConversation: (_ token: JWT, _ request: CreateConversationRequest) -> Effect<TaskResult<TransmittedConversation>, Never>
+    
+    // Conversation Requests
+    public var incomingConversationRequests: (_ token: JWT) -> Effect<TaskResult<[IncomingConversationRequest]>, Never>
+    public var outgoingConversationRequests: (_ token: JWT) -> Effect<TaskResult<[OutgoingConversationRequest]>, Never>
+    public var cancelOutgoingRequest: (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var answerIncomingRequest: (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>
     
     // Social
     public var addFriend: (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>
@@ -39,8 +45,12 @@ public struct APIClient {
         updateMe: @escaping (_ token: JWT, _ user: User) -> Effect<TaskResult<User>, Never>,
         updateAvatar: @escaping (_ token: JWT, _ data: Data) -> Effect<TaskResult<APIResultResponse>, Never>,
         myConversations: @escaping (_ token: JWT) -> Effect<TaskResult<[TransmittedConversation]>, Never>,
-        joinableConversations: @escaping (_ token: JWT) -> Effect<TaskResult<[TransmittedConversation]>, Never>,
-        createConversation: @escaping (_ token: JWT, _ request: CreateConversationRequest) -> Effect<TaskResult<APIResultResponse>, Never>,
+        openConversations: @escaping (_ token: JWT) -> Effect<TaskResult<PagedResponse<[ConversationSummary]>>, Never>,
+        createConversation: @escaping (_ token: JWT, _ request: CreateConversationRequest) -> Effect<TaskResult<TransmittedConversation>, Never>,
+        incomingConversationRequests: @escaping (_ token: JWT) -> Effect<TaskResult<[IncomingConversationRequest]>, Never>,
+        outgoingConversationRequests: @escaping (_ token: JWT) -> Effect<TaskResult<[OutgoingConversationRequest]>, Never>,
+        cancelOutgoingRequest: @escaping (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>,
+        answerIncomingRequest: @escaping (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>,
         addFriend: @escaping (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>,
         block: @escaping (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>,
         report: @escaping (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>,
@@ -53,8 +63,12 @@ public struct APIClient {
         self.updateMe = updateMe
         self.updateAvatar = updateAvatar
         self.myConversations = myConversations
-        self.joinableConversations = joinableConversations
+        self.openConversations = openConversations
         self.createConversation = createConversation
+        self.incomingConversationRequests = incomingConversationRequests
+        self.outgoingConversationRequests = outgoingConversationRequests
+        self.cancelOutgoingRequest = cancelOutgoingRequest
+        self.answerIncomingRequest = answerIncomingRequest
         self.addFriend = addFriend
         self.block = block
         self.report = report

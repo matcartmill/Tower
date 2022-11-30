@@ -29,10 +29,7 @@ public struct AvatarOnboardingStepView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
-            .background(
-                Asset.Colors.Background.base.swiftUIColor
-                    .ignoresSafeArea()
-            )
+            .themedBackground()
         }
     }
 }

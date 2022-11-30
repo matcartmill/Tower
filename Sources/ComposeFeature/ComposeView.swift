@@ -29,13 +29,13 @@ public struct ComposeView: View {
                             .padding(.vertical, 6)
                             .font(.subheadline.bold())
                             .foregroundColor(
-                                viewStore.message.isEmpty
+                                viewStore.newConversation.content.isEmpty
                                 ? Asset.Colors.Content.Button.primaryDisabled.swiftUIColor
                                 : Asset.Colors.Content.Button.primary.swiftUIColor
                             )
                     }
                     .background(
-                        viewStore.message.isEmpty
+                        viewStore.newConversation.content.isEmpty
                         ? Asset.Colors.Background.Button.primaryDisabled.swiftUIColor
                         : Asset.Colors.Background.Button.primary.swiftUIColor
                     )
@@ -63,7 +63,7 @@ public struct ComposeView: View {
                 TextField(
                     "What's on your mind?",
                     text: viewStore.binding(
-                        get: \.message,
+                        get: \.newConversation.content,
                         send: Compose.Action.textFieldChanged
                     ),
                     axis: .vertical
@@ -74,10 +74,7 @@ public struct ComposeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
-            .background(
-                Asset.Colors.Background.base.swiftUIColor
-                    .ignoresSafeArea()
-            )
+            .themedBackground()
         }
     }
 }

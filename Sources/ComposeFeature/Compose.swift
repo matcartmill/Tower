@@ -3,14 +3,10 @@ import Models
 
 public struct Compose: ReducerProtocol {
     public struct State: Equatable {
-        public var conversation: Conversation
-        public var message: String
-        public var user: User
+        public var newConversation: NewConversation
         
-        public init(conversation: Conversation, message: String = "", user: User) {
-            self.conversation = conversation
-            self.message = message
-            self.user = user
+        public init(newConversation: NewConversation) {
+            self.newConversation = newConversation
         }
     }
     
@@ -26,7 +22,7 @@ public struct Compose: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .textFieldChanged(let messageContent):
-                state.message = messageContent
+                state.newConversation.content = messageContent
                 
                 return .none
                 

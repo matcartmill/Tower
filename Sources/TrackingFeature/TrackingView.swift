@@ -107,10 +107,7 @@ public struct TrackingView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding()
-                .background(
-                    Asset.Colors.Background.base.swiftUIColor
-                        .ignoresSafeArea()
-                )
+                .themedBackground()
                 .navigationTitle(Text("Tracking"))
                 .navigationBarTitleDisplayMode(.automatic)
                 .toolbar {

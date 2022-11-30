@@ -13,10 +13,7 @@ public struct AppLoadingView: View {
         WithViewStore(store) { viewStore in
             ProgressView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    Asset.Colors.Background.base.swiftUIColor
-                        .ignoresSafeArea()
-                )
+                .themedBackground()
                 .onAppear { viewStore.send(.load) }
         }
     }

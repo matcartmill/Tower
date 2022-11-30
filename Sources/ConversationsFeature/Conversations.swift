@@ -3,38 +3,55 @@ import ComposableArchitecture
 import AccountFeature
 import ComposeFeature
 import ConversationFeature
-import ConversationOnboardingFeature
+import ConversationDisclosureFeature
+import IncomingRequestsFeature
+import InformationDisclosureFeature
 import Models
 import MyConversationsFeature
 import OpenConversationsFeature
+import OutgoingRequestsFeature
 import Session
 import SwiftUI
 
 public struct Conversations: ReducerProtocol {
-    public enum Tab: Equatable {
+    enum Tab: Equatable {
         case openConversations
         case myConversations
     }
     
+    fileprivate enum DisclosureEvent: Equatable {
+        case accept(IncomingConversationRequest.ID)
+        case request(Conversation.ID)
+    }
+    
     public struct State: Equatable {
-        public var myConversationsState: MyConversations.State
-        public var openConversationsState: OpenConversations.State
+        public var incomingRequests: IncomingRequests.State
+        public var outgoingRequests: OutgoingRequests.State
+        public var openConversations: OpenConversations.State
+        public var activeConversations: MyConversations.State
+        
         public var user: User
         public var accountState: Account.State?
         public var newConversation: Compose.State?
         public var selectedConversation: ConversationDetail.State?
-        public var conversationOnboardingState: ConversationOnboarding.State?
-        public var activeTab: Tab = .openConversations
+        public var conversationDisclosureState: ConversationDisclosure.State?
+        public var informationDisclosureState: InformationDisclosure.State?
+        
+        var activeTab: Tab = .openConversations
+        
+        fileprivate var disclosureEvent: DisclosureEvent?
         
         public init(user: User) {
             self.user = user
-            self.myConversationsState = .init(user: user)
-            self.openConversationsState = .init()
+            self.incomingRequests = .init()
+            self.outgoingRequests = .init()
+            self.activeConversations = .init()
+            self.openConversations = .init()
         }
     }
     
     public enum Action {
-        case viewShown
+        case refresh
         
         // Account
         case openAccount
@@ -43,7 +60,7 @@ public struct Conversations: ReducerProtocol {
         case openComposer
         case closeComposer
         case composingFailed
-        case composingSuccessful(Conversation.ID)
+        case composingSuccessful(TransmittedConversation)
         
         // Conversation Detail
         case dismissConversation
@@ -59,9 +76,12 @@ public struct Conversations: ReducerProtocol {
         case account(Account.Action)
         case compose(Compose.Action)
         case conversation(ConversationDetail.Action)
-        case myConversations(MyConversations.Action)
-        case onboarding(ConversationOnboarding.Action)
+        case activeConversations(MyConversations.Action)
+        case conversationDisclosure(ConversationDisclosure.Action)
+        case informationDisclosure(InformationDisclosure.Action)
         case openConversations(OpenConversations.Action)
+        case incomingRequests(IncomingRequests.Action)
+        case outgoingRequests(OutgoingRequests.Action)
     }
     
     @Dependency(\.apiClient) private var apiClient
@@ -73,8 +93,13 @@ public struct Conversations: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .viewShown:
-                return .none
+            case .refresh:
+                return .merge(
+                    .task { .incomingRequests(.loadRequests) },
+                    .task { .outgoingRequests(.loadRequests) },
+                    .task { .activeConversations(.loadConversations) },
+                    .task { .openConversations(.loadConversations) }
+                )
                 
             case .viewMyConversations:
                 state.activeTab = .myConversations
@@ -88,13 +113,12 @@ public struct Conversations: ReducerProtocol {
             
             case .openAccount:
                 state.accountState = .init()
-                
                 return .none
             
             // Composer
             
             case .openComposer:
-                state.conversationOnboardingState = .init()
+                state.conversationDisclosureState = .init()
                 
                 return .none
                 
@@ -106,7 +130,19 @@ public struct Conversations: ReducerProtocol {
             case .composingFailed:
                 return .none
                 
-            case .composingSuccessful(let id):
+            case .composingSuccessful(let conversation):
+                state.activeConversations.conversations.insert(
+                    .init(
+                       id: .init(conversation.id.uuidString),
+                       author: conversation.author,
+                       partner: conversation.participant,
+                       messages: conversation.messages,
+                       createdAt: conversation.createdAt,
+                       updatedAt: conversation.updatedAt
+                   ),
+                    at: 0
+                )
+                
                 return .merge(
                     .task { .closeComposer }
                 )
@@ -134,20 +170,15 @@ public struct Conversations: ReducerProtocol {
                 
             case .compose(.start):
                 guard
-                    let conversation = state.newConversation?.conversation,
-                    let message = conversation.messages.first?.content,
+                    let newConversation = state.newConversation?.newConversation,
                     let jwt = sessionStore.session?.jwt
                 else { return .none }
                 
-                return apiClient.createConversation(jwt, .init(message: .init(content: message)))
+                return apiClient.createConversation(jwt, .init(newConversation))
                     .map { result in
                         switch result {
-                        case .success(let response) where response.success:
-                            return .composingSuccessful(conversation.id)
-                            
-                        case .success(let response):
-                            print(response.error ?? "Something went wrong...")
-                            return .composingFailed
+                        case .success(let conversation):
+                            return .composingSuccessful(conversation)
                             
                         case .failure(let error):
                             print(error.localizedDescription)
@@ -161,24 +192,16 @@ public struct Conversations: ReducerProtocol {
             case .compose(.close):
                 return .task { .closeComposer }
                 
-            // Bridges - Conversation Onboarding
+            // Bridges - Conversation Disclosure
 
-            case .onboarding(.next):
-                state.conversationOnboardingState = nil
-                state.newConversation = .init(
-                    conversation: .init(
-                        id: .init(),
-                        authorId: User.sender.id,
-                        partnerId: nil,
-                        messages: []
-                    ),
-                    user: state.user
-                )
+            case .conversationDisclosure(.next):
+                state.conversationDisclosureState = nil
+                state.newConversation = .init(newConversation: .init(category: .none, content: ""))
                 
                 return .none
                 
-            case .onboarding(.cancel):
-                state.conversationOnboardingState = nil
+            case .conversationDisclosure(.cancel):
+                state.conversationDisclosureState = nil
                 
                 return .none
             
@@ -189,16 +212,40 @@ public struct Conversations: ReducerProtocol {
                 
             // Bridges - My Conversations
                 
-            case .myConversations(.selectedConversation(let conversationState)):
-                return .task { .openConversation(conversationState) }
-                
-            case .myConversations:
+            case .activeConversations:
                 return .none
                 
             // Bridges - Open Conversations
                 
+//            case .openConversations(.selectConversation(let id)):
+//                state.disclosureEvent = .request(id)
+//                state.informationDisclosureState = .init(context: .participant)
+//
+//                return .none
+                
             case .openConversations:
                 return .none
+                
+            // Bridges - Incoming Requests
+                
+            case .incomingRequests:
+                return .none
+                
+            // Bridges - Outgoing Requests
+                
+            case .outgoingRequests:
+                return .none
+                
+            // Bridges - Information Disclosure
+                
+            case .informationDisclosure(.next):
+                return .none
+                
+            case .informationDisclosure(.cancel):
+                state.disclosureEvent = nil
+                state.informationDisclosureState = nil
+                return .none
+                
             }
         }
         .ifLet(\.accountState, action: /Action.account) {
@@ -207,19 +254,30 @@ public struct Conversations: ReducerProtocol {
         .ifLet(\.newConversation, action: /Action.compose) {
             Compose()
         }
-        .ifLet(\.conversationOnboardingState, action: /Action.onboarding) {
-            ConversationOnboarding()
+        .ifLet(\.conversationDisclosureState, action: /Action.conversationDisclosure) {
+            ConversationDisclosure()
         }
         .ifLet(\.selectedConversation, action: /Action.conversation) {
             ConversationDetail()
         }
+        .ifLet(\.informationDisclosureState, action: /Action.informationDisclosure) {
+            InformationDisclosure()
+        }
         
-        Scope(state: \.myConversationsState, action: /Action.myConversations) {
+        Scope(state: \.activeConversations, action: /Action.activeConversations) {
             MyConversations()
         }
         
-        Scope(state: \.openConversationsState, action: /Action.openConversations) {
+        Scope(state: \.openConversations, action: /Action.openConversations) {
             OpenConversations()
+        }
+        
+        Scope(state: \.incomingRequests, action: /Action.incomingRequests) {
+            IncomingRequests()
+        }
+        
+        Scope(state: \.outgoingRequests, action: /Action.outgoingRequests) {
+            OutgoingRequests()
         }
     }
 }

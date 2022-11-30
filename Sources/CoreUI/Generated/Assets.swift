@@ -75,6 +75,7 @@ public enum Asset {
       }
       public static let primary = ColorAsset(name: "colors/content/primary")
       public static let secondary = ColorAsset(name: "colors/content/secondary")
+      public static let tertiary = ColorAsset(name: "colors/content/tertiary")
     }
   }
   public enum Icons {
@@ -103,6 +104,8 @@ public enum Asset {
     public static let plus = ImageAsset(name: "icons/plus")
     public static let send = ImageAsset(name: "icons/send")
     public static let shieldCheck = ImageAsset(name: "icons/shield-check")
+    public static let starFilled = ImageAsset(name: "icons/star-filled")
+    public static let starLine = ImageAsset(name: "icons/star-line")
     public static let tag = ImageAsset(name: "icons/tag")
     public static let task = ImageAsset(name: "icons/task")
   }

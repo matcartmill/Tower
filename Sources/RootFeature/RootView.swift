@@ -29,9 +29,6 @@ public struct RootView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            Asset.Colors.Background.base.swiftUIColor
-                .ignoresSafeArea()
-        )
+        .themedBackground()
     }
 }

@@ -46,7 +46,7 @@ extension APIClient: DependencyKey {
                 request.httpMethod = "GET"
             }
         },
-        joinableConversations: { token in
+        openConversations: { token in
             request(path: "v1", "conversations", "open") { request in
                 request.contentTypeJSON()
                 request.authorize(with: token)
@@ -55,10 +55,39 @@ extension APIClient: DependencyKey {
         },
         createConversation: { token, conversation in
             request(path: "v1", "conversations") { request in
+                print(conversation)
                 request.jsonBody(conversation)
                 request.contentTypeJSON()
                 request.authorize(with: token)
                 request.httpMethod = "POST"
+            }
+        },
+        incomingConversationRequests: { token in
+            request(path: "v1", "conversations", "requests", "incoming") { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "GET"
+            }
+        },
+        outgoingConversationRequests: { token in
+            request(path: "v1", "conversations", "requests", "outgoing") { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "GET"
+            }
+        },
+        cancelOutgoingRequest: { token, requestId in
+            request(path: "v1", "conversations", "requests", "outgoing", requestId.uuidString) { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "DELETE"
+            }
+        },
+        answerIncomingRequest: { token, requestId in
+            request(path: "v1", "conversations", "requests", "incoming", requestId.uuidString) { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "PATCH"
             }
         },
         addFriend: { token, userId in
@@ -146,12 +175,48 @@ extension APIClient {
                 await TaskResult { [] }
             }
         },
-        joinableConversations: { _ in
+        openConversations: { _ in
+            return .task {
+                await TaskResult { .init(items: [], metadata: .init(page: 1, per: 10, total: 10)) }
+            }
+        },
+        createConversation: { _, _ in
+            return .task {
+                await TaskResult {
+                    .init(
+                        id: .init(),
+                        author: .init(
+                            username: "Foo",
+                            avatar: nil,
+                            rating: nil,
+                            joined: Date()
+                        ),
+                        participant: nil,
+                        messages: [],
+                        createdAt: Date(),
+                        updatedAt: Date()
+                    )
+                }
+            }
+        },
+        incomingConversationRequests: { _ in
             return .task {
                 await TaskResult { [] }
             }
         },
-        createConversation: { _, _ in
+        outgoingConversationRequests: { _ in
+            return .task {
+                await TaskResult { [] }
+            }
+        },
+        cancelOutgoingRequest: { _, _ in
+            return .task {
+                await TaskResult {
+                    .init(success: true, error: nil)
+                }
+            }
+        },
+        answerIncomingRequest: { _, _ in
             return .task {
                 await TaskResult {
                     .init(success: true, error: nil)

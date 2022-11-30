@@ -2,10 +2,10 @@ import ComposableArchitecture
 import CoreUI
 import SwiftUI
 
-public struct ConversationOnboardingView: View {
-    private let store: StoreOf<ConversationOnboarding>
+public struct InformationDisclosureView: View {
+    public let store: StoreOf<InformationDisclosure>
     
-    public init(store: StoreOf<ConversationOnboarding>) {
+    public init(store: StoreOf<InformationDisclosure>) {
         self.store = store
     }
     
@@ -13,10 +13,10 @@ public struct ConversationOnboardingView: View {
         WithViewStore(store) { viewStore in
             CalloutView<EmptyView>(
                 image: Asset.Icons.commentAlert.swiftUIImage,
-                title: "Before you post...",
-                details: "If you need immediate mental health support please dial your local health crisis number.",
+                title: viewStore.context.title,
+                details: viewStore.context.description,
                 primaryAction: .init(
-                    title: "I understand",
+                    title: "Confirm",
                     execute: { viewStore.send(.next) }
                 ),
                 secondaryAction: .init(
