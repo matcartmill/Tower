@@ -1,14 +1,18 @@
 import APIClient
 import ComposableArchitecture
+import ImageUploaderFeature
 import Models
 import Permissions
 import Session
 
 public struct Account: ReducerProtocol {
     public struct State: Equatable {
-        @BindableState public var notificationsEnabled: Bool
+        @BindableState var notificationsEnabled: Bool
+        var user: User
+        var imageUploaderState: ImageUploader.State = .init()
         
-        public init(notificationsEnabled: Bool = true) {
+        public init(user: User, notificationsEnabled: Bool = true) {
+            self.user = user
             self.notificationsEnabled = notificationsEnabled
         }
     }
@@ -18,6 +22,10 @@ public struct Account: ReducerProtocol {
         case close
         case enablePush
         case logout
+        case updateAvatarButtonTapped
+        case avatarUploaderDismissed
+        
+        case imageUploader(ImageUploader.Action)
     }
     
     @Dependency(\.apiClient) private var apiClient
@@ -43,7 +51,21 @@ public struct Account: ReducerProtocol {
             case .logout:
                 guard let session = sessionStore.session else { return .none }
                 
-                return .fireAndForget { _ = apiClient.logout(session.jwt) }
+                return .fireAndForget {
+                    try await apiClient.logout(session.jwt)
+                }
+                
+            case .updateAvatarButtonTapped:
+                state.imageUploaderState = .init()
+                return .none
+                
+            case .avatarUploaderDismissed:
+                return .none
+                
+            // Bridges - Image Uploader
+                
+            case .imageUploader:
+                return .none
             }
         }
         

@@ -33,6 +33,7 @@ var package = Package(
         .library(name: "ConversationDisclosureFeature", targets: ["ConversationDisclosureFeature"]),
         .library(name: "ConversationFeature", targets: ["ConversationFeature"]),
         .library(name: "ConversationsFeature", targets: ["ConversationsFeature"]),
+        .library(name: "ImageUploaderFeature", targets: ["ImageUploaderFeature"]),
         .library(name: "IncomingRequestsFeature", targets: ["IncomingRequestsFeature"]),
         .library(name: "InformationDisclosureFeature", targets: ["InformationDisclosureFeature"]),
         .library(name: "LoggedInFeature", targets: ["LoggedInFeature"]),
@@ -115,6 +116,7 @@ var package = Package(
             dependencies: [
                 "APIClient",
                 "CoreUI",
+                "ImageUploaderFeature",
                 "Models",
                 "Permissions",
                 "Session",
@@ -173,6 +175,7 @@ var package = Package(
             name: "ConversationFeature",
             dependencies: [
                 "AnyCodable",
+                "APIClient",
                 "CoreUI",
                 "Models",
                 "NetworkEnvironment",
@@ -190,10 +193,20 @@ var package = Package(
                 "ConversationFeature",
                 "CoreUI",
                 "IncomingRequestsFeature",
+                "InformationDisclosureFeature",
                 "Models",
                 "MyConversationsFeature",
                 "OpenConversationsFeature",
                 "OutgoingRequestsFeature",
+                "Session",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "ImageUploaderFeature",
+            dependencies: [
+                "APIClient",
+                "Models",
                 "Session",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]

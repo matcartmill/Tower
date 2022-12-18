@@ -79,8 +79,9 @@ public struct Tracking: ReducerProtocol {
                 else { return .none }
                 
                 state.selectedEmotion = nil
+                
                 return .fireAndForget {
-                    _ = apiClient.trackMood(jwt, emotion)
+                    try await apiClient.trackMood(jwt, emotion)
                 }
             }
         }

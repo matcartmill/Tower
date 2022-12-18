@@ -1,3 +1,4 @@
+import APIClient
 import ComposableArchitecture
 import Foundation
 import Identifier
@@ -30,6 +31,7 @@ public struct ConversationDetail: ReducerProtocol {
         case textFieldChanged(String)
     }
     
+    @Dependency(\.apiClient) var apiClient
     @Dependency(\.sessionStore) var sessionStore
     @Dependency(\.urlSession) var urlSession
     @Dependency(\.conversationGateway) var gateway
@@ -60,11 +62,14 @@ public struct ConversationDetail: ReducerProtocol {
                 return .none
                 
             case .sendMessage:
+                let id = state.conversation.id
                 let message = state.newMessage
                 state.newMessage = ""
                 
-                return .fireAndForget {
-                    try await gateway.send(message)
+                guard let jwt = sessionStore.session?.jwt else { return .none }
+                
+                return .fireAndForget(priority: .userInitiated) {
+                    try await apiClient.sendMessage(jwt, message, id)
                 }
                 
             case .receivedMessage(let message):

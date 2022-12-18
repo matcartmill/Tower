@@ -26,28 +26,26 @@ public struct MyConversations: ReducerProtocol {
             switch action {
             case .loadConversations:
                 guard let jwt = sessionStore.session?.jwt else { return .none }
-                
-                var myConversations = [Conversation]()
-                
-                return apiClient.myConversations(jwt).map { result in
-                    switch result {
-                    case .success(let conversations):
-                        myConversations = conversations
-                            .map { .init(
+                                
+                return .task {
+                    do {
+                        let conversations = try await apiClient.myConversations(jwt).map {
+                            Conversation(
                                 id: .init($0.id.uuidString),
                                 author: $0.author,
                                 partner: $0.participant,
                                 messages: $0.messages,
                                 createdAt: $0.createdAt,
                                 updatedAt: $0.updatedAt
-                            )}
+                            )
+                        }
                             .sorted(by: { $0.updatedAt < $1.updatedAt })
                         
-                    case .failure(let error):
+                        return .conversationsLoaded(conversations)
+                    } catch let error {
                         print(error.localizedDescription)
+                        return .conversationsLoaded([])
                     }
-                    
-                    return .conversationsLoaded(myConversations)
                 }
                 
             case .conversationsLoaded(let conversations):

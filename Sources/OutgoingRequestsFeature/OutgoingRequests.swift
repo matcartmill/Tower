@@ -28,16 +28,14 @@ public struct OutgoingRequests: ReducerProtocol {
             case .loadRequests:
                 guard let jwt = sessionStore.session?.jwt else { return .none }
                 
-                return apiClient.outgoingConversationRequests(jwt)
-                    .map {
-                        switch $0 {
-                        case .success(let outgoing):
-                            return .requestsLoaded(outgoing)
-                            
-                        case .failure(let error):
-                            return .loadFailed(error)
-                        }
+                return .task {
+                    do {
+                        let requests = try await apiClient.outgoingConversationRequests(jwt)
+                        return .requestsLoaded(requests)
+                    } catch let error {
+                        return .loadFailed(error)
                     }
+                }
                 
             case .loadFailed(let error):
                 print(error.localizedDescription)

@@ -60,30 +60,27 @@ public struct Auth: ReducerProtocol {
                 }
                 
             case .exchangeIdentity(let identity):
-                return apiClient.exchange(identity)
-                    .map { result in
-                        switch result {
-                        case .success(let jwt):
-                            return .fetchUser(jwt)
-                            
-                        case .failure(let error):
-                            return .authenticationResponse(.failure(error))
-                        }
+                return .task {
+                    do {
+                        let jwt = try await apiClient.exchange(identity)
+                        return .fetchUser(jwt)
+                    } catch let error {
+                        return .authenticationResponse(.failure(error))
                     }
+                }
                 
             case .fetchUser(let jwt):
-                return apiClient.me(jwt)
-                    .map { result in
-                        switch result {
-                        case .success(let user):
-                            let session = Session(jwt: jwt, user: user)
-                            return .authenticationResponse(.success(session))
-                            
-                        case .failure(let error):
-                            return .authenticationResponse(.failure(error))
-                        }
+                return .task {
+                    do {
+                        let user = try await apiClient.me(jwt)
+                        let session = Session(jwt: jwt, user: user)
+                        return .authenticationResponse(.success(session))
+                    } catch let error {
+                        print(error.localizedDescription)
+                        return .authenticationResponse(.failure(error))
                     }
-                    .animation()
+                }
+                .animation()
             }
         }
     }

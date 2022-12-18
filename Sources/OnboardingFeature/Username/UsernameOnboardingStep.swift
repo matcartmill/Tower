@@ -33,6 +33,7 @@ public struct UsernameOnboardingStep: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .error(let error):
+                print(error.localizedDescription)
                 // state.error = .remote
                 
                 return .none
@@ -49,17 +50,16 @@ public struct UsernameOnboardingStep: ReducerProtocol {
                 var user = session.user
                 user.username = state.username
                 
-                return apiClient.updateMe(session.jwt, user)
-                    .map {
-                        switch $0 {
-                        case .success(let updatedUser):
-                            sessionStore.update(.init(jwt: session.jwt, user: updatedUser))
-                            return .next
-                            
-                        case .failure(let error):
-                            return .error(error)
-                        }
+                return .task { [user] in
+                    do {
+                        let updated = try await apiClient.updateMe(session.jwt, user)
+                        sessionStore.update(.init(jwt: session.jwt, user: updated))
+                        
+                        return .next
+                    } catch let error {
+                        return .error(error)
                     }
+                }
                 
             case .textFieldChanged(let value):
                 state.username = value

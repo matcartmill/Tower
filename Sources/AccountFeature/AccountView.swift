@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import CoreUI
+import ImageUploaderFeature
 import SwiftUI
 
 public struct AccountView: View {
@@ -13,23 +14,21 @@ public struct AccountView: View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 40) {
                 VStack(spacing: 12) {
-                    VStack {
-                        Text("Mat Cartmill")
-                            .font(.title3.bold())
-                        Text(verbatim: "mat.cartmill@gmail.com")
-                            .font(.body)
-                    }
-                    .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
-                    
-                    Button(action: {}) {
-                        Text("Update")
+                    ProfileImage(viewStore.user.avatarUrl)
+                        .frame(width: 100, height: 100)
+
+                    ImageUploaderView(store: store.scope(
+                        state: \.imageUploaderState,
+                        action: Account.Action.imageUploader
+                    )) {
+                        Text("Update Avatar")
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 4)
                             .font(.caption)
+                            .background(Asset.Colors.Background.Button.secondary.swiftUIColor)                        
                             .foregroundColor(Asset.Colors.Content.Button.secondary.swiftUIColor)
+                            .clipShape(Capsule())
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
-                    .background(Asset.Colors.Background.Button.secondary.swiftUIColor)
-                    .clipShape(Capsule())
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)

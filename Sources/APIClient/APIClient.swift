@@ -1,4 +1,3 @@
-import ComposableArchitecture
 import Foundation
 import Identifier
 import Identity
@@ -6,56 +5,72 @@ import JWT
 import Models
 
 public struct APIClient {
-    
     // Auth
-    public var exchange: (_ identity: Identity) -> Effect<TaskResult<JWT>, Never>
-    public var logout: (_ token: JWT) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var exchange: @Sendable (_ identity: Identity) async throws -> JWT
+    public var logout: @Sendable (_ token: JWT) async throws -> Void
     
     // User
-    public var me: (_ token: JWT) -> Effect<TaskResult<User>, Never>
-    public var updateMe: (_ token: JWT, _ user: User) -> Effect<TaskResult<User>, Never>
-    public var updateAvatar: (_ token: JWT, _ data: Data) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var me: @Sendable (_ token: JWT) async throws -> User
+    public var updateMe: @Sendable (_ token: JWT, _ user: User) async throws -> User
+    public var updateAvatar: @Sendable (_ token: JWT, _ data: Data) async throws -> Void
     
     // Conversation
-    public var myConversations: (_ token: JWT) -> Effect<TaskResult<[TransmittedConversation]>, Never>
-    public var openConversations: (_ token: JWT) -> Effect<TaskResult<PagedResponse<[ConversationSummary]>>, Never>
-    public var createConversation: (_ token: JWT, _ request: CreateConversationRequest) -> Effect<TaskResult<TransmittedConversation>, Never>
+    public var myConversations: @Sendable (_ token: JWT) async throws -> [TransmittedConversation]
+    public var openConversations: @Sendable (_ token: JWT) async throws -> PagedResponse<[ConversationSummary]>
+    public var createConversation: @Sendable (
+        _ token: JWT,
+        _ request: CreateConversationRequest
+    ) async throws -> TransmittedConversation
+    
+    // Messages
+    public var sendMessage: @Sendable (
+        _ token: JWT,
+        _ message: String,
+        _ conversationId: Identifier<Conversation>
+    ) async throws -> Void
     
     // Conversation Requests
-    public var incomingConversationRequests: (_ token: JWT) -> Effect<TaskResult<[IncomingConversationRequest]>, Never>
-    public var outgoingConversationRequests: (_ token: JWT) -> Effect<TaskResult<[OutgoingConversationRequest]>, Never>
-    public var cancelOutgoingRequest: (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>
-    public var answerIncomingRequest: (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var incomingConversationRequests: @Sendable (_ token: JWT) async throws -> [IncomingConversationRequest]
+    public var outgoingConversationRequests: @Sendable (_ token: JWT) async throws -> [OutgoingConversationRequest]
+    public var cancelOutgoingRequest: @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void
+    public var answerIncomingRequest: @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void
     
     // Social
-    public var addFriend: (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>
-    public var block: (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>
-    public var report: (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var addFriend: @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void
+    public var block: @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void
+    public var report: @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void
     
     // Tracking
-    public var trackMood: (_ token: JWT, _ emotion: Emotion) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var trackMood: @Sendable (_ token: JWT, _ emotion: Emotion) async throws -> Void
     
     // Settings
-    public var registerDeviceToken: (_ token: JWT, _ deviceToken: DeviceTokenRequest) -> Effect<TaskResult<APIResultResponse>, Never>
+    public var registerDeviceToken: @Sendable (_ token: JWT, _ deviceToken: DeviceTokenRequest) async throws -> Void
 
     public init(
-        exchange: @escaping (_ identity: Identity) -> Effect<TaskResult<JWT>, Never>,
-        logout: @escaping (_ token: JWT) -> Effect<TaskResult<APIResultResponse>, Never>,
-        me: @escaping (_ token: JWT) -> Effect<TaskResult<User>, Never>,
-        updateMe: @escaping (_ token: JWT, _ user: User) -> Effect<TaskResult<User>, Never>,
-        updateAvatar: @escaping (_ token: JWT, _ data: Data) -> Effect<TaskResult<APIResultResponse>, Never>,
-        myConversations: @escaping (_ token: JWT) -> Effect<TaskResult<[TransmittedConversation]>, Never>,
-        openConversations: @escaping (_ token: JWT) -> Effect<TaskResult<PagedResponse<[ConversationSummary]>>, Never>,
-        createConversation: @escaping (_ token: JWT, _ request: CreateConversationRequest) -> Effect<TaskResult<TransmittedConversation>, Never>,
-        incomingConversationRequests: @escaping (_ token: JWT) -> Effect<TaskResult<[IncomingConversationRequest]>, Never>,
-        outgoingConversationRequests: @escaping (_ token: JWT) -> Effect<TaskResult<[OutgoingConversationRequest]>, Never>,
-        cancelOutgoingRequest: @escaping (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>,
-        answerIncomingRequest: @escaping (_ token: JWT, _ requestId: UUID) -> Effect<TaskResult<APIResultResponse>, Never>,
-        addFriend: @escaping (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>,
-        block: @escaping (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>,
-        report: @escaping (_ token: JWT, _ user: Identifier<User>) -> Effect<TaskResult<APIResultResponse>, Never>,
-        trackMood: @escaping (_ token: JWT, _ emotion: Emotion) -> Effect<TaskResult<APIResultResponse>, Never>,
-        registerDeviceToken: @escaping (_ token: JWT, _ deviceToken: DeviceTokenRequest) -> Effect<TaskResult<APIResultResponse>, Never>
+        exchange: @escaping @Sendable (_ identity: Identity) async throws -> JWT,
+        logout: @escaping @Sendable (_ token: JWT) async throws -> Void,
+        me: @escaping @Sendable (_ token: JWT) async throws -> User,
+        updateMe: @escaping @Sendable (_ token: JWT, _ user: User) async throws -> User,
+        updateAvatar: @escaping @Sendable (_ token: JWT, _ data: Data) async throws -> Void,
+        myConversations: @escaping @Sendable (_ token: JWT) async throws -> [TransmittedConversation],
+        openConversations: @escaping @Sendable (_ token: JWT) async throws -> PagedResponse<[ConversationSummary]>,
+        createConversation: @escaping @Sendable (
+            _ token: JWT,
+            _ request: CreateConversationRequest
+        ) async throws -> TransmittedConversation,
+        sendMessage: @escaping @Sendable (
+            _ token: JWT,
+            _ message: String, _ conversationId: Identifier<Conversation>
+        ) async throws -> Void,
+        incomingConversationRequests: @escaping @Sendable (_ token: JWT) async throws -> [IncomingConversationRequest],
+        outgoingConversationRequests: @escaping @Sendable (_ token: JWT) async throws -> [OutgoingConversationRequest],
+        cancelOutgoingRequest: @escaping @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void,
+        answerIncomingRequest: @escaping @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void,
+        addFriend: @escaping @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void,
+        block: @escaping @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void,
+        report: @escaping @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void,
+        trackMood: @escaping @Sendable (_ token: JWT, _ emotion: Emotion) async throws -> Void,
+        registerDeviceToken: @escaping @Sendable (_ token: JWT, _ deviceToken: DeviceTokenRequest) async throws -> Void
     ) {
         self.exchange = exchange
         self.logout = logout
@@ -65,6 +80,7 @@ public struct APIClient {
         self.myConversations = myConversations
         self.openConversations = openConversations
         self.createConversation = createConversation
+        self.sendMessage = sendMessage
         self.incomingConversationRequests = incomingConversationRequests
         self.outgoingConversationRequests = outgoingConversationRequests
         self.cancelOutgoingRequest = cancelOutgoingRequest

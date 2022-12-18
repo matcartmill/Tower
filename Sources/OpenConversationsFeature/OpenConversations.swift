@@ -31,19 +31,15 @@ public struct OpenConversations: ReducerProtocol {
             switch action {
             case .loadConversations:
                 guard let jwt = sessionStore.session?.jwt else { return .none }
-                
-                var openConversations: [ConversationSummary] = []
-                
-                return apiClient.openConversations(jwt).map { result in
-                    switch result {
-                    case .success(let conversations):
-                        openConversations = conversations.items
-                        
-                    case .failure(let error):
+                                
+                return .task {
+                    do {
+                        let conversations = try await apiClient.openConversations(jwt)
+                        return .conversationsLoaded(conversations.items)
+                    } catch let error {
                         print(error.localizedDescription)
+                        return .conversationsLoaded([])
                     }
-                    
-                    return .conversationsLoaded(openConversations)
                 }
                 
             case .openWebSocket:

@@ -6,11 +6,11 @@ struct ActiveConversationItem: View {
     let conversation: Conversation
     
     var body: some View {
-        HStack(alignment: .top, spacing: 20) {
+        HStack(alignment: .top, spacing: 16) {
             ProfileImage(User.sender.avatarUrl)
-                .frame(width: 40, height: 40)
+                .frame(width: 36, height: 36)
             
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(conversation.author.username)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.subheadline)
@@ -20,9 +20,9 @@ struct ActiveConversationItem: View {
                 
                 Text(conversation.messages.last!.content)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.callout)
+                    .font(.footnote)
                     .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
-                    .lineLimit(2)
+                    .lineLimit(1)
             }
             .frame(maxWidth: .infinity)
             

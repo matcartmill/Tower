@@ -20,42 +20,20 @@ public struct ConversationsView: View {
     public var body: some View {
         WithViewStore(store) { viewStore in
             NavigationStack {
-                List {
-                    Section {
-                        EmptyView()
-                    } header: {
-                        TabSelector(
-                            selectedTab: viewStore.activeTab,
-                            onOpenRequestsSelected: { viewStore.send(.viewOpenRequests, animation: .spring()) },
-                            onMyConversationsSelected: { viewStore.send(.viewMyConversations, animation: .spring()) }
-                        )
-                        .themedRow()
-                    }
-
-                    if viewStore.activeTab == .openConversations {
-                        if !viewStore.incomingRequests.requests.isEmpty {
-                            IncomingRequestsSection(requests: viewStore.incomingRequests.requests)
-                                .themedRow()
-                        }
-                        
-                        if !viewStore.outgoingRequests.requests.isEmpty {
-                            OutgoingRequestsSection(requests: viewStore.outgoingRequests.requests)
-                                .themedRow()
-                        }
-                        
-                        OpenConversationsSection(conversations: viewStore.openConversations.conversations)
-                            .themedRow()
-                    } else {
-                        ActiveConversationsSection(conversations: viewStore.activeConversations.conversations)
-                            .themedRow()
-                    }
-                }
+                _ConversationsView(
+                    activeTab: viewStore.activeTab,
+                    incomingRequests: viewStore.incomingRequests.requests,
+                    outgoingRequests: viewStore.outgoingRequests.requests,
+                    openConversations: viewStore.openConversations.conversations,
+                    activeConversations: viewStore.activeConversations.conversations,
+                    onTabChangedToRequests: { viewStore.send(.viewOpenRequests, animation: .spring()) },
+                    onTabChangedToConversations: { viewStore.send(.viewMyConversations, animation: .spring()) },
+                    onOpenComposer: { viewStore.send(.openComposer) },
+                    onSelectOpenConversation: { viewStore.send(.openConversationTapped($0)) },
+                    onSelectActiveConversation: { viewStore.send(.selectConversation($0)) }
+                )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal)
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
-                .scrollContentBackground(.hidden)
-                .themedBackground()
                 .navigationDestination(isPresented: viewStore.binding(
                     get: { return $0.selectedConversation != nil },
                     send: Conversations.Action.dismissConversation
@@ -72,19 +50,6 @@ public struct ConversationsView: View {
                 }
                 .navigationBarTitle(Text("Conversations"))
                 .navigationBarTitleDisplayMode(.automatic)
-                .overlay(alignment: .bottomTrailing) {
-                    Button(action: { viewStore.send(.openComposer) }) {
-                        Asset.Icons.plus.swiftUIImage
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 28, height: 28)
-                            .padding(12)
-                            .tint(Asset.Colors.Content.Button.primary.swiftUIColor)
-                    }
-                    .background(Asset.Colors.Background.Button.primary.swiftUIColor)
-                    .clipShape(Circle())
-                    .padding([.bottom, .trailing], 30)
-                }
                 .toolbar {
                     ToolbarItemGroup {
                         Button(action: { viewStore.send(.openAccount) }) {
@@ -96,7 +61,7 @@ public struct ConversationsView: View {
                         }
                     }
                 }
-                .fullScreenCover(isPresented: viewStore.binding(
+                .sheet(isPresented: viewStore.binding(
                     get: { $0.newConversation != nil },
                     send: Conversations.Action.compose(.close)
                 )) {
@@ -158,6 +123,79 @@ public struct ConversationsView: View {
     }
 }
 
+private struct _ConversationsView: View {
+    let activeTab: Conversations.Tab
+    let incomingRequests: IdentifiedArrayOf<IncomingConversationRequest>
+    let outgoingRequests: IdentifiedArrayOf<OutgoingConversationRequest>
+    let openConversations: IdentifiedArrayOf<ConversationSummary>
+    let activeConversations: IdentifiedArrayOf<Conversation>
+    let onTabChangedToRequests: () -> Void
+    let onTabChangedToConversations: () -> Void
+    let onOpenComposer: () -> Void
+    let onSelectOpenConversation: (Conversation.ID) -> Void
+    let onSelectActiveConversation: (Conversation) -> Void
+    
+    var body: some View {
+        List {
+            Section {
+                EmptyView()
+            } header: {
+                TabSelector(
+                    selectedTab: activeTab,
+                    onOpenRequestsSelected: onTabChangedToRequests,
+                    onMyConversationsSelected: onTabChangedToConversations
+                )
+                .themedRow()
+            }
+
+            if activeTab == .openConversations {
+                if !incomingRequests.isEmpty {
+                    IncomingRequestsSection(requests: incomingRequests)
+                        .themedRow()
+                }
+                
+                if !outgoingRequests.isEmpty {
+                    OutgoingRequestsSection(requests: outgoingRequests)
+                        .themedRow()
+                }
+                
+                OpenConversationsSection(
+                    conversations: openConversations,
+                    onSelectOpenConversation: onSelectOpenConversation
+                )
+                .themedRow()
+            } else {
+                ActiveConversationsSection(
+                    conversations: activeConversations,
+                    onSelectActiveConversation: onSelectActiveConversation
+                )
+                .themedRow()
+            }
+            
+            Color.clear
+                .frame(height: 100)
+                .themedRow()
+        }
+        .listStyle(.plain)
+        .scrollIndicators(.hidden)
+        .scrollContentBackground(.hidden)
+        .themedBackground()
+        .overlay(alignment: .bottomTrailing) {
+            Button(action: onOpenComposer) {
+                Asset.Icons.plus.swiftUIImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 28, height: 28)
+                    .padding(12)
+                    .tint(Asset.Colors.Content.Button.primary.swiftUIColor)
+            }
+            .background(Asset.Colors.Background.Button.primary.swiftUIColor)
+            .clipShape(Circle())
+            .padding([.bottom, .trailing], 30)
+        }
+    }
+}
+
 private struct TabSelector: View {
     struct TabPreference: PreferenceKey {
         static var defaultValue: [Conversations.Tab: Anchor<CGRect>] = [:]
@@ -213,6 +251,7 @@ private struct IncomingRequestsSection: View {
                     acceptAction: { },
                     declineAction: { }
                 )
+                .padding(.vertical, 14)
             }
         }
     }
@@ -225,6 +264,7 @@ private struct OutgoingRequestsSection: View {
         Section(LocalizedStringKey("Outgoing")) {
             ForEach(requests) {
                 OutgoingRequestItem(request: $0)
+                    .padding(.vertical, 14)
             }
         }
     }
@@ -232,11 +272,14 @@ private struct OutgoingRequestsSection: View {
 
 private struct OpenConversationsSection: View {
     let conversations: IdentifiedArrayOf<ConversationSummary>
+    let onSelectOpenConversation: (Conversation.ID) -> Void
     
     var body: some View {
         Section(LocalizedStringKey("Open Conversations")) {
-            ForEach(conversations) {
-                OpenConversationItem(conversation: $0)
+            ForEach(conversations) { conversation in
+                OpenConversationItem(conversation: conversation)
+                    .padding(.vertical, 14)
+                    .onTapGesture { onSelectOpenConversation(conversation.id) }
             }
         }
     }
@@ -244,10 +287,140 @@ private struct OpenConversationsSection: View {
 
 private struct ActiveConversationsSection: View {
     let conversations: IdentifiedArrayOf<Conversation>
+    let onSelectActiveConversation: (Conversation) -> Void
     
     var body: some View {
-        ForEach(conversations) {
-            ActiveConversationItem(conversation: $0)
+        ForEach(conversations) { conversation in
+            ActiveConversationItem(conversation: conversation)
+                .onTapGesture { onSelectActiveConversation(conversation) }
         }
+    }
+}
+
+struct ConversationsView_Previews: PreviewProvider {
+    static var previews: some View {
+        _ConversationsView(
+            activeTab: .openConversations,
+            incomingRequests: [
+                .init(
+                    userDetails: .init(
+                        username: User.lynn.username!,
+                        avatar: User.lynn.avatarUrl,
+                        rating: 4,
+                        joined: Date()
+                    )
+                ),
+                .init(
+                    userDetails: .init(
+                        username: User.mike.username!,
+                        avatar: User.mike.avatarUrl,
+                        rating: 2,
+                        joined: Date()
+                    )
+                ),
+                .init(
+                    userDetails: .init(
+                        username: User.sender.username!,
+                        avatar: User.sender.avatarUrl,
+                        rating: 5,
+                        joined: Date()
+                    )
+                ),
+            ],
+            outgoingRequests: [
+                .init(
+                    summary: .init(
+                        id: .init(),
+                        summary: "Hey im not sure if anyone is listening or not but there's a lot going on that...",
+                        createdAt: Date(),
+                        updatedAt: Date()
+                    )
+                ),
+                .init(
+                    summary: .init(
+                        id: .init(),
+                        summary: "Hey im not sure if anyone is listening or not but there's a lot going on that...",
+                        createdAt: Date(),
+                        updatedAt: Date()
+                    )
+                ),
+                .init(
+                    summary: .init(
+                        id: .init(),
+                        summary: "Hey im not sure if anyone is listening or not but there's a lot going on that...",
+                        createdAt: Date(),
+                        updatedAt: Date()
+                    )
+                ),
+            ],
+            openConversations: [
+                .init(
+                    id: .init(),
+                    summary: "Foo",
+                    createdAt: Date(),
+                    updatedAt: Date()
+                ),
+                .init(
+                    id: .init(),
+                    summary: "Foo",
+                    createdAt: Date(),
+                    updatedAt: Date()
+                ),
+                .init(
+                    id: .init(),
+                    summary: "Foo",
+                    createdAt: Date(),
+                    updatedAt: Date()
+                )
+            ],
+            activeConversations: [],
+            onTabChangedToRequests: { },
+            onTabChangedToConversations: { },
+            onOpenComposer: { },
+            onSelectOpenConversation: { _ in },
+            onSelectActiveConversation: { _ in }
+        )
+        .padding()
+        
+        _ConversationsView(
+            activeTab: .myConversations,
+            incomingRequests: [],
+            outgoingRequests: [],
+            openConversations: [],
+            activeConversations: [
+                .init(
+                    id: .init(),
+                    author: .init(
+                        username: User.lynn.username!,
+                        avatar: User.lynn.avatarUrl,
+                        rating: 3,
+                        joined: Date()
+                    ),
+                    partner: .init(
+                        username: User.mike.username!,
+                        avatar: User.mike.avatarUrl,
+                        rating: 4,
+                        joined: Date()
+                    ),
+                    messages: [
+                        .init(
+                            id: .init(),
+                            authorId: User.lynn.id,
+                            conversationId: .init(),
+                            content: "Hello, this is a test",
+                            createdAt: Date()
+                        )
+                    ],
+                    createdAt: Date(),
+                    updatedAt: Date()
+                )
+            ],
+            onTabChangedToRequests: { },
+            onTabChangedToConversations: { },
+            onOpenComposer: { },
+            onSelectOpenConversation: { _ in },
+            onSelectActiveConversation: { _ in }
+        )
+        .padding()
     }
 }

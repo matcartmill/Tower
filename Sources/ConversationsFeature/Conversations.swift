@@ -63,11 +63,13 @@ public struct Conversations: ReducerProtocol {
         case composingSuccessful(TransmittedConversation)
         
         // Conversation Detail
+        case selectConversation(Conversation)
         case dismissConversation
-        case openConversation(ConversationDetail.State)
+        case viewConversation(ConversationDetail.State)
         
         // Open Requests
         case viewOpenRequests
+        case openConversationTapped(Conversation.ID)
         
         // My Conversations
         case viewMyConversations
@@ -105,14 +107,22 @@ public struct Conversations: ReducerProtocol {
                 state.activeTab = .myConversations
                 return .none
                 
+            // Open Conversations
+                
             case .viewOpenRequests:
                 state.activeTab = .openConversations
+                return .none
+                
+            case .openConversationTapped(let id):
+                state.disclosureEvent = .request(id)
+                state.informationDisclosureState = .init(context: .participant)
+                
                 return .none
                 
             // Account
             
             case .openAccount:
-                state.accountState = .init()
+                state.accountState = .init(user: state.user)
                 return .none
             
             // Composer
@@ -133,13 +143,13 @@ public struct Conversations: ReducerProtocol {
             case .composingSuccessful(let conversation):
                 state.activeConversations.conversations.insert(
                     .init(
-                       id: .init(conversation.id.uuidString),
-                       author: conversation.author,
-                       partner: conversation.participant,
-                       messages: conversation.messages,
-                       createdAt: conversation.createdAt,
-                       updatedAt: conversation.updatedAt
-                   ),
+                        id: .init(conversation.id.uuidString),
+                        author: conversation.author,
+                        partner: conversation.participant,
+                        messages: conversation.messages,
+                        createdAt: conversation.createdAt,
+                        updatedAt: conversation.updatedAt
+                    ),
                     at: 0
                 )
                 
@@ -148,8 +158,13 @@ public struct Conversations: ReducerProtocol {
                 )
                 
             // Conversation Detail
+            case .selectConversation(let conversation):
+                let conversationState = ConversationDetail.State(conversation: conversation, user: state.user)
+                state.selectedConversation = conversationState
                 
-            case .openConversation(let conversationState):
+                return .none
+                
+            case .viewConversation(let conversationState):
                 state.selectedConversation = conversationState
                 return .none
                 
@@ -174,17 +189,15 @@ public struct Conversations: ReducerProtocol {
                     let jwt = sessionStore.session?.jwt
                 else { return .none }
                 
-                return apiClient.createConversation(jwt, .init(newConversation))
-                    .map { result in
-                        switch result {
-                        case .success(let conversation):
-                            return .composingSuccessful(conversation)
-                            
-                        case .failure(let error):
-                            print(error.localizedDescription)
-                            return .composingFailed
-                        }
+                return .task {
+                    do {
+                        let conversation = try await apiClient.createConversation(jwt, .init(newConversation))
+                        return .composingSuccessful(conversation)
+                    } catch let error {
+                        print(error.localizedDescription)
+                        return .composingFailed
                     }
+                }
                 
             case .compose(.textFieldChanged):
                 return .none
@@ -214,14 +227,6 @@ public struct Conversations: ReducerProtocol {
                 
             case .activeConversations:
                 return .none
-                
-            // Bridges - Open Conversations
-                
-//            case .openConversations(.selectConversation(let id)):
-//                state.disclosureEvent = .request(id)
-//                state.informationDisclosureState = .init(context: .participant)
-//
-//                return .none
                 
             case .openConversations:
                 return .none

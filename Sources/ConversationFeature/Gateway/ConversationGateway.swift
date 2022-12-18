@@ -56,11 +56,6 @@ public class ConversationGateway {
         
         return stream
     }
-    public func send(_ message: String) async throws {
-        let message = SendMessageRequest(content: message)
-        let data = try encoder.encode(message)
-        try await connection?.send(.data(data))
-    }
     
     public func close() {
         timerCancellable?.cancel()

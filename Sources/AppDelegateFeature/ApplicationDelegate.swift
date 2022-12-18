@@ -42,20 +42,8 @@ public struct ApplicationDelegate: ReducerProtocol {
                 
                 let token = tokenData.map { String(format: "%02.2hhx", $0) }.joined()
                 
-                return apiClient.registerDeviceToken(
-                    session.jwt,
-                    .init(token: token)
-                )
-                .map {
-                    switch $0 {
-                    case .success(let response):
-                        print(response.success)
-                        
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                    
-                    return .nothing
+                return .fireAndForget {
+                    try await apiClient.registerDeviceToken(session.jwt, .init(token: token))
                 }
                 
             case .didRegisterForRemoteNotifications(.failure(let error)):

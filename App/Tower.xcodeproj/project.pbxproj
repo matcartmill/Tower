@@ -35,6 +35,8 @@
 		8218AE6328FB2AEA00EE8A1F /* AppDelegateFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */; };
 		8231A8BD29249071007C46E5 /* ConversationDisclosureFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8231A8BC29249071007C46E5 /* ConversationDisclosureFeature */; };
 		8231A8BF292496B2007C46E5 /* InformationDisclosureFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8231A8BE292496B2007C46E5 /* InformationDisclosureFeature */; };
+		825CEA4F293EFDE1000FB6A5 /* ImageUploaderFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */; };
+		825CEA51293F01CE000FB6A5 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 825CEA50293F01CE000FB6A5 /* PhotosUI.framework */; };
 		827BD7E9293651DA00C01B51 /* IncomingRequestsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 827BD7E8293651DA00C01B51 /* IncomingRequestsFeature */; };
 		827BD7EB293651DE00C01B51 /* OutgoingRequestsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 827BD7EA293651DE00C01B51 /* OutgoingRequestsFeature */; };
 		8292BDE128A958B600471B59 /* TowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDE028A958B600471B59 /* TowerApp.swift */; };
@@ -47,6 +49,7 @@
 /* Begin PBXFileReference section */
 		8218AE2D28FB159100EE8A1F /* Tower */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Tower; path = ..; sourceTree = "<group>"; };
 		8218AE6028FB229E00EE8A1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		825CEA50293F01CE000FB6A5 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		825DD94828F8F89C008CE274 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		827EEB4728E252C60044BCD5 /* Tower.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tower.entitlements; sourceTree = "<group>"; };
 		8292BDDD28A958B600471B59 /* Tower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tower.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,8 +84,10 @@
 				827BD7E9293651DA00C01B51 /* IncomingRequestsFeature in Frameworks */,
 				8212519A2902356A00834532 /* NetworkEnvironment in Frameworks */,
 				8231A8BF292496B2007C46E5 /* InformationDisclosureFeature in Frameworks */,
+				825CEA4F293EFDE1000FB6A5 /* ImageUploaderFeature in Frameworks */,
 				8218AE3128FB15A900EE8A1F /* APIClient in Frameworks */,
 				8218AE3728FB15A900EE8A1F /* ComposeFeature in Frameworks */,
+				825CEA51293F01CE000FB6A5 /* PhotosUI.framework in Frameworks */,
 				8218AE5D28FB166200EE8A1F /* UserNotificationsClient in Frameworks */,
 				8218AE5B28FB166200EE8A1F /* RemoteNotificationsClient in Frameworks */,
 				8218AE4F28FB15A900EE8A1F /* RootFeature in Frameworks */,
@@ -145,6 +150,7 @@
 		829832B328E6958700A05525 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				825CEA50293F01CE000FB6A5 /* PhotosUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -199,6 +205,7 @@
 				8231A8BE292496B2007C46E5 /* InformationDisclosureFeature */,
 				827BD7E8293651DA00C01B51 /* IncomingRequestsFeature */,
 				827BD7EA293651DE00C01B51 /* OutgoingRequestsFeature */,
+				825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */,
 			);
 			productName = Tower;
 			productReference = 8292BDDD28A958B600471B59 /* Tower.app */;
@@ -587,6 +594,10 @@
 		8231A8BE292496B2007C46E5 /* InformationDisclosureFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = InformationDisclosureFeature;
+		};
+		825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageUploaderFeature;
 		};
 		827BD7E8293651DA00C01B51 /* IncomingRequestsFeature */ = {
 			isa = XCSwiftPackageProductDependency;
