@@ -1,4 +1,4 @@
-import AnyCodable
+import Core
 import Models
 
 extension OpenConversationsGateway {

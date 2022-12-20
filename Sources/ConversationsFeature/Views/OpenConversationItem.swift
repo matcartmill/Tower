@@ -31,7 +31,9 @@ struct OpenConversationItem: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            CategoryTag("Addiction")
+            Text("Addiction")
+                .font(.caption2)
+                .contentTag()
         }
     }
 }

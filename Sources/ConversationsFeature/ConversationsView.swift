@@ -30,7 +30,10 @@ public struct ConversationsView: View {
                     onTabChangedToConversations: { viewStore.send(.viewMyConversations, animation: .spring()) },
                     onOpenComposer: { viewStore.send(.openComposer) },
                     onSelectOpenConversation: { viewStore.send(.openConversationTapped($0)) },
-                    onSelectActiveConversation: { viewStore.send(.selectConversation($0)) }
+                    onSelectActiveConversation: { viewStore.send(.selectConversation($0)) },
+                    onOutgoingRequestDelete: { requestId in
+                        viewStore.send(.outgoingRequests(.cancelRequest(requestId)))
+                    }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal)
@@ -118,6 +121,7 @@ public struct ConversationsView: View {
                     }
                 }
                 .onAppear { viewStore.send(.refresh) }
+                //.task { await viewStore.send(.openSockets).finish() }
             }
         }
     }
@@ -134,6 +138,7 @@ private struct _ConversationsView: View {
     let onOpenComposer: () -> Void
     let onSelectOpenConversation: (Conversation.ID) -> Void
     let onSelectActiveConversation: (Conversation) -> Void
+    let onOutgoingRequestDelete: (OutgoingConversationRequest.ID) -> Void
     
     var body: some View {
         List {
@@ -155,8 +160,13 @@ private struct _ConversationsView: View {
                 }
                 
                 if !outgoingRequests.isEmpty {
-                    OutgoingRequestsSection(requests: outgoingRequests)
-                        .themedRow()
+                    OutgoingRequestsSection(
+                        requests: outgoingRequests,
+                        onDelete: { requestId in
+                            onOutgoingRequestDelete(requestId)
+                        }
+                    )
+                    .themedRow()
                 }
                 
                 OpenConversationsSection(
@@ -212,7 +222,7 @@ private struct TabSelector: View {
     var body: some View {
         VStack {
             HStack(spacing: 18) {
-                SegmentButton(title: "Open Requests", isActive: selectedTab == .openConversations) {
+                SegmentButton(title: "Requests", isActive: selectedTab == .openConversations) {
                     onOpenRequestsSelected()
                 }
                 .anchorPreference(key: TabPreference.self, value: .bounds) { [.openConversations: $0] }
@@ -247,7 +257,7 @@ private struct IncomingRequestsSection: View {
         Section(LocalizedStringKey("Incoming")) {
             ForEach(requests) {
                 IncomingRequestItem(
-                    userDetails: $0.userDetails,
+                    userDetails: $0.user,
                     acceptAction: { },
                     declineAction: { }
                 )
@@ -259,12 +269,16 @@ private struct IncomingRequestsSection: View {
 
 private struct OutgoingRequestsSection: View {
     let requests: IdentifiedArrayOf<OutgoingConversationRequest>
+    let onDelete: (OutgoingConversationRequest.ID) -> Void
     
     var body: some View {
         Section(LocalizedStringKey("Outgoing")) {
-            ForEach(requests) {
-                OutgoingRequestItem(request: $0)
-                    .padding(.vertical, 14)
+            ForEach(requests) { request in
+                OutgoingRequestItem(
+                    request: request,
+                    onDelete: { onDelete(request.id) }
+                )
+                .padding(.vertical, 14)
             }
         }
     }
@@ -275,12 +289,17 @@ private struct OpenConversationsSection: View {
     let onSelectOpenConversation: (Conversation.ID) -> Void
     
     var body: some View {
-        Section(LocalizedStringKey("Open Conversations")) {
+        Section {
             ForEach(conversations) { conversation in
                 OpenConversationItem(conversation: conversation)
                     .padding(.vertical, 14)
                     .onTapGesture { onSelectOpenConversation(conversation.id) }
             }
+        } header: {
+            Text("Open Conversations")
+                .font(.callout)
+                .fontWeight(.bold)
+                .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
         }
     }
 }
@@ -303,7 +322,7 @@ struct ConversationsView_Previews: PreviewProvider {
             activeTab: .openConversations,
             incomingRequests: [
                 .init(
-                    userDetails: .init(
+                    user: .init(
                         username: User.lynn.username!,
                         avatar: User.lynn.avatarUrl,
                         rating: 4,
@@ -311,7 +330,7 @@ struct ConversationsView_Previews: PreviewProvider {
                     )
                 ),
                 .init(
-                    userDetails: .init(
+                    user: .init(
                         username: User.mike.username!,
                         avatar: User.mike.avatarUrl,
                         rating: 2,
@@ -319,7 +338,7 @@ struct ConversationsView_Previews: PreviewProvider {
                     )
                 ),
                 .init(
-                    userDetails: .init(
+                    user: .init(
                         username: User.sender.username!,
                         avatar: User.sender.avatarUrl,
                         rating: 5,
@@ -378,7 +397,8 @@ struct ConversationsView_Previews: PreviewProvider {
             onTabChangedToConversations: { },
             onOpenComposer: { },
             onSelectOpenConversation: { _ in },
-            onSelectActiveConversation: { _ in }
+            onSelectActiveConversation: { _ in },
+            onOutgoingRequestDelete: { _ in }
         )
         .padding()
         
@@ -419,7 +439,8 @@ struct ConversationsView_Previews: PreviewProvider {
             onTabChangedToConversations: { },
             onOpenComposer: { },
             onSelectOpenConversation: { _ in },
-            onSelectActiveConversation: { _ in }
+            onSelectActiveConversation: { _ in },
+            onOutgoingRequestDelete: { _ in }
         )
         .padding()
     }

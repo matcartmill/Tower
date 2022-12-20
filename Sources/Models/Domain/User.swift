@@ -1,5 +1,5 @@
+import Core
 import Foundation
-import Identifier
 
 public struct User: Codable, Equatable, Identifiable {
     public let id: Identifier<Self>

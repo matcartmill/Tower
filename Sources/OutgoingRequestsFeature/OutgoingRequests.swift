@@ -14,7 +14,8 @@ public struct OutgoingRequests: ReducerProtocol {
         case loadRequests
         case loadFailed(Error)
         case requestsLoaded([OutgoingConversationRequest])
-        case cancelOutgoing
+        case addRequest(OutgoingConversationRequest)
+        case cancelRequest(OutgoingConversationRequest.ID)
     }
     
     @Dependency(\.apiClient) private var apiClient
@@ -45,8 +46,18 @@ public struct OutgoingRequests: ReducerProtocol {
                 state.requests = .init(uniqueElements: requests)
                 return .none
                 
-            case .cancelOutgoing:
+            case .addRequest(let request):
+                state.requests.append(request)
                 return .none
+                
+            case .cancelRequest(let id):
+                guard let jwt = sessionStore.session?.jwt else { return .none }
+                
+                state.requests.remove(id: id)
+                
+                return .fireAndForget {
+                    try await apiClient.cancelOutgoingRequest(jwt, id)
+                }
             }
         }
     }

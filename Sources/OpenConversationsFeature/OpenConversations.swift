@@ -6,6 +6,9 @@ import Session
 
 public struct OpenConversations: ReducerProtocol {
     public struct State: Equatable {
+        fileprivate var page = 1
+        fileprivate var per = 5
+        
         public var conversations: IdentifiedArrayOf<ConversationSummary>
         
         public init(conversations: IdentifiedArrayOf<ConversationSummary> = []) {
@@ -31,10 +34,12 @@ public struct OpenConversations: ReducerProtocol {
             switch action {
             case .loadConversations:
                 guard let jwt = sessionStore.session?.jwt else { return .none }
-                                
+                           
+                let pageInfo = PageInfo(page: state.page, per: state.per)
+                
                 return .task {
                     do {
-                        let conversations = try await apiClient.openConversations(jwt)
+                        let conversations = try await apiClient.openConversations(jwt, pageInfo)
                         return .conversationsLoaded(conversations.items)
                     } catch let error {
                         print(error.localizedDescription)

@@ -5,7 +5,7 @@ import JWT
 import Models
 import NetworkEnvironment
 
-public class OpenConversationsGateway {
+public class IncomingRequestsGateway {
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
     private let environment: NetworkEnvironment
@@ -39,7 +39,7 @@ public class OpenConversationsGateway {
     
     public func open() throws -> AsyncStream<Action> {
         guard
-            let url = URL(string: "\(environment.socketProtocol)://\(environment.apiHost)/v1/conversations/open/stream")
+            let url = URL(string: "\(environment.socketProtocol)://\(environment.apiHost)/v1/conversations/requests/incoming/stream")
         else { throw Error.invalidUrl }
         
         let stream = AsyncStream<Action> { [weak self] continuation in
@@ -55,11 +55,6 @@ public class OpenConversationsGateway {
         configureTimer()
         
         return stream
-    }
-    public func send(_ message: String) async throws {
-        let message = SendMessageRequest(content: message)
-        let data = try encoder.encode(message)
-        try await connection?.send(.data(data))
     }
     
     public func close() {
@@ -80,9 +75,9 @@ public class OpenConversationsGateway {
                     let event = try self.decoder.decode(Event.self, from: data)
                     
                     switch event.action {
-                    case .removeConversation:
-                        let conversationId = try event.payload.to(Conversation.ID.self)
-                        self.continuation?.yield(.removeConversation(conversationId))
+                    case .newRequest:
+                        let request = try event.payload.to(IncomingConversationRequest.self)
+                        self.continuation?.yield((.addRequest(request)))
                         
                     default:
                         break

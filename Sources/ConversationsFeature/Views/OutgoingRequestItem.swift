@@ -4,6 +4,7 @@ import SwiftUI
 
 struct OutgoingRequestItem: View {
     let request: OutgoingConversationRequest
+    let onDelete: () -> Void
     
     var body: some View {
         HStack(alignment: .top, spacing: 24) {
@@ -18,7 +19,7 @@ struct OutgoingRequestItem: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            Button(action: { }) {
+            Button(action: onDelete) {
                 Asset.Icons.crossCircle.swiftUIImage
                     .resizable()
                     .frame(width: 24, height: 24)

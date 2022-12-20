@@ -1,7 +1,7 @@
 import APIClient
 import ComposableArchitecture
+import Core
 import Foundation
-import Identifier
 import JWT
 import Models
 import NetworkEnvironment
@@ -33,7 +33,6 @@ public struct ConversationDetail: ReducerProtocol {
     
     @Dependency(\.apiClient) var apiClient
     @Dependency(\.sessionStore) var sessionStore
-    @Dependency(\.urlSession) var urlSession
     @Dependency(\.conversationGateway) var gateway
     
     public init() { }

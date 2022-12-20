@@ -1,9 +1,9 @@
 import Core
 import Models
 
-extension ConversationGateway {
+extension IncomingRequestsGateway {
     public enum Action {
-        case addMessage(Message)
+        case addRequest(IncomingConversationRequest)
     }
 
     public enum Error: Swift.Error {
@@ -23,6 +23,6 @@ extension ConversationGateway {
     }
 }
 
-extension ConversationGateway.Event.Action {
-    static let newMessage: Self = .init(rawValue: "new_message")
+extension IncomingRequestsGateway.Event.Action {
+    static let newRequest: Self = .init(rawValue: "new_request")
 }

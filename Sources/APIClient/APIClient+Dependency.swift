@@ -47,8 +47,14 @@ extension APIClient: DependencyKey {
                 request.httpMethod = "GET"
             }
         },
-        openConversations: { token in
-            try await request(path: "v1", "conversations", "open") { request in
+        openConversations: { token, pageInfo in
+            try await request(
+                path: "v1", "conversations", "open",
+                queryItems: [
+                    URLQueryItem(name: "page", value: "\(pageInfo.page)"),
+                    URLQueryItem(name: "per", value: "\(pageInfo.per)")
+                ]
+            ) { request in
                 request.contentTypeJSON()
                 request.authorize(with: token)
                 request.httpMethod = "GET"
@@ -84,15 +90,22 @@ extension APIClient: DependencyKey {
                 request.httpMethod = "GET"
             }
         },
+        sendOutgoingRequest: { token, conversationId in
+            try await request(path: "v1", "conversations", conversationId.rawValue, "request") { request in
+                request.contentTypeJSON()
+                request.authorize(with: token)
+                request.httpMethod = "POST"
+            }
+        },
         cancelOutgoingRequest: { token, requestId in
-            try await request(path: "v1", "conversations", "requests", "outgoing", requestId.uuidString) { request in
+            try await request(path: "v1", "conversations", "requests", "outgoing", requestId.rawValue) { request in
                 request.contentTypeJSON()
                 request.authorize(with: token)
                 request.httpMethod = "DELETE"
             }
         },
         answerIncomingRequest: { token, requestId in
-            try await request(path: "v1", "conversations", "requests", "incoming", requestId.uuidString) { request in
+            try await request(path: "v1", "conversations", "requests", "incoming", requestId.rawValue) { request in
                 request.contentTypeJSON()
                 request.authorize(with: token)
                 request.httpMethod = "PATCH"
@@ -161,7 +174,7 @@ extension APIClient {
         myConversations: { _ in
             []
         },
-        openConversations: { _ in
+        openConversations: { _, _ in
             .init(items: [], metadata: .init(page: 1, per: 10, total: 10))
         },
         createConversation: { _, _ in
@@ -187,6 +200,14 @@ extension APIClient {
         },
         outgoingConversationRequests: { _ in
             []
+        },
+        sendOutgoingRequest: { _, _ in
+            .init(summary: .init(
+                id: .init(),
+                summary: "",
+                createdAt: Date(),
+                updatedAt: Date()
+            ))
         },
         cancelOutgoingRequest: { _, _ in
             return
@@ -221,6 +242,7 @@ extension DependencyValues {
 
 private func request<T: Decodable>(
     path: String...,
+    queryItems: [URLQueryItem] = [],
     modify: @escaping (inout URLRequest) -> Void
 ) async throws -> T {
     let networkEnvironment: NetworkEnvironment = .current
@@ -230,6 +252,9 @@ private func request<T: Decodable>(
     components.host = networkEnvironment.apiHost
     components.port = networkEnvironment.apiPort
     components.path = "/" + path.joined(separator: "/")
+    components.queryItems = []
+    
+    queryItems.forEach { components.queryItems?.append($0) }
     
     var request = URLRequest(url: components.url!)
     
@@ -245,6 +270,7 @@ private func request<T: Decodable>(
 
 private func request(
     path: String...,
+    queryItems: [URLQueryItem] = [],
     modify: @escaping (inout URLRequest) -> Void
 ) async throws {
     let networkEnvironment: NetworkEnvironment = .current
@@ -254,6 +280,9 @@ private func request(
     components.host = networkEnvironment.apiHost
     components.port = networkEnvironment.apiPort
     components.path = "/" + path.joined(separator: "/")
+    components.queryItems = []
+    
+    queryItems.forEach { components.queryItems?.append($0) }
     
     var request = URLRequest(url: components.url!)
     

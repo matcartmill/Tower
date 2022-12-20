@@ -1,5 +1,5 @@
+import Core
 import Foundation
-import Identifier
 
 public struct Task: Codable, Equatable, Identifiable {
     public enum Frequency: Codable, Equatable {

@@ -1,15 +1,15 @@
+import Core
 import Foundation
-import Identifier
 
 public struct IncomingConversationRequest: Equatable, Decodable, Identifiable {
     public var id: Identifier<Self> = .init()
-    public let userDetails: BasicUserDetails
+    public let user: BasicUserDetails
     
     public init(
         id: Identifier<Self> = .init(),
-        userDetails: BasicUserDetails
+        user: BasicUserDetails
     ) {
         self.id = id
-        self.userDetails = userDetails
+        self.user = user
     }
 }

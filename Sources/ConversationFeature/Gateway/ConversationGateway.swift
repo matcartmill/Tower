@@ -1,5 +1,5 @@
-import AnyCodable
 import Combine
+import Core
 import Foundation
 import JWT
 import Models
@@ -112,12 +112,5 @@ public class ConversationGateway {
                 }
             })
         })
-    }
-}
-
-extension Dictionary where Key == String, Value == AnyCodable {
-    func to<T: Decodable>(_ type: T.Type, decoder: JSONDecoder = .init(), encoder: JSONEncoder = .init()) throws -> T {
-        let data = try encoder.encode(self)
-        return try decoder.decode(T.self, from: data)
     }
 }

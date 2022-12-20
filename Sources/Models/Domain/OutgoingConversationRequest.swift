@@ -1,5 +1,5 @@
+import Core
 import Foundation
-import Identifier
 
 public struct OutgoingConversationRequest: Equatable, Decodable, Identifiable {
     public var id: Identifier<Self> = .init()

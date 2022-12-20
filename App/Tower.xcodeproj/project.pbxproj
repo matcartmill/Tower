@@ -18,7 +18,6 @@
 		8218AE3528FB15A900EE8A1F /* AuthFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3428FB15A900EE8A1F /* AuthFeature */; };
 		8218AE3728FB15A900EE8A1F /* ComposeFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3628FB15A900EE8A1F /* ComposeFeature */; };
 		8218AE3928FB15A900EE8A1F /* ConversationFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3828FB15A900EE8A1F /* ConversationFeature */; };
-		8218AE3F28FB15A900EE8A1F /* Identifier in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE3E28FB15A900EE8A1F /* Identifier */; };
 		8218AE4128FB15A900EE8A1F /* JWT in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE4028FB15A900EE8A1F /* JWT */; };
 		8218AE4328FB15A900EE8A1F /* LoggedInFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE4228FB15A900EE8A1F /* LoggedInFeature */; };
 		8218AE4528FB15A900EE8A1F /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE4428FB15A900EE8A1F /* Models */; };
@@ -35,12 +34,12 @@
 		8218AE6328FB2AEA00EE8A1F /* AppDelegateFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8218AE6228FB2AEA00EE8A1F /* AppDelegateFeature */; };
 		8231A8BD29249071007C46E5 /* ConversationDisclosureFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8231A8BC29249071007C46E5 /* ConversationDisclosureFeature */; };
 		8231A8BF292496B2007C46E5 /* InformationDisclosureFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 8231A8BE292496B2007C46E5 /* InformationDisclosureFeature */; };
+		8232C40C2951766500E9D60E /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 8232C40B2951766500E9D60E /* Core */; };
 		825CEA4F293EFDE1000FB6A5 /* ImageUploaderFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */; };
 		825CEA51293F01CE000FB6A5 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 825CEA50293F01CE000FB6A5 /* PhotosUI.framework */; };
 		827BD7E9293651DA00C01B51 /* IncomingRequestsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 827BD7E8293651DA00C01B51 /* IncomingRequestsFeature */; };
 		827BD7EB293651DE00C01B51 /* OutgoingRequestsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 827BD7EA293651DE00C01B51 /* OutgoingRequestsFeature */; };
 		8292BDE128A958B600471B59 /* TowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8292BDE028A958B600471B59 /* TowerApp.swift */; };
-		82A5071A291C02DF000906F6 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 82A50719291C02DF000906F6 /* AnyCodable */; };
 		82A5071C291CBB88000906F6 /* Identity in Frameworks */ = {isa = PBXBuildFile; productRef = 82A5071B291CBB88000906F6 /* Identity */; };
 		82B12AD4291A239B007FBDE4 /* MyConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82B12AD3291A239B007FBDE4 /* MyConversationsFeature */; };
 		82B12AD6291A239F007FBDE4 /* OpenConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */; };
@@ -66,8 +65,8 @@
 				8218AE4928FB15A900EE8A1F /* OnboardingFeature in Frameworks */,
 				8218AE4128FB15A900EE8A1F /* JWT in Frameworks */,
 				82A5071C291CBB88000906F6 /* Identity in Frameworks */,
+				8232C40C2951766500E9D60E /* Core in Frameworks */,
 				82B12AD6291A239F007FBDE4 /* OpenConversationsFeature in Frameworks */,
-				82A5071A291C02DF000906F6 /* AnyCodable in Frameworks */,
 				8218AE4328FB15A900EE8A1F /* LoggedInFeature in Frameworks */,
 				8218AE2F28FB15A900EE8A1F /* AccountFeature in Frameworks */,
 				8218AE3328FB15A900EE8A1F /* AppLoadingFeature in Frameworks */,
@@ -93,7 +92,6 @@
 				8218AE4F28FB15A900EE8A1F /* RootFeature in Frameworks */,
 				8212520F290EA6FB00834532 /* CalendarFeature in Frameworks */,
 				8218AE2928FB12AD00EE8A1F /* Dependencies in Frameworks */,
-				8218AE3F28FB15A900EE8A1F /* Identifier in Frameworks */,
 				8218AE4528FB15A900EE8A1F /* Models in Frameworks */,
 				8218AE5128FB15A900EE8A1F /* Session in Frameworks */,
 			);
@@ -180,7 +178,6 @@
 				8218AE3428FB15A900EE8A1F /* AuthFeature */,
 				8218AE3628FB15A900EE8A1F /* ComposeFeature */,
 				8218AE3828FB15A900EE8A1F /* ConversationFeature */,
-				8218AE3E28FB15A900EE8A1F /* Identifier */,
 				8218AE4028FB15A900EE8A1F /* JWT */,
 				8218AE4228FB15A900EE8A1F /* LoggedInFeature */,
 				8218AE4428FB15A900EE8A1F /* Models */,
@@ -199,13 +196,13 @@
 				821252142919F20100834532 /* ConversationsFeature */,
 				82B12AD3291A239B007FBDE4 /* MyConversationsFeature */,
 				82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */,
-				82A50719291C02DF000906F6 /* AnyCodable */,
 				82A5071B291CBB88000906F6 /* Identity */,
 				8231A8BC29249071007C46E5 /* ConversationDisclosureFeature */,
 				8231A8BE292496B2007C46E5 /* InformationDisclosureFeature */,
 				827BD7E8293651DA00C01B51 /* IncomingRequestsFeature */,
 				827BD7EA293651DE00C01B51 /* OutgoingRequestsFeature */,
 				825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */,
+				8232C40B2951766500E9D60E /* Core */,
 			);
 			productName = Tower;
 			productReference = 8292BDDD28A958B600471B59 /* Tower.app */;
@@ -531,10 +528,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ConversationFeature;
 		};
-		8218AE3E28FB15A900EE8A1F /* Identifier */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Identifier;
-		};
 		8218AE4028FB15A900EE8A1F /* JWT */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = JWT;
@@ -595,6 +588,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = InformationDisclosureFeature;
 		};
+		8232C40B2951766500E9D60E /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
 		825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageUploaderFeature;
@@ -606,10 +603,6 @@
 		827BD7EA293651DE00C01B51 /* OutgoingRequestsFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OutgoingRequestsFeature;
-		};
-		82A50719291C02DF000906F6 /* AnyCodable */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AnyCodable;
 		};
 		82A5071B291CBB88000906F6 /* Identity */ = {
 			isa = XCSwiftPackageProductDependency;

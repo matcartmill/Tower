@@ -1,5 +1,5 @@
+import Core
 import Foundation
-import Identifier
 
 public struct Conversation: Decodable, Identifiable, Equatable {
     public struct Category: RawRepresentable, Codable, Equatable {

@@ -10,10 +10,9 @@ var package = Package(
     ],
     products: [
         // Components
-        .library(name: "AnyCodable", targets: ["AnyCodable"]),
         .library(name: "APIClient", targets: ["APIClient"]),
+        .library(name: "Core", targets: ["Core"]),
         .library(name: "CoreUI", targets: ["CoreUI"]),
-        .library(name: "Identifier", targets: ["Identifier"]),
         .library(name: "Identity", targets: ["Identity"]),
         .library(name: "JWT", targets: ["JWT"]),
         .library(name: "Models", targets: ["Models"]),
@@ -51,10 +50,6 @@ var package = Package(
     targets: [
         // Components
         .target(
-            name: "AnyCodable",
-            dependencies: []
-        ),
-        .target(
             name: "APIClient",
             dependencies: [
                 "Identity",
@@ -62,12 +57,12 @@ var package = Package(
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
+        .target(name: "Core"),
         .target(
             name: "CoreUI",
             dependencies: ["Models"],
             resources: [.process("Resources/")]
         ),
-        .target(name: "Identifier"),
         .target(
             name: "Identity",
             dependencies: [
@@ -77,7 +72,7 @@ var package = Package(
         .target(name: "JWT"),
         .target(
             name: "Models",
-            dependencies: ["Identifier"]
+            dependencies: ["Core"]
         ),
         .target(
             name: "NetworkEnvironment",
@@ -174,8 +169,8 @@ var package = Package(
         .target(
             name: "ConversationFeature",
             dependencies: [
-                "AnyCodable",
                 "APIClient",
+                "Core",
                 "CoreUI",
                 "Models",
                 "NetworkEnvironment",

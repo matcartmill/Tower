@@ -244,7 +244,19 @@ public struct Conversations: ReducerProtocol {
             // Bridges - Information Disclosure
                 
             case .informationDisclosure(.next):
-                return .none
+                guard
+                    let jwt = sessionStore.session?.jwt,
+                    let event = state.disclosureEvent,
+                    case let .request(conversationId) = event
+                else { return .none }
+                
+                state.disclosureEvent = nil
+                state.informationDisclosureState = nil
+                
+                return .task {
+                    let request = try await apiClient.sendOutgoingRequest(jwt, conversationId)
+                    return .outgoingRequests(.addRequest(request))
+                }
                 
             case .informationDisclosure(.cancel):
                 state.disclosureEvent = nil

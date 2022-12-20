@@ -1,5 +1,5 @@
+import Core
 import Foundation
-import Identifier
 import Identity
 import JWT
 import Models
@@ -16,7 +16,10 @@ public struct APIClient {
     
     // Conversation
     public var myConversations: @Sendable (_ token: JWT) async throws -> [TransmittedConversation]
-    public var openConversations: @Sendable (_ token: JWT) async throws -> PagedResponse<[ConversationSummary]>
+    public var openConversations: @Sendable (
+        _ token: JWT,
+        _ pageInfo: PageInfo
+    ) async throws -> PagedResponse<[ConversationSummary]>
     public var createConversation: @Sendable (
         _ token: JWT,
         _ request: CreateConversationRequest
@@ -32,8 +35,9 @@ public struct APIClient {
     // Conversation Requests
     public var incomingConversationRequests: @Sendable (_ token: JWT) async throws -> [IncomingConversationRequest]
     public var outgoingConversationRequests: @Sendable (_ token: JWT) async throws -> [OutgoingConversationRequest]
-    public var cancelOutgoingRequest: @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void
-    public var answerIncomingRequest: @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void
+    public var sendOutgoingRequest: @Sendable (_ token: JWT, _ id: Conversation.ID) async throws -> OutgoingConversationRequest
+    public var cancelOutgoingRequest: @Sendable (_ token: JWT, _ requestId: Identifier<OutgoingConversationRequest>) async throws -> Void
+    public var answerIncomingRequest: @Sendable (_ token: JWT, _ requestId: Identifier<IncomingConversationRequest>) async throws -> Void
     
     // Social
     public var addFriend: @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void
@@ -53,7 +57,10 @@ public struct APIClient {
         updateMe: @escaping @Sendable (_ token: JWT, _ user: User) async throws -> User,
         updateAvatar: @escaping @Sendable (_ token: JWT, _ data: Data) async throws -> Void,
         myConversations: @escaping @Sendable (_ token: JWT) async throws -> [TransmittedConversation],
-        openConversations: @escaping @Sendable (_ token: JWT) async throws -> PagedResponse<[ConversationSummary]>,
+        openConversations: @escaping @Sendable (
+            _ token: JWT,
+            _ pageInfo: PageInfo
+        ) async throws -> PagedResponse<[ConversationSummary]>,
         createConversation: @escaping @Sendable (
             _ token: JWT,
             _ request: CreateConversationRequest
@@ -64,8 +71,9 @@ public struct APIClient {
         ) async throws -> Void,
         incomingConversationRequests: @escaping @Sendable (_ token: JWT) async throws -> [IncomingConversationRequest],
         outgoingConversationRequests: @escaping @Sendable (_ token: JWT) async throws -> [OutgoingConversationRequest],
-        cancelOutgoingRequest: @escaping @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void,
-        answerIncomingRequest: @escaping @Sendable (_ token: JWT, _ requestId: UUID) async throws -> Void,
+        sendOutgoingRequest: @escaping @Sendable (_ token: JWT, _ id: Conversation.ID) async throws -> OutgoingConversationRequest,
+        cancelOutgoingRequest: @escaping @Sendable (_ token: JWT, _ requestId: Identifier<OutgoingConversationRequest>) async throws -> Void,
+        answerIncomingRequest: @escaping @Sendable (_ token: JWT, _ requestId: Identifier<IncomingConversationRequest>) async throws -> Void,
         addFriend: @escaping @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void,
         block: @escaping @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void,
         report: @escaping @Sendable (_ token: JWT, _ user: Identifier<User>) async throws -> Void,
@@ -83,6 +91,7 @@ public struct APIClient {
         self.sendMessage = sendMessage
         self.incomingConversationRequests = incomingConversationRequests
         self.outgoingConversationRequests = outgoingConversationRequests
+        self.sendOutgoingRequest = sendOutgoingRequest
         self.cancelOutgoingRequest = cancelOutgoingRequest
         self.answerIncomingRequest = answerIncomingRequest
         self.addFriend = addFriend

@@ -1,5 +1,5 @@
+import Core
 import Foundation
-import Identifier
 
 public struct ConversationSummary: Equatable, Decodable, Identifiable {
     public let id: Conversation.ID
