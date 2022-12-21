@@ -15,14 +15,16 @@ public class IncomingRequestsGateway {
     private var continuation: AsyncStream<Action>.Continuation?
     private var timer: AnyPublisher<Date, Never>
     private var timerCancellable: AnyCancellable?
-    
-    var newTimer: Timer?
-    
+        
     public init(
         session: URLSession = .shared,
         environment: NetworkEnvironment = .current,
         jwt: @escaping () -> JWT,
-        timer: AnyPublisher<Date, Never> = Timer.publish(every: 10, on: .main, in: .common).autoconnect().eraseToAnyPublisher(),
+        timer: AnyPublisher<Date, Never> = Timer.publish(
+            every: 10,
+            on: .main,
+            in: .common
+        ).autoconnect().eraseToAnyPublisher(),
         decoder: JSONDecoder = .init(),
         encoder: JSONEncoder = .init()
     ) {
@@ -76,7 +78,11 @@ public class IncomingRequestsGateway {
                     
                     switch event.action {
                     case .newRequest:
-                        let request = try event.payload.to(IncomingConversationRequest.self)
+                        let request = try event.payload.to(
+                            IncomingConversationRequest.self,
+                            decoder: self.decoder,
+                            encoder: self.encoder
+                        )
                         self.continuation?.yield((.addRequest(request)))
                         
                     default:

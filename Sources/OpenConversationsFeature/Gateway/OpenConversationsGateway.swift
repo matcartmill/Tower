@@ -15,14 +15,16 @@ public class OpenConversationsGateway {
     private var continuation: AsyncStream<Action>.Continuation?
     private var timer: AnyPublisher<Date, Never>
     private var timerCancellable: AnyCancellable?
-    
-    var newTimer: Timer?
-    
+        
     public init(
         session: URLSession = .shared,
         environment: NetworkEnvironment = .current,
         jwt: @escaping () -> JWT,
-        timer: AnyPublisher<Date, Never> = Timer.publish(every: 10, on: .main, in: .common).autoconnect().eraseToAnyPublisher(),
+        timer: AnyPublisher<Date, Never> = Timer.publish(
+            every: 10,
+            on: .main,
+            in: .common
+        ).autoconnect().eraseToAnyPublisher(),
         decoder: JSONDecoder = .init(),
         encoder: JSONEncoder = .init()
     ) {

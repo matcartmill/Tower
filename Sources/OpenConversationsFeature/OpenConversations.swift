@@ -8,6 +8,7 @@ public struct OpenConversations: ReducerProtocol {
     public struct State: Equatable {
         fileprivate var page = 1
         fileprivate var per = 5
+        fileprivate var total = Int.max
         
         public var conversations: IdentifiedArrayOf<ConversationSummary>
         
@@ -19,7 +20,9 @@ public struct OpenConversations: ReducerProtocol {
     public enum Action {
         case loadConversations
         case openWebSocket
-        case conversationsLoaded([ConversationSummary])
+        case closeWebSocket
+        case conversationsLoaded(PagedResponse<[ConversationSummary]>)
+        case conversationsFailedToLoad(Error)
         case removeExistingSummary(Conversation.ID)
     }
     
@@ -33,17 +36,21 @@ public struct OpenConversations: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .loadConversations:
-                guard let jwt = sessionStore.session?.jwt else { return .none }
+                guard
+                    let jwt = sessionStore.session?.jwt,
+                    state.page * state.per < state.total
+                else { return .none }
                            
                 let pageInfo = PageInfo(page: state.page, per: state.per)
                 
+                state.page += 1
+                
                 return .task {
                     do {
-                        let conversations = try await apiClient.openConversations(jwt, pageInfo)
-                        return .conversationsLoaded(conversations.items)
+                        let response = try await apiClient.openConversations(jwt, pageInfo)
+                        return .conversationsLoaded(response)
                     } catch let error {
-                        print(error.localizedDescription)
-                        return .conversationsLoaded([])
+                        return .conversationsFailedToLoad(error)
                     }
                 }
                 
@@ -57,8 +64,17 @@ public struct OpenConversations: ReducerProtocol {
                     }
                 }
                 
-            case .conversationsLoaded(let conversations):
-                state.conversations.append(contentsOf: conversations)
+            case .closeWebSocket:
+                gateway.close()
+                return .none
+                
+            case .conversationsLoaded(let response):
+                state.total = response.metadata.total
+                state.conversations.append(contentsOf: response.items)
+                return .none
+                
+            case .conversationsFailedToLoad(let error):
+                print(error.localizedDescription)
                 return .none
                 
             case .removeExistingSummary(let id):

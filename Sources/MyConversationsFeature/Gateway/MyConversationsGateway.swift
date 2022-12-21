@@ -4,23 +4,15 @@ import JWT
 import Models
 import NetworkEnvironment
 
-public protocol MyConversationsGateway {
-    func open() throws -> AsyncStream<[Conversation]>
-    func close()
-}
 
-public class WebSocketMyConversationsGateway: MyConversationsGateway {
-    public enum Error: Swift.Error {
-        case invalidUrl
-    }
-    
+public class MyConversationsGateway {
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
     private let environment: NetworkEnvironment
     private let session: URLSession
     private let jwt: () -> JWT
     private var connection: URLSessionWebSocketTask?
-    private var continuation: AsyncStream<[Conversation]>.Continuation?
+    private var continuation: AsyncStream<Action>.Continuation?
     private var timer: AnyPublisher<Date, Never>
     private var timerCancellable: AnyCancellable?
     
@@ -28,7 +20,11 @@ public class WebSocketMyConversationsGateway: MyConversationsGateway {
         session: URLSession = .shared,
         environment: NetworkEnvironment = .current,
         jwt: @escaping () -> JWT,
-        timer: AnyPublisher<Date, Never> = Timer.publish(every: 3, on: .current, in: .default).autoconnect().eraseToAnyPublisher(),
+        timer: AnyPublisher<Date, Never> = Timer.publish(
+            every: 10,
+            on: .main,
+            in: .common
+        ).autoconnect().eraseToAnyPublisher(),
         decoder: JSONDecoder = .init(),
         encoder: JSONEncoder = .init()
     ) {
@@ -43,12 +39,12 @@ public class WebSocketMyConversationsGateway: MyConversationsGateway {
         encoder.dateEncodingStrategy = .iso8601
     }
     
-    public func open() throws -> AsyncStream<[Conversation]> {
-        guard let url = URL(string: "\(environment.socketProtocol)://\(environment.apiHost)/conversations/stream") else {
-            throw Error.invalidUrl
-        }
+    public func open() throws -> AsyncStream<Action> {
+        guard
+            let url = URL(string: "\(environment.socketProtocol)://\(environment.apiHost)/v1/conversations/stream")
+        else { throw Error.invalidUrl }
         
-        let stream = AsyncStream<[Conversation]> { [weak self] continuation in
+        let stream = AsyncStream<Action> { [weak self] continuation in
             self?.continuation = continuation
         }
         
@@ -56,12 +52,41 @@ public class WebSocketMyConversationsGateway: MyConversationsGateway {
         request.setValue("Bearer \(jwt().token)", forHTTPHeaderField: "Authorization")
         
         connection = session.webSocketTask(with: request)
+        configureCallbacks()
+        connection?.resume()
+        configureTimer()
+        
+        return stream
+    }
+    
+    public func close() {
+        timerCancellable?.cancel()
+        continuation?.finish()
+        connection?.cancel(with: .goingAway, reason: nil)
+    }
+    
+    // MARK: - Private
+    
+    private func configureCallbacks() {
         connection?.receive(completionHandler: { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(.data(let data)):
-                print("Received updated conversations")
+                do {
+                    let event = try self.decoder.decode(Event.self, from: data)
+                    
+                    switch event.action {
+                    case .newConversation:
+                        let conversation = try event.payload.to(Conversation.self)
+                        self.continuation?.yield(.addConversation(conversation))
+                        
+                    default:
+                        break
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
                 
             case .success(.string(let string)):
                 print("Received a string value of \(string), but we are not expecting any string values here")
@@ -72,8 +97,13 @@ public class WebSocketMyConversationsGateway: MyConversationsGateway {
             case .failure(let error):
                 print(error.localizedDescription)
             }
+            
+            self.configureCallbacks()
         })
-        
+    }
+    
+    private func configureTimer() {
+        timerCancellable?.cancel()
         timerCancellable = timer.sink(receiveValue: { [weak self] _ in
             guard let self = self else { return }
             
@@ -84,14 +114,5 @@ public class WebSocketMyConversationsGateway: MyConversationsGateway {
                 }
             })
         })
-        
-        return stream
-    }
-    
-    public func close() {
-        timerCancellable?.cancel()
-        continuation?.finish()
-        connection?.cancel(with: .goingAway, reason: nil)
     }
 }
-

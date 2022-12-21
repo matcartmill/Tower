@@ -40,6 +40,7 @@ public struct Conversations: ReducerProtocol {
         var activeTab: Tab = .openConversations
         
         fileprivate var disclosureEvent: DisclosureEvent?
+        fileprivate var hasOpenedSocketConnections = false
         
         public init(user: User) {
             self.user = user
@@ -52,6 +53,10 @@ public struct Conversations: ReducerProtocol {
     
     public enum Action {
         case refresh
+        
+        // Sockets
+        case openSockets
+        case closeSockets
         
         // Account
         case openAccount
@@ -70,6 +75,7 @@ public struct Conversations: ReducerProtocol {
         // Open Requests
         case viewOpenRequests
         case openConversationTapped(Conversation.ID)
+        case loadMoreOpenConversations
         
         // My Conversations
         case viewMyConversations
@@ -87,7 +93,6 @@ public struct Conversations: ReducerProtocol {
     }
     
     @Dependency(\.apiClient) private var apiClient
-    @Dependency(\.conversationGateway) var conversationGateway
     @Dependency(\.sessionStore) private var sessionStore
     
     public init() { }
@@ -101,6 +106,28 @@ public struct Conversations: ReducerProtocol {
                     .task { .outgoingRequests(.loadRequests) },
                     .task { .activeConversations(.loadConversations) },
                     .task { .openConversations(.loadConversations) }
+                )
+                
+            case .openSockets:
+                guard !state.hasOpenedSocketConnections else { return .none }
+                
+                state.hasOpenedSocketConnections = true
+                
+                return .merge(
+                    .task { .incomingRequests(.openWebSocket) },
+                    .task { .openConversations(.openWebSocket) },
+                    .task { .activeConversations(.openWebSocket) }
+                )
+                
+            case .closeSockets:
+                guard state.hasOpenedSocketConnections else { return .none }
+                
+                state.hasOpenedSocketConnections = false
+                
+                return .merge(
+                    .task { .incomingRequests(.closeWebSocket) },
+                    .task { .openConversations(.closeWebSocket) },
+                    .task { .activeConversations(.closeWebSocket) }
                 )
                 
             case .viewMyConversations:
@@ -118,6 +145,9 @@ public struct Conversations: ReducerProtocol {
                 state.informationDisclosureState = .init(context: .participant)
                 
                 return .none
+                
+            case .loadMoreOpenConversations:
+                return .task { .openConversations(.loadConversations) }
                 
             // Account
             
@@ -253,10 +283,13 @@ public struct Conversations: ReducerProtocol {
                 state.disclosureEvent = nil
                 state.informationDisclosureState = nil
                 
-                return .task {
+            return .merge(
+                .task { .openConversations(.removeExistingSummary(conversationId)) },
+                .task {
                     let request = try await apiClient.sendOutgoingRequest(jwt, conversationId)
                     return .outgoingRequests(.addRequest(request))
                 }
+            )
                 
             case .informationDisclosure(.cancel):
                 state.disclosureEvent = nil

@@ -2,7 +2,7 @@ import Core
 import Foundation
 
 public struct IncomingConversationRequest: Equatable, Decodable, Identifiable {
-    public var id: Identifier<Self> = .init()
+    public let id: Identifier<Self>
     public let user: BasicUserDetails
     
     public init(

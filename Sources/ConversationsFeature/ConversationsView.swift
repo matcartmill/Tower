@@ -33,7 +33,8 @@ public struct ConversationsView: View {
                     onSelectActiveConversation: { viewStore.send(.selectConversation($0)) },
                     onOutgoingRequestDelete: { requestId in
                         viewStore.send(.outgoingRequests(.cancelRequest(requestId)))
-                    }
+                    },
+                    onOpenConversationsShowMore: { viewStore.send(.loadMoreOpenConversations) }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal)
@@ -120,8 +121,11 @@ public struct ConversationsView: View {
                             .dynamicTypeSize((.xSmall)...(.xxLarge))
                     }
                 }
-                .onAppear { viewStore.send(.refresh) }
-                //.task { await viewStore.send(.openSockets).finish() }
+                .onAppear {
+                    viewStore.send(.openSockets)
+                    viewStore.send(.refresh)
+                }
+                .onDisappear { viewStore.send(.closeSockets) }
             }
         }
     }
@@ -139,6 +143,7 @@ private struct _ConversationsView: View {
     let onSelectOpenConversation: (Conversation.ID) -> Void
     let onSelectActiveConversation: (Conversation) -> Void
     let onOutgoingRequestDelete: (OutgoingConversationRequest.ID) -> Void
+    let onOpenConversationsShowMore: () -> Void
     
     var body: some View {
         List {
@@ -151,7 +156,9 @@ private struct _ConversationsView: View {
                     onMyConversationsSelected: onTabChangedToConversations
                 )
                 .themedRow()
+                .padding(.vertical)
             }
+            .textCase(nil)
 
             if activeTab == .openConversations {
                 if !incomingRequests.isEmpty {
@@ -171,7 +178,8 @@ private struct _ConversationsView: View {
                 
                 OpenConversationsSection(
                     conversations: openConversations,
-                    onSelectOpenConversation: onSelectOpenConversation
+                    onSelectOpenConversation: onSelectOpenConversation,
+                    onShowMore: onOpenConversationsShowMore
                 )
                 .themedRow()
             } else {
@@ -186,7 +194,7 @@ private struct _ConversationsView: View {
                 .frame(height: 100)
                 .themedRow()
         }
-        .listStyle(.plain)
+        .listStyle(.grouped)
         .scrollIndicators(.hidden)
         .scrollContentBackground(.hidden)
         .themedBackground()
@@ -254,7 +262,7 @@ private struct IncomingRequestsSection: View {
     let requests: IdentifiedArrayOf<IncomingConversationRequest>
     
     var body: some View {
-        Section(LocalizedStringKey("Incoming")) {
+        Section {
             ForEach(requests) {
                 IncomingRequestItem(
                     userDetails: $0.user,
@@ -263,6 +271,15 @@ private struct IncomingRequestsSection: View {
                 )
                 .padding(.vertical, 14)
             }
+        } header: {
+            Text("Incoming Requests")
+                .font(.callout)
+                .fontWeight(.semibold)
+                .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
+                .textCase(nil)
+        } footer: {
+            Color.clear
+                .frame(height: 14)
         }
     }
 }
@@ -272,7 +289,7 @@ private struct OutgoingRequestsSection: View {
     let onDelete: (OutgoingConversationRequest.ID) -> Void
     
     var body: some View {
-        Section(LocalizedStringKey("Outgoing")) {
+        Section {
             ForEach(requests) { request in
                 OutgoingRequestItem(
                     request: request,
@@ -280,6 +297,15 @@ private struct OutgoingRequestsSection: View {
                 )
                 .padding(.vertical, 14)
             }
+        } header: {
+            Text("Outgoing Requests")
+                .font(.callout)
+                .fontWeight(.semibold)
+                .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
+                .textCase(nil)
+        } footer: {
+            Color.clear
+                .frame(height: 14)
         }
     }
 }
@@ -287,6 +313,7 @@ private struct OutgoingRequestsSection: View {
 private struct OpenConversationsSection: View {
     let conversations: IdentifiedArrayOf<ConversationSummary>
     let onSelectOpenConversation: (Conversation.ID) -> Void
+    let onShowMore: () -> Void
     
     var body: some View {
         Section {
@@ -298,8 +325,16 @@ private struct OpenConversationsSection: View {
         } header: {
             Text("Open Conversations")
                 .font(.callout)
-                .fontWeight(.bold)
+                .fontWeight(.semibold)
                 .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
+                .textCase(nil)
+        } footer: {
+            Button("Show More") { onShowMore() }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .foregroundColor(Asset.Colors.Content.secondary.swiftUIColor)
+                .font(.callout)
+                .fontWeight(.semibold)
+                .padding(.top)
         }
     }
 }
@@ -398,7 +433,8 @@ struct ConversationsView_Previews: PreviewProvider {
             onOpenComposer: { },
             onSelectOpenConversation: { _ in },
             onSelectActiveConversation: { _ in },
-            onOutgoingRequestDelete: { _ in }
+            onOutgoingRequestDelete: { _ in },
+            onOpenConversationsShowMore: { }
         )
         .padding()
         
@@ -440,7 +476,8 @@ struct ConversationsView_Previews: PreviewProvider {
             onOpenComposer: { },
             onSelectOpenConversation: { _ in },
             onSelectActiveConversation: { _ in },
-            onOutgoingRequestDelete: { _ in }
+            onOutgoingRequestDelete: { _ in },
+            onOpenConversationsShowMore: { }
         )
         .padding()
     }

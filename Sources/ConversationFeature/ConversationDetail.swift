@@ -23,10 +23,10 @@ public struct ConversationDetail: ReducerProtocol {
     
     public enum Action {
         case openWebSocket
+        case handleGatewayAction(ConversationGateway.Action)
         case dismissMoreMenu
         case leave(Conversation.ID)
         case sendMessage
-        case receivedMessage(Message)
         case showMoreMenu
         case textFieldChanged(String)
     }
@@ -45,12 +45,17 @@ public struct ConversationDetail: ReducerProtocol {
 
                 return .run { subscriber in
                     for await action in try gateway.open(conversationId) {
-                        switch action {
-                        case .addMessage(let message):
-                            await subscriber.send(.receivedMessage(message))
-                        }
+                        await subscriber.send(.handleGatewayAction(action))
                     }
                 }
+                
+            case .handleGatewayAction(let action):
+                switch action {
+                case .addMessage(let message):
+                    state.conversation.messages.append(message)
+                }
+                
+                return .none
                 
             case .dismissMoreMenu:
                 state.isMoreMenuOpen = false
@@ -70,10 +75,6 @@ public struct ConversationDetail: ReducerProtocol {
                 return .fireAndForget(priority: .userInitiated) {
                     try await apiClient.sendMessage(jwt, message, id)
                 }
-                
-            case .receivedMessage(let message):
-                state.conversation.messages.append(message)
-                return .none
                 
             case .showMoreMenu:
                 state.isMoreMenuOpen = true

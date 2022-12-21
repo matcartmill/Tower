@@ -14,9 +14,13 @@ public struct IncomingRequests: ReducerProtocol {
         case loadRequests
         case loadFailed(Error)
         case requestsLoaded([IncomingConversationRequest])
+        case openWebSocket
+        case closeWebSocket
+        case handleGatewayAction(IncomingRequestsGateway.Action)
     }
     
     @Dependency(\.apiClient) private var apiClient
+    @Dependency(\.incomingRequestsGateway) private var gateway
     @Dependency(\.sessionStore) private var sessionStore
     
     public init() { }
@@ -42,6 +46,25 @@ public struct IncomingRequests: ReducerProtocol {
                 
             case .requestsLoaded(let requests):
                 state.requests = .init(uniqueElements: requests)
+                return .none
+                
+            case .openWebSocket:
+                return .run { subscriber in
+                    for await action in try gateway.open() {
+                        await subscriber.send(.handleGatewayAction(action))
+                    }
+                }
+                
+            case .closeWebSocket:
+                gateway.close()
+                return .none
+                
+            case .handleGatewayAction(let action):
+                switch action {
+                case .addRequest(let request):
+                    state.requests.append(request)
+                }
+                
                 return .none
             }
         }

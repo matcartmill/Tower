@@ -14,9 +14,13 @@ public struct MyConversations: ReducerProtocol {
     public enum Action {
         case loadConversations
         case conversationsLoaded([Conversation])
+        case openWebSocket
+        case closeWebSocket
+        case handleSocketAction(MyConversationsGateway.Action)
     }
     
     @Dependency(\.apiClient) private var apiClient
+    @Dependency(\.myConversationsGateway) private var gateway
     @Dependency(\.sessionStore) private var sessionStore
     
     public init() { }
@@ -50,6 +54,24 @@ public struct MyConversations: ReducerProtocol {
                 
             case .conversationsLoaded(let conversations):
                 state.conversations = .init(uniqueElements: conversations)
+                return .none
+                
+            case .openWebSocket:
+                return .run { subscriber in
+                    for await action in try gateway.open() {
+                        await subscriber.send(.handleSocketAction(action))
+                    }
+                }
+                
+            case .closeWebSocket:
+                gateway.close()
+                return .none
+                
+            case .handleSocketAction(let action):
+                switch action {
+                case .addConversation(let conversation):
+                    state.conversations.insert(conversation, at: 0)
+                }
                 return .none
             }
         }
