@@ -2,11 +2,11 @@ import JWT
 import Models
 
 public struct Session: Equatable {
-    public var jwt: JWT
+    public var accessToken: AccessToken
     public var user: User
     
-    public init(jwt: JWT, user: User) {
-        self.jwt = jwt
+    public init(accessToken: AccessToken, user: User) {
+        self.accessToken = accessToken
         self.user = user
     }
 }

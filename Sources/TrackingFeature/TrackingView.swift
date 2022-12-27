@@ -15,8 +15,49 @@ public struct TrackingView: View {
         WithViewStore(store) { viewStore in
             NavigationStack {
                 VStack(spacing: 40) {
+                    VStack(spacing: 36) {
+                        Text("Right now I'm feeling...")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
+                        
+                        HStack(spacing: 30) {
+                            ForEach(Emotion.allCases, id: \.self) { emotion in
+                                EmotionView(
+                                    emotion: emotion,
+                                    isSelected: emotion == viewStore.selectedEmotion
+                                ) {
+                                    viewStore.send(.selectEmotion(emotion))
+                                }
+                            }
+                        }
+                        
+                        TextField(text: .constant("")) {
+                            Text("I feel this way because...")
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: 40)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .multilineTextAlignment(.center)
+                        
+                        Button("Track") { viewStore.send(.confirmEmotionSelection) }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 24)
+                            .background(Asset.Colors.Background.Button.primary.swiftUIColor)
+                            .foregroundColor(Asset.Colors.Content.Button.primary.swiftUIColor)
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .clipShape(Capsule())
+                            .disabled(viewStore.selectedEmotion == nil)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
+                    .padding(.vertical, 24)
+                    //.background(Asset.Colors.Background.tertiary.swiftUIColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    
                     VStack(alignment: .leading) {
-                        Text("TASKS")
+                        Text("SELF-CARE")
                             .font(.footnote)
                             .fontWeight(.bold)
                             .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
@@ -73,34 +114,6 @@ public struct TrackingView: View {
                                 }
                             }
                         }
-                    }
-                    
-                    VStack(spacing: 36) {
-                        Text("Right now I'm feeling...")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
-                        
-                        HStack(spacing: 30) {
-                            ForEach(Emotion.allCases, id: \.self) { emotion in
-                                EmotionView(
-                                    emotion: emotion,
-                                    isSelected: emotion == viewStore.selectedEmotion
-                                ) {
-                                    viewStore.send(.selectEmotion(emotion))
-                                }
-                            }
-                        }
-                        
-                        Button("Track") { viewStore.send(.confirmEmotionSelection) }
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 24)
-                            .background(Asset.Colors.Background.Button.primary.swiftUIColor)
-                            .foregroundColor(Asset.Colors.Content.Button.primary.swiftUIColor)
-                            .font(.body)
-                            .fontWeight(.bold)
-                            .clipShape(Capsule())
-                            .disabled(viewStore.selectedEmotion == nil)
                     }
                     
                     Spacer()

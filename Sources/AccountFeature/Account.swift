@@ -1,5 +1,6 @@
 import APIClient
 import ComposableArchitecture
+import Foundation
 import ImageUploaderFeature
 import Models
 import Permissions
@@ -10,6 +11,7 @@ public struct Account: ReducerProtocol {
         @BindableState var notificationsEnabled: Bool
         var user: User
         var imageUploaderState: ImageUploader.State = .init()
+        var localPhotoData: Data?
         
         public init(user: User, notificationsEnabled: Bool = true) {
             self.user = user
@@ -35,6 +37,12 @@ public struct Account: ReducerProtocol {
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        
+        Scope(state: \.imageUploaderState, action: /Action.imageUploader) {
+            ImageUploader()
+        }
+        
         Reduce { state, action in
             switch action {
             case .binding:
@@ -52,7 +60,7 @@ public struct Account: ReducerProtocol {
                 guard let session = sessionStore.session else { return .none }
                 
                 return .fireAndForget {
-                    try await apiClient.logout(session.jwt)
+                    try await apiClient.logout(session.accessToken)
                 }
                 
             case .updateAvatarButtonTapped:
@@ -64,11 +72,13 @@ public struct Account: ReducerProtocol {
                 
             // Bridges - Image Uploader
                 
-            case .imageUploader:
+            case .imageUploader(.setPhotoData(let data)):
+                state.localPhotoData = data
+                return .none
+                
+            case .imageUploader(.binding):
                 return .none
             }
         }
-        
-        BindingReducer()
     }
 }

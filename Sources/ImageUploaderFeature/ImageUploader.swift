@@ -12,7 +12,7 @@ public struct ImageUploader: ReducerProtocol {
     
     public enum Action: BindableAction {
         case binding(BindingAction<ImageUploader.State>)
-        case imageSelected
+        case setPhotoData(Data?)
     }
     
     public init() { }
@@ -22,10 +22,18 @@ public struct ImageUploader: ReducerProtocol {
         
         Reduce { state, action in
             switch action {
+            case .binding(\.$photoItem):
+                guard let item = state.photoItem else { return .none }
+                
+                return .task {
+                    let data = try await item.loadTransferable(type: Data.self)
+                    return .setPhotoData(data)
+                }
+                
             case .binding:
                 return .none
                 
-            case .imageSelected:
+            case .setPhotoData:
                 return .none
             }
         }

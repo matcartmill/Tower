@@ -25,6 +25,7 @@ struct OutgoingRequestItem: View {
                     .frame(width: 24, height: 24)
                     .tint(Asset.Colors.Content.primary.swiftUIColor)
             }
+            .buttonStyle(.plain)
         }
     }
 }

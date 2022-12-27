@@ -43,9 +43,12 @@
 		82A5071C291CBB88000906F6 /* Identity in Frameworks */ = {isa = PBXBuildFile; productRef = 82A5071B291CBB88000906F6 /* Identity */; };
 		82B12AD4291A239B007FBDE4 /* MyConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82B12AD3291A239B007FBDE4 /* MyConversationsFeature */; };
 		82B12AD6291A239F007FBDE4 /* OpenConversationsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */; };
+		82BF6DEC2959EEA300711664 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 82BF6DEB2959EEA300711664 /* Storage */; };
+		82BF6DEE295A9E6100711664 /* SignInFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 82BF6DED295A9E6100711664 /* SignInFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		820BA26E2956BF210094404C /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8218AE2D28FB159100EE8A1F /* Tower */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Tower; path = ..; sourceTree = "<group>"; };
 		8218AE6028FB229E00EE8A1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		825CEA50293F01CE000FB6A5 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
@@ -53,6 +56,7 @@
 		827EEB4728E252C60044BCD5 /* Tower.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tower.entitlements; sourceTree = "<group>"; };
 		8292BDDD28A958B600471B59 /* Tower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tower.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8292BDE028A958B600471B59 /* TowerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TowerApp.swift; sourceTree = "<group>"; };
+		8295D2EA2956BB210014A4A2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,12 +81,14 @@
 				8218AE3928FB15A900EE8A1F /* ConversationFeature in Frameworks */,
 				82B12AD4291A239B007FBDE4 /* MyConversationsFeature in Frameworks */,
 				8218AE2728FB12AD00EE8A1F /* ComposableArchitecture in Frameworks */,
+				82BF6DEE295A9E6100711664 /* SignInFeature in Frameworks */,
 				8218AE4B28FB15A900EE8A1F /* Permissions in Frameworks */,
 				8218AE4728FB15A900EE8A1F /* NotificationsFeature in Frameworks */,
 				8218AE3528FB15A900EE8A1F /* AuthFeature in Frameworks */,
 				827BD7E9293651DA00C01B51 /* IncomingRequestsFeature in Frameworks */,
 				8212519A2902356A00834532 /* NetworkEnvironment in Frameworks */,
 				8231A8BF292496B2007C46E5 /* InformationDisclosureFeature in Frameworks */,
+				82BF6DEC2959EEA300711664 /* Storage in Frameworks */,
 				825CEA4F293EFDE1000FB6A5 /* ImageUploaderFeature in Frameworks */,
 				8218AE3128FB15A900EE8A1F /* APIClient in Frameworks */,
 				8218AE3728FB15A900EE8A1F /* ComposeFeature in Frameworks */,
@@ -148,6 +154,8 @@
 		829832B328E6958700A05525 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				820BA26E2956BF210094404C /* libsqlite3.tbd */,
+				8295D2EA2956BB210014A4A2 /* CoreData.framework */,
 				825CEA50293F01CE000FB6A5 /* PhotosUI.framework */,
 			);
 			name = Frameworks;
@@ -203,6 +211,8 @@
 				827BD7EA293651DE00C01B51 /* OutgoingRequestsFeature */,
 				825CEA4E293EFDE1000FB6A5 /* ImageUploaderFeature */,
 				8232C40B2951766500E9D60E /* Core */,
+				82BF6DEB2959EEA300711664 /* Storage */,
+				82BF6DED295A9E6100711664 /* SignInFeature */,
 			);
 			productName = Tower;
 			productReference = 8292BDDD28A958B600471B59 /* Tower.app */;
@@ -215,6 +225,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
@@ -396,7 +409,6 @@
 				INFOPLIST_FILE = Tower/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Access to your photos is required in order to send message attachments and upload profile images.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -429,7 +441,6 @@
 				INFOPLIST_FILE = Tower/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Access to your photos is required in order to send message attachments and upload profile images.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -615,6 +626,14 @@
 		82B12AD5291A239F007FBDE4 /* OpenConversationsFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OpenConversationsFeature;
+		};
+		82BF6DEB2959EEA300711664 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Storage;
+		};
+		82BF6DED295A9E6100711664 /* SignInFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SignInFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

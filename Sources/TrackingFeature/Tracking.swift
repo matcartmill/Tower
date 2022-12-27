@@ -74,14 +74,14 @@ public struct Tracking: ReducerProtocol {
                 
             case .confirmEmotionSelection:
                 guard
-                    let jwt = sessionStore.session?.jwt,
+                    let accessToken = sessionStore.session?.accessToken,
                     let emotion = state.selectedEmotion
                 else { return .none }
                 
                 state.selectedEmotion = nil
                 
                 return .fireAndForget {
-                    try await apiClient.trackMood(jwt, emotion)
+                    try await apiClient.trackMood(accessToken, emotion)
                 }
             }
         }

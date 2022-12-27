@@ -2,10 +2,10 @@ import ComposableArchitecture
 import CoreUI
 import SwiftUI
 
-public struct AuthView: View {
-    public let store: StoreOf<Auth>
+public struct SignInView: View {
+    public let store: StoreOf<SignIn>
     
-    public init(store: StoreOf<Auth>) {
+    public init(store: StoreOf<SignIn>) {
         self.store = store
     }
     
@@ -25,7 +25,7 @@ public struct AuthView: View {
                     AppleSignInButton()
                         .frame(maxWidth: 375, maxHeight: 50)
                         .padding(.bottom, 40)
-                        .onTapGesture { viewStore.send(.authenticate) }
+                        .onTapGesture { viewStore.send(.signInTapped) }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -35,7 +35,7 @@ public struct AuthView: View {
                 "Oops!",
                 isPresented: viewStore.binding(
                     get: { $0.errorMessage != nil },
-                    send: Auth.Action.showAuthError
+                    send: SignIn.Action.authErrorDismissed
                 ),
                 actions: { Button("Okay") {} },
                 message: { Text("Something went wrong during the sign-in process.") }

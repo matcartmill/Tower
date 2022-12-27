@@ -1,8 +1,8 @@
 import APIClient
 import AppDelegateFeature
 import AppLoadingFeature
-import AuthFeature
 import ComposableArchitecture
+import ConversationsFeature
 import Foundation
 import Identity
 import LoggedInFeature
@@ -10,14 +10,15 @@ import Models
 import OnboardingFeature
 import RemoteNotificationsClient
 import Session
+import SignInFeature
 import SwiftUI
 import UserNotificationsClient
 
 public struct Root: ReducerProtocol {
     public enum State: Equatable {
         case loading(AppLoading.State)
-        case loggedIn(LoggedIn.State)
-        case loggedOut(Auth.State)
+        case loggedIn(Conversations.State)
+        case loggedOut(SignIn.State)
         case onboarding(Onboarding.State)
     }
     
@@ -33,9 +34,11 @@ public struct Root: ReducerProtocol {
         case showLoggedInExperience(User)
         case showOnboardingExperience(User)
         
+        case handleSessionResponse(TaskResult<Session>)
+        
         // Bridges
-        case auth(Auth.Action)
-        case loggedIn(LoggedIn.Action)
+        case signIn(SignIn.Action)
+        case conversations(Conversations.Action)
         case onboarding(Onboarding.Action)
         case loading(AppLoading.Action)
     }
@@ -66,11 +69,8 @@ public struct Root: ReducerProtocol {
                 return .none
                 
             case .showLoggedInExperience(let user):
-                state = .loggedIn(.init(
-                    conversations: .init(user: user),
-                    tracking: .init(tasks: []),
-                    notifications: .init()
-                ))
+                state = .loggedIn(.init(user: user))
+                
                 return .fireAndForget {
                     await remoteNotifications.register()
                 }
@@ -79,24 +79,33 @@ public struct Root: ReducerProtocol {
                 state = .onboarding(.username(.init()))
                 return .none
                 
+            case .handleSessionResponse(let response):
+                switch response {
+                case .success(let session):
+                    if session.user.username != nil {
+                        return .task { .showLoggedInExperience(session.user) }
+                    } else {
+                        return .task { .showOnboardingExperience(session.user) }
+                    }
+                    
+                case .failure:
+                    return .task { .showAuth }
+                }
+            
             // Bridge - Auth
                 
-            case .auth(.authenticationResponse(.success(let session))):
-                if session.user.username != nil {
-                    return .init(value: .showLoggedInExperience(session.user))
-                } else {
-                    return .init(value: .showOnboardingExperience(session.user))
-                }
+            case .signIn(.signInResult(let response)):
+                return .task { .handleSessionResponse(response) }
                 
-            case .auth:
+            case .signIn:
                 return .none
                 
             // Bridge - Logged In
                 
-            case .loggedIn(.conversations(.account(.logout))):
+            case .conversations(.account(.logout)):
                 return .task { .showAuth }
                 
-            case .loggedIn:
+            case .conversations:
                 return .none
                 
             // Bridge - Onboarding
@@ -109,8 +118,8 @@ public struct Root: ReducerProtocol {
                 
             // Bridge - Loading
                 
-            case .loading(.loaded):
-                return .init(value: .showAuth)
+            case .loading(.loaded(let response)):
+                return .task { .handleSessionResponse(response) }
                 
             case .loading:
                 return .none
@@ -130,13 +139,11 @@ public struct Root: ReducerProtocol {
                 return .none
             }
         }
-        .ifCaseLet(/State.loggedIn, action: /Action.loggedIn) {
-            LoggedIn()
+        .ifCaseLet(/State.loggedIn, action: /Action.conversations) {
+            Conversations()
         }
-        .ifCaseLet(/State.loggedOut, action: /Action.auth) {
-            Auth()
-//                .dependency(\.identityProvider, MockIdentityProvider())
-//                .dependency(\.apiClient, .mock)
+        .ifCaseLet(/State.loggedOut, action: /Action.signIn) {
+            SignIn()
         }
         .ifCaseLet(/State.onboarding, action: /Action.onboarding) {
             Onboarding()

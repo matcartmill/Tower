@@ -3,19 +3,25 @@ import ComposableArchitecture
 import Foundation
 import Session
 
-public struct AppLoading: ReducerProtocol {
+public struct SignIn: ReducerProtocol {
     public struct State: Equatable {
         fileprivate var authState: Auth.State = .init()
         
-        public init() { }
+        var errorMessage: String?
+        var isAuthenticating = false
+        
+        public init(errorMessage: String? = nil, isAuthenticating: Bool = false) {
+            self.errorMessage = errorMessage
+            self.isAuthenticating = isAuthenticating
+        }
     }
     
     public enum Action {
-        case load
-        case loaded(TaskResult<Session>)
+        case signInTapped
+        case signInResult(TaskResult<Session>)
+        case authErrorDismissed
         
         // Bridges
-        
         case auth(Auth.Action)
     }
     
@@ -28,16 +34,17 @@ public struct AppLoading: ReducerProtocol {
         
         Reduce { state, action in
             switch action {
-            case .load:
-                return .task { .auth(.refresh) }
+            case .signInTapped:
+                return .task { .auth(.authenticate) }
                 
-            case .loaded:
+            case .signInResult:
                 return .none
                 
-            // Bridge - Auth
+            case .authErrorDismissed:
+                return .none
                 
             case .auth(.authenticationResponse(let response)):
-                return .task { .loaded(response) }
+                return .task { .signInResult(response) }
                 
             case .auth:
                 return .none

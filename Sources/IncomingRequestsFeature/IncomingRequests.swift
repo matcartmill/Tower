@@ -17,6 +17,8 @@ public struct IncomingRequests: ReducerProtocol {
         case openWebSocket
         case closeWebSocket
         case handleGatewayAction(IncomingRequestsGateway.Action)
+        case accept(IncomingConversationRequest.ID)
+        case decline(IncomingConversationRequest.ID)
     }
     
     @Dependency(\.apiClient) private var apiClient
@@ -29,11 +31,11 @@ public struct IncomingRequests: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .loadRequests:
-                guard let jwt = sessionStore.session?.jwt else { return .none }
+                guard let accessToken = sessionStore.session?.accessToken else { return .none }
                 
                 return .task {
                     do {
-                        let requests = try await apiClient.incomingConversationRequests(jwt)
+                        let requests = try await apiClient.incomingConversationRequests(accessToken)
                         return .requestsLoaded(requests)
                     } catch let error {
                         return .loadFailed(error)
@@ -65,6 +67,12 @@ public struct IncomingRequests: ReducerProtocol {
                     state.requests.append(request)
                 }
                 
+                return .none
+                
+            case .accept(let id):
+                return .none
+                
+            case .decline(let id):
                 return .none
             }
         }

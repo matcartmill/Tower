@@ -14,8 +14,16 @@ public struct AccountView: View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 40) {
                 VStack(spacing: 12) {
-                    ProfileImage(viewStore.user.avatarUrl)
-                        .frame(width: 100, height: 100)
+                    if let data = viewStore.localPhotoData, let uiImage = UIImage(data: data) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                    } else {
+                        ProfileImage(viewStore.user.avatarUrl)
+                            .frame(width: 100, height: 100)
+                    }
 
                     ImageUploaderView(store: store.scope(
                         state: \.imageUploaderState,

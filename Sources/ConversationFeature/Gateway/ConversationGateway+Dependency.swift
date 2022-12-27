@@ -11,8 +11,8 @@ extension ConversationGateway: DependencyKey {
         return ConversationGateway(
             session: urlSession,
             environment: .current,
-            jwt: {
-                sessionStore.session?.jwt ?? .init(token: "")
+            accessToken: {
+                sessionStore.session?.accessToken ?? .init("")
             }
         )
     }

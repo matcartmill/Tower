@@ -20,6 +20,7 @@ var package = Package(
         .library(name: "Permissions", targets: ["Permissions"]),
         .library(name: "RemoteNotificationsClient", targets: ["RemoteNotificationsClient"]),
         .library(name: "Session", targets: ["Session"]),
+        .library(name: "Storage", targets: ["Storage"]),
         .library(name: "UserNotificationsClient", targets: ["UserNotificationsClient"]),
         
         // Features
@@ -42,6 +43,7 @@ var package = Package(
         .library(name: "OpenConversationsFeature", targets: ["OpenConversationsFeature"]),
         .library(name: "OutgoingRequestsFeature", targets: ["OutgoingRequestsFeature"]),
         .library(name: "RootFeature", targets: ["RootFeature"]),
+        .library(name: "SignInFeature", targets: ["SignInFeature"]),
         .library(name: "TrackingFeature", targets: ["TrackingFeature"]),
     ],
     dependencies: [
@@ -99,6 +101,12 @@ var package = Package(
             ]
         ),
         .target(
+            name: "Storage",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+            ]
+        ),
+        .target(
             name: "UserNotificationsClient",
             dependencies: [
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
@@ -130,6 +138,7 @@ var package = Package(
         .target(
             name: "AppLoadingFeature",
             dependencies: [
+                "AuthFeature",
                 "CoreUI",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
@@ -138,9 +147,9 @@ var package = Package(
             name: "AuthFeature",
             dependencies: [
                 "APIClient",
-                "CoreUI",
                 "Identity",
                 "Session",
+                "Storage",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
@@ -186,6 +195,7 @@ var package = Package(
                 "ComposeFeature",
                 "ConversationDisclosureFeature",
                 "ConversationFeature",
+                "Core",
                 "CoreUI",
                 "IncomingRequestsFeature",
                 "InformationDisclosureFeature",
@@ -283,10 +293,19 @@ var package = Package(
             name: "RootFeature",
             dependencies: [
                 "AppLoadingFeature",
-                "AuthFeature",
-                "LoggedInFeature",
+                "ConversationsFeature",
                 "OnboardingFeature",
+                "SignInFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+        .target(
+            name: "SignInFeature",
+            dependencies: [
+                "AuthFeature",
+                "CoreUI",
+                "Session",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
             ]
         ),
         .target(

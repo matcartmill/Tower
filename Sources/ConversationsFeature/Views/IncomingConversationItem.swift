@@ -43,6 +43,7 @@ struct IncomingRequestItem: View {
                     .frame(width: 24, height: 24)
                     .tint(Asset.Colors.Content.primary.swiftUIColor)
             }
+            .buttonStyle(.plain)
             
             Button(action: acceptAction) {
                 Asset.Icons.checkCircle.swiftUIImage
@@ -50,6 +51,7 @@ struct IncomingRequestItem: View {
                     .frame(width: 24, height: 24)
                     .tint(Asset.Colors.Content.primary.swiftUIColor)
             }
+            .buttonStyle(.plain)
         }
     }
 }

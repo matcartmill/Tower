@@ -29,11 +29,11 @@ public struct MyConversations: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .loadConversations:
-                guard let jwt = sessionStore.session?.jwt else { return .none }
+                guard let accessToken = sessionStore.session?.accessToken else { return .none }
                                 
                 return .task {
                     do {
-                        let conversations = try await apiClient.myConversations(jwt).map {
+                        let conversations = try await apiClient.myConversations(accessToken).map {
                             Conversation(
                                 id: .init($0.id.uuidString),
                                 author: $0.author,

@@ -10,7 +10,7 @@ public class OpenConversationsGateway {
     private let encoder: JSONEncoder
     private let environment: NetworkEnvironment
     private let session: URLSession
-    private let jwt: () -> JWT
+    private let accessToken: () -> AccessToken
     private var connection: URLSessionWebSocketTask?
     private var continuation: AsyncStream<Action>.Continuation?
     private var timer: AnyPublisher<Date, Never>
@@ -19,7 +19,7 @@ public class OpenConversationsGateway {
     public init(
         session: URLSession = .shared,
         environment: NetworkEnvironment = .current,
-        jwt: @escaping () -> JWT,
+        accessToken: @escaping () -> AccessToken,
         timer: AnyPublisher<Date, Never> = Timer.publish(
             every: 10,
             on: .main,
@@ -30,7 +30,7 @@ public class OpenConversationsGateway {
     ) {
         self.session = session
         self.environment = environment
-        self.jwt = jwt
+        self.accessToken = accessToken
         self.decoder = decoder
         self.encoder = encoder
         self.timer = timer
@@ -49,7 +49,7 @@ public class OpenConversationsGateway {
         }
         
         var request = URLRequest(url: url)
-        request.setValue("Bearer \(jwt().token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(accessToken())", forHTTPHeaderField: "Authorization")
         
         connection = session.webSocketTask(with: request)
         configureCallbacks()

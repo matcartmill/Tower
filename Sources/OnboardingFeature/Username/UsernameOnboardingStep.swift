@@ -52,8 +52,8 @@ public struct UsernameOnboardingStep: ReducerProtocol {
                 
                 return .task { [user] in
                     do {
-                        let updated = try await apiClient.updateMe(session.jwt, user)
-                        sessionStore.update(.init(jwt: session.jwt, user: updated))
+                        let updated = try await apiClient.updateMe(session.accessToken, user)
+                        sessionStore.update(.init(accessToken: session.accessToken, user: updated))
                         
                         return .next
                     } catch let error {

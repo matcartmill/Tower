@@ -70,10 +70,10 @@ public struct ConversationDetail: ReducerProtocol {
                 let message = state.newMessage
                 state.newMessage = ""
                 
-                guard let jwt = sessionStore.session?.jwt else { return .none }
+                guard let accessToken = sessionStore.session?.accessToken else { return .none }
                 
                 return .fireAndForget(priority: .userInitiated) {
-                    try await apiClient.sendMessage(jwt, message, id)
+                    try await apiClient.sendMessage(accessToken, message, id)
                 }
                 
             case .showMoreMenu:

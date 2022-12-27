@@ -7,10 +7,10 @@ import Session
 public struct OpenConversations: ReducerProtocol {
     public struct State: Equatable {
         fileprivate var page = 1
-        fileprivate var per = 5
         fileprivate var total = Int.max
         
         public var conversations: IdentifiedArrayOf<ConversationSummary>
+        public var canLoadMoreConversations = true
         
         public init(conversations: IdentifiedArrayOf<ConversationSummary> = []) {
             self.conversations = conversations
@@ -36,18 +36,13 @@ public struct OpenConversations: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .loadConversations:
-                guard
-                    let jwt = sessionStore.session?.jwt,
-                    state.page * state.per < state.total
-                else { return .none }
+                guard let accessToken = sessionStore.session?.accessToken else { return .none }
                            
-                let pageInfo = PageInfo(page: state.page, per: state.per)
-                
-                state.page += 1
+                let pageInfo = PageInfo(page: state.page, per: 5)
                 
                 return .task {
                     do {
-                        let response = try await apiClient.openConversations(jwt, pageInfo)
+                        let response = try await apiClient.openConversations(accessToken, pageInfo)
                         return .conversationsLoaded(response)
                     } catch let error {
                         return .conversationsFailedToLoad(error)
@@ -71,6 +66,15 @@ public struct OpenConversations: ReducerProtocol {
             case .conversationsLoaded(let response):
                 state.total = response.metadata.total
                 state.conversations.append(contentsOf: response.items)
+                
+                let conversationCount = state.conversations.count
+                
+                state.canLoadMoreConversations = conversationCount < state.total
+                
+                if conversationCount <= state.total {
+                    state.page += 1
+                }
+                
                 return .none
                 
             case .conversationsFailedToLoad(let error):

@@ -13,6 +13,13 @@ extension APIClient: DependencyKey {
                 request.httpMethod = "POST"
             }
         },
+        refresh: { refreshRequest in
+            try await request(path: "v1", "auth", "refresh") { request in
+                request.jsonBody(refreshRequest)
+                request.contentTypeJSON()
+                request.httpMethod = "POST"
+            }
+        },
         logout: { token in
             try await request(path: "v1", "auth", "logout") { request in
                 request.authorize(with: token)
@@ -157,7 +164,10 @@ extension APIClient: DependencyKey {
 extension APIClient {
     public static let mock = Self(
         exchange: { _ in
-            .init(token: "foo")
+            .init(accessToken: "foo", refreshToken: "bar")
+        },
+        refresh: { refreshRequest in
+            .init(accessToken: "foo", refreshToken: "bar")
         },
         logout: { _ in
             return
@@ -296,9 +306,8 @@ private func request(
 }
 
 private extension URLRequest {
-    mutating func authorize(with jwt: JWT) {
-        print(jwt.token)
-        self.setValue("Bearer \(jwt.token)", forHTTPHeaderField: "Authorization")
+    mutating func authorize(with accessToken: AccessToken) {
+        self.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
     }
     mutating func contentTypeJSON() {
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")

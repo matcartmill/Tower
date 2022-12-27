@@ -11,7 +11,7 @@ public struct InformationDisclosure: ReducerProtocol {
                 return "Accept this participant request?"
                 
             case .participant:
-                return "Join this conversation?"
+                return "Request to join this conversation?"
             }
         }
         

@@ -38,6 +38,7 @@ public struct Conversations: ReducerProtocol {
         public var informationDisclosureState: InformationDisclosure.State?
         
         var activeTab: Tab = .openConversations
+        var isComposing = false
         
         fileprivate var disclosureEvent: DisclosureEvent?
         fileprivate var hasOpenedSocketConnections = false
@@ -72,6 +73,20 @@ public struct Conversations: ReducerProtocol {
         case dismissConversation
         case viewConversation(ConversationDetail.State)
         
+        // Conversation Disclosure
+        case conversationDisclosureDismissed
+        case cancelConversationDisclosure
+        
+        // Information Disclosure
+        case cancelInformationDisclosure
+        
+        // Incoming Requests
+        case acceptIncomingRequest(IncomingConversationRequest.ID)
+        case declineIncomingRequest(IncomingConversationRequest.ID)
+        
+        // Outgoing Requests
+        case cancelOutgoingRequest(OutgoingConversationRequest.ID)
+        
         // Open Requests
         case viewOpenRequests
         case openConversationTapped(Conversation.ID)
@@ -98,6 +113,22 @@ public struct Conversations: ReducerProtocol {
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
+        Scope(state: \.activeConversations, action: /Action.activeConversations) {
+            MyConversations()
+        }
+        
+        Scope(state: \.openConversations, action: /Action.openConversations) {
+            OpenConversations()
+        }
+        
+        Scope(state: \.incomingRequests, action: /Action.incomingRequests) {
+            IncomingRequests()
+        }
+        
+        Scope(state: \.outgoingRequests, action: /Action.outgoingRequests) {
+            OutgoingRequests()
+        }
+        
         Reduce { state, action in
             switch action {
             case .refresh:
@@ -134,6 +165,20 @@ public struct Conversations: ReducerProtocol {
                 state.activeTab = .myConversations
                 return .none
                 
+            // Incoming Requests
+            case .acceptIncomingRequest(let id):
+                state.disclosureEvent = .accept(id)
+                state.informationDisclosureState = .init(context: .author)
+                
+                return .none
+                
+            case .declineIncomingRequest(let id):
+                return .task { .incomingRequests(.decline(id)) }
+                
+            // Outgoing Requests
+            case .cancelOutgoingRequest(let id):
+                return .task { .outgoingRequests(.cancel(id)) }
+                
             // Open Conversations
                 
             case .viewOpenRequests:
@@ -164,7 +209,7 @@ public struct Conversations: ReducerProtocol {
                 
             case .closeComposer:
                 state.newConversation = nil
-                
+                state.isComposing = false
                 return .none
                 
             case .composingFailed:
@@ -186,6 +231,22 @@ public struct Conversations: ReducerProtocol {
                 return .merge(
                     .task { .closeComposer }
                 )
+                
+            // Conversation Disclosure
+            case .cancelConversationDisclosure:
+                state.conversationDisclosureState = nil
+                return .none
+                
+            case .conversationDisclosureDismissed:
+                state.isComposing = state.newConversation != nil
+                return .none
+                
+            // Information Disclosure
+            case .cancelInformationDisclosure:
+                state.disclosureEvent = nil
+                state.informationDisclosureState = nil
+                
+                return .none
                 
             // Conversation Detail
             case .selectConversation(let conversation):
@@ -216,12 +277,12 @@ public struct Conversations: ReducerProtocol {
             case .compose(.start):
                 guard
                     let newConversation = state.newConversation?.newConversation,
-                    let jwt = sessionStore.session?.jwt
+                    let accessToken = sessionStore.session?.accessToken
                 else { return .none }
                 
                 return .task {
                     do {
-                        let conversation = try await apiClient.createConversation(jwt, .init(newConversation))
+                        let conversation = try await apiClient.createConversation(accessToken, .init(newConversation))
                         return .composingSuccessful(conversation)
                     } catch let error {
                         print(error.localizedDescription)
@@ -244,9 +305,7 @@ public struct Conversations: ReducerProtocol {
                 return .none
                 
             case .conversationDisclosure(.cancel):
-                state.conversationDisclosureState = nil
-                
-                return .none
+                return .task { .cancelConversationDisclosure }
             
             // Bridges - Conversation Details
                 
@@ -275,7 +334,7 @@ public struct Conversations: ReducerProtocol {
                 
             case .informationDisclosure(.next):
                 guard
-                    let jwt = sessionStore.session?.jwt,
+                    let accessToken = sessionStore.session?.accessToken,
                     let event = state.disclosureEvent,
                     case let .request(conversationId) = event
                 else { return .none }
@@ -286,15 +345,13 @@ public struct Conversations: ReducerProtocol {
             return .merge(
                 .task { .openConversations(.removeExistingSummary(conversationId)) },
                 .task {
-                    let request = try await apiClient.sendOutgoingRequest(jwt, conversationId)
+                    let request = try await apiClient.sendOutgoingRequest(accessToken, conversationId)
                     return .outgoingRequests(.addRequest(request))
                 }
             )
                 
             case .informationDisclosure(.cancel):
-                state.disclosureEvent = nil
-                state.informationDisclosureState = nil
-                return .none
+                return .task { .cancelInformationDisclosure }
                 
             }
         }
@@ -312,22 +369,6 @@ public struct Conversations: ReducerProtocol {
         }
         .ifLet(\.informationDisclosureState, action: /Action.informationDisclosure) {
             InformationDisclosure()
-        }
-        
-        Scope(state: \.activeConversations, action: /Action.activeConversations) {
-            MyConversations()
-        }
-        
-        Scope(state: \.openConversations, action: /Action.openConversations) {
-            OpenConversations()
-        }
-        
-        Scope(state: \.incomingRequests, action: /Action.incomingRequests) {
-            IncomingRequests()
-        }
-        
-        Scope(state: \.outgoingRequests, action: /Action.outgoingRequests) {
-            OutgoingRequests()
         }
     }
 }

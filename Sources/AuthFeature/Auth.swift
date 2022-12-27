@@ -3,31 +3,39 @@ import ComposableArchitecture
 import Foundation
 import Identity
 import JWT
+import Models
 import Session
+import Storage
 
 public struct Auth: ReducerProtocol {
+    public enum AuthError: Error {
+        case noExistingRefreshToken
+    }
+    
     public struct State: Equatable {
-        var errorMessage: String?
         var isAuthenticating = false
         
-        public init(errorMessage: String? = nil, isAuthenticating: Bool = false) {
-            self.errorMessage = errorMessage
-            self.isAuthenticating = isAuthenticating
+        public init(isAuthentication: Bool = false) {
+            self.isAuthenticating = isAuthentication
         }
     }
     
     public enum Action {
-        case showAuthError
         case authenticate
         case authenticationResponse(TaskResult<Session>)
         
         case fetchIdentity
         case exchangeIdentity(Identity)
-        case fetchUser(JWT)
+        
+        case refresh
+        
+        case extractTokens(AuthenticationResponse)
+        case fetchUser(AccessToken)
     }
     
-    @Dependency(\.identityProvider) private var identityProvider
     @Dependency(\.apiClient) private var apiClient
+    @Dependency(\.identityProvider) private var identityProvider
+    @Dependency(\.keychain) private var keychain
     @Dependency(\.sessionStore) private var sessionStore
     
     public init() { }
@@ -35,8 +43,6 @@ public struct Auth: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .showAuthError:
-                return .none
                 
             case .authenticate:
                 state.isAuthenticating = true
@@ -48,9 +54,8 @@ public struct Auth: ReducerProtocol {
                 state.isAuthenticating = false
                 return .none
                 
-            case .authenticationResponse(.failure(let error)):
+            case .authenticationResponse(.failure):
                 state.isAuthenticating = false
-                state.errorMessage = error.localizedDescription
                 return .none
                 
             case .fetchIdentity:
@@ -62,26 +67,51 @@ public struct Auth: ReducerProtocol {
             case .exchangeIdentity(let identity):
                 return .task {
                     do {
-                        let jwt = try await apiClient.exchange(identity)
-                        return .fetchUser(jwt)
+                        let response = try await apiClient.exchange(identity)
+                        return .extractTokens(response)
                     } catch let error {
                         return .authenticationResponse(.failure(error))
                     }
                 }
                 
-            case .fetchUser(let jwt):
+            case .refresh:
+                guard let refreshToken = keychain.value(for: .refreshToken) else {
+                    return .task { .authenticationResponse(.failure(AuthError.noExistingRefreshToken)) }
+                }
+                
                 return .task {
                     do {
-                        let user = try await apiClient.me(jwt)
-                        let session = Session(jwt: jwt, user: user)
+                        let response = try await apiClient.refresh(.init(jwt: refreshToken))
+                        return .extractTokens(response)
+                    } catch let error {
+                        return .authenticationResponse(.failure(error))
+                    }
+                }
+                
+            case .extractTokens(let response):
+                let accessToken = AccessToken(response.accessToken)
+                let refreshToken = RefreshToken(response.refreshToken)
+                
+                keychain.update(.refreshToken, to: refreshToken.description)
+                
+                return .task { .fetchUser(accessToken) }
+                
+            case .fetchUser(let accessToken):
+                return .task {
+                    do {
+                        let user = try await apiClient.me(accessToken)
+                        let session = Session(accessToken: accessToken, user: user)
                         return .authenticationResponse(.success(session))
                     } catch let error {
                         print(error.localizedDescription)
                         return .authenticationResponse(.failure(error))
                     }
                 }
-                .animation()
             }
         }
     }
+}
+
+private extension Setting {
+    static var refreshToken: Setting<String> { .init(key: "auth-refresh-token", defaultValue: nil) }
 }

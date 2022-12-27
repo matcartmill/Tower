@@ -15,7 +15,7 @@ public struct OutgoingRequests: ReducerProtocol {
         case loadFailed(Error)
         case requestsLoaded([OutgoingConversationRequest])
         case addRequest(OutgoingConversationRequest)
-        case cancelRequest(OutgoingConversationRequest.ID)
+        case cancel(OutgoingConversationRequest.ID)
     }
     
     @Dependency(\.apiClient) private var apiClient
@@ -27,11 +27,11 @@ public struct OutgoingRequests: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .loadRequests:
-                guard let jwt = sessionStore.session?.jwt else { return .none }
+                guard let accessToken = sessionStore.session?.accessToken else { return .none }
                 
                 return .task {
                     do {
-                        let requests = try await apiClient.outgoingConversationRequests(jwt)
+                        let requests = try await apiClient.outgoingConversationRequests(accessToken)
                         return .requestsLoaded(requests)
                     } catch let error {
                         return .loadFailed(error)
@@ -50,13 +50,13 @@ public struct OutgoingRequests: ReducerProtocol {
                 state.requests.append(request)
                 return .none
                 
-            case .cancelRequest(let id):
-                guard let jwt = sessionStore.session?.jwt else { return .none }
+            case .cancel(let id):
+                guard let accessToken = sessionStore.session?.accessToken else { return .none }
                 
                 state.requests.remove(id: id)
                 
                 return .fireAndForget {
-                    try await apiClient.cancelOutgoingRequest(jwt, id)
+                    try await apiClient.cancelOutgoingRequest(accessToken, id)
                 }
             }
         }

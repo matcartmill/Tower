@@ -11,8 +11,8 @@ extension IncomingRequestsGateway: DependencyKey {
         return IncomingRequestsGateway(
             session: urlSession,
             environment: .current,
-            jwt: {
-                sessionStore.session?.jwt ?? .init(token: "")
+            accessToken: {
+                sessionStore.session?.accessToken ?? .init("")
             }
         )
     }

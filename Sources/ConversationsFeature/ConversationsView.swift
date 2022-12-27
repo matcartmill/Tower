@@ -3,6 +3,7 @@ import ComposableArchitecture
 import ComposeFeature
 import ConversationDisclosureFeature
 import ConversationFeature
+import Core
 import CoreUI
 import InformationDisclosureFeature
 import Models
@@ -26,15 +27,17 @@ public struct ConversationsView: View {
                     outgoingRequests: viewStore.outgoingRequests.requests,
                     openConversations: viewStore.openConversations.conversations,
                     activeConversations: viewStore.activeConversations.conversations,
+                    canLoadMoreOpenConversations: viewStore.openConversations.canLoadMoreConversations,
                     onTabChangedToRequests: { viewStore.send(.viewOpenRequests, animation: .spring()) },
                     onTabChangedToConversations: { viewStore.send(.viewMyConversations, animation: .spring()) },
                     onOpenComposer: { viewStore.send(.openComposer) },
                     onSelectOpenConversation: { viewStore.send(.openConversationTapped($0)) },
                     onSelectActiveConversation: { viewStore.send(.selectConversation($0)) },
-                    onOutgoingRequestDelete: { requestId in
-                        viewStore.send(.outgoingRequests(.cancelRequest(requestId)))
-                    },
-                    onOpenConversationsShowMore: { viewStore.send(.loadMoreOpenConversations) }
+                    onIncomingRequestAccept: { viewStore.send(.acceptIncomingRequest($0)) },
+                    onIncomingRequestDecline: { viewStore.send(.declineIncomingRequest($0)) },
+                    onOutgoingRequestDelete: { viewStore.send(.cancelOutgoingRequest($0)) },
+                    onOpenConversationsShowMore: { viewStore.send(.loadMoreOpenConversations) },
+                    onRefresh: { viewStore.send(.refresh) }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal)
@@ -65,13 +68,13 @@ public struct ConversationsView: View {
                         }
                     }
                 }
-                .sheet(isPresented: viewStore.binding(
-                    get: { $0.newConversation != nil },
-                    send: Conversations.Action.compose(.close)
+                .fullScreenCover(isPresented: viewStore.binding(
+                    get: \.isComposing,
+                    send: .closeComposer
                 )) {
                     IfLetStore(
                         store.scope(
-                            state: \.newConversation,
+                            state: lastNonNil(\.newConversation),
                             action: Conversations.Action.compose
                         )
                     ) {
@@ -84,20 +87,23 @@ public struct ConversationsView: View {
                 )) {
                     IfLetStore(
                         store.scope(
-                            state: \.accountState,
+                            state: lastNonNil(\.accountState),
                             action: Conversations.Action.account
                         )
                     ) {
                         AccountView(store: $0)
                     }
                 }
-                .sheet(isPresented: viewStore.binding(
-                    get: { $0.conversationDisclosureState != nil },
-                    send: Conversations.Action.conversationDisclosure(.cancel)
-                )) {
+                .sheet(
+                    isPresented: viewStore.binding(
+                        get: { $0.conversationDisclosureState != nil },
+                        send: .cancelConversationDisclosure
+                    ),
+                    onDismiss: { viewStore.send(.conversationDisclosureDismissed) }
+                ) {
                     IfLetStore(
                         store.scope(
-                            state: \.conversationDisclosureState,
+                            state: lastNonNil(\.conversationDisclosureState),
                             action: Conversations.Action.conversationDisclosure
                         )
                     ) {
@@ -108,11 +114,11 @@ public struct ConversationsView: View {
                 }
                 .sheet(isPresented: viewStore.binding(
                     get: { $0.informationDisclosureState != nil },
-                    send: Conversations.Action.informationDisclosure(.cancel)
+                    send: Conversations.Action.cancelInformationDisclosure
                 )) {
                     IfLetStore(
                         store.scope(
-                            state: \.informationDisclosureState,
+                            state: lastNonNil(\.informationDisclosureState),
                             action: Conversations.Action.informationDisclosure
                         )
                     ) {
@@ -131,19 +137,23 @@ public struct ConversationsView: View {
     }
 }
 
-private struct _ConversationsView: View {
+private struct _ConversationsView: View, Equatable {
     let activeTab: Conversations.Tab
     let incomingRequests: IdentifiedArrayOf<IncomingConversationRequest>
     let outgoingRequests: IdentifiedArrayOf<OutgoingConversationRequest>
     let openConversations: IdentifiedArrayOf<ConversationSummary>
     let activeConversations: IdentifiedArrayOf<Conversation>
+    let canLoadMoreOpenConversations: Bool
     let onTabChangedToRequests: () -> Void
     let onTabChangedToConversations: () -> Void
     let onOpenComposer: () -> Void
     let onSelectOpenConversation: (Conversation.ID) -> Void
     let onSelectActiveConversation: (Conversation) -> Void
+    let onIncomingRequestAccept: (IncomingConversationRequest.ID) -> Void
+    let onIncomingRequestDecline: (IncomingConversationRequest.ID) -> Void
     let onOutgoingRequestDelete: (OutgoingConversationRequest.ID) -> Void
     let onOpenConversationsShowMore: () -> Void
+    let onRefresh: () -> Void
     
     var body: some View {
         List {
@@ -156,14 +166,23 @@ private struct _ConversationsView: View {
                     onMyConversationsSelected: onTabChangedToConversations
                 )
                 .themedRow()
-                .padding(.vertical)
+                .padding(.top)
+                .padding(.bottom, 4)
             }
             .textCase(nil)
 
             if activeTab == .openConversations {
                 if !incomingRequests.isEmpty {
-                    IncomingRequestsSection(requests: incomingRequests)
-                        .themedRow()
+                    IncomingRequestsSection(
+                        requests: incomingRequests,
+                        onAccept: { id in
+                            onIncomingRequestAccept(id)
+                        },
+                        onDecline: { id in
+                            onIncomingRequestDecline(id)
+                        }
+                    )
+                    .themedRow()
                 }
                 
                 if !outgoingRequests.isEmpty {
@@ -178,6 +197,7 @@ private struct _ConversationsView: View {
                 
                 OpenConversationsSection(
                     conversations: openConversations,
+                    showMoreButton: canLoadMoreOpenConversations,
                     onSelectOpenConversation: onSelectOpenConversation,
                     onShowMore: onOpenConversationsShowMore
                 )
@@ -197,6 +217,7 @@ private struct _ConversationsView: View {
         .listStyle(.grouped)
         .scrollIndicators(.hidden)
         .scrollContentBackground(.hidden)
+        .refreshable { onRefresh() }
         .themedBackground()
         .overlay(alignment: .bottomTrailing) {
             Button(action: onOpenComposer) {
@@ -211,6 +232,14 @@ private struct _ConversationsView: View {
             .clipShape(Circle())
             .padding([.bottom, .trailing], 30)
         }
+    }
+    
+    static func == (lhs: _ConversationsView, rhs: _ConversationsView) -> Bool {
+        return lhs.activeTab == rhs.activeTab
+        && lhs.incomingRequests == rhs.incomingRequests
+        && lhs.outgoingRequests == rhs.outgoingRequests
+        && lhs.openConversations == rhs.openConversations
+        && lhs.activeConversations == rhs.activeConversations
     }
 }
 
@@ -260,14 +289,16 @@ private struct TabSelector: View {
 
 private struct IncomingRequestsSection: View {
     let requests: IdentifiedArrayOf<IncomingConversationRequest>
+    let onAccept: (IncomingConversationRequest.ID) -> Void
+    let onDecline: (IncomingConversationRequest.ID) -> Void
     
     var body: some View {
         Section {
-            ForEach(requests) {
+            ForEach(requests) { request in
                 IncomingRequestItem(
-                    userDetails: $0.user,
-                    acceptAction: { },
-                    declineAction: { }
+                    userDetails: request.user,
+                    acceptAction: { onAccept(request.id) },
+                    declineAction: { onDecline(request.id) }
                 )
                 .padding(.vertical, 14)
             }
@@ -312,6 +343,7 @@ private struct OutgoingRequestsSection: View {
 
 private struct OpenConversationsSection: View {
     let conversations: IdentifiedArrayOf<ConversationSummary>
+    let showMoreButton: Bool
     let onSelectOpenConversation: (Conversation.ID) -> Void
     let onShowMore: () -> Void
     
@@ -329,12 +361,16 @@ private struct OpenConversationsSection: View {
                 .foregroundColor(Asset.Colors.Content.primary.swiftUIColor)
                 .textCase(nil)
         } footer: {
-            Button("Show More") { onShowMore() }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundColor(Asset.Colors.Content.secondary.swiftUIColor)
-                .font(.callout)
-                .fontWeight(.semibold)
-                .padding(.top)
+            if showMoreButton {
+                Button("Show More") { onShowMore() }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .foregroundColor(Asset.Colors.Content.secondary.swiftUIColor)
+                    .font(.callout)
+                    .fontWeight(.semibold)
+                    .padding(.top)
+            } else {
+                EmptyView()
+            }
         }
     }
 }
@@ -428,13 +464,17 @@ struct ConversationsView_Previews: PreviewProvider {
                 )
             ],
             activeConversations: [],
+            canLoadMoreOpenConversations: true,
             onTabChangedToRequests: { },
             onTabChangedToConversations: { },
             onOpenComposer: { },
             onSelectOpenConversation: { _ in },
             onSelectActiveConversation: { _ in },
+            onIncomingRequestAccept: { _ in },
+            onIncomingRequestDecline: { _ in },
             onOutgoingRequestDelete: { _ in },
-            onOpenConversationsShowMore: { }
+            onOpenConversationsShowMore: { },
+            onRefresh: { }
         )
         .padding()
         
@@ -471,13 +511,17 @@ struct ConversationsView_Previews: PreviewProvider {
                     updatedAt: Date()
                 )
             ],
+            canLoadMoreOpenConversations: false,
             onTabChangedToRequests: { },
             onTabChangedToConversations: { },
             onOpenComposer: { },
             onSelectOpenConversation: { _ in },
             onSelectActiveConversation: { _ in },
+            onIncomingRequestAccept: { _ in },
+            onIncomingRequestDecline: { _ in },
             onOutgoingRequestDelete: { _ in },
-            onOpenConversationsShowMore: { }
+            onOpenConversationsShowMore: { },
+            onRefresh: { }
         )
         .padding()
     }
